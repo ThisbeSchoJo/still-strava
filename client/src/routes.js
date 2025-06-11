@@ -1,6 +1,7 @@
 import App from "./components/App";
 import Home from "./components/Home";
 import ErrorPage from "./components/ErrorPage"
+import ActivityFeed from "./components/ActivityFeed";
 
 const routes = [
     {
@@ -11,6 +12,10 @@ const routes = [
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/activity-feed",
+          element: <ActivityFeed />,
         },
       ],
     },
