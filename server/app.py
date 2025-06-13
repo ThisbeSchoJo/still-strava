@@ -124,7 +124,35 @@ class ActivityById(Resource):
         
 api.add_resource(ActivityById, '/activities/<int:id>')
 
+# CRUD for comments
+class AllComments(Resource):
+    def get(self):
+        stmt = select(Comment)
+        result = db.session.execute(stmt)
+        comments = result.scalars().all()
+        response_body = [comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id')) for comment in comments]
+        return make_response(response_body, 200)
+    
+    def post(self):
+        try:
+            new_comment = Comment(
+                content=request.json.get('content'),
+                datetime=request.json.get('datetime'),
+                activity_id=request.json.get('activity_id'),
+                user_id=request.json.get('user_id')
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+            response_body = new_comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id'))
+            return make_response(response_body, 201)
+        except Exception as e:
+            response_body = {
+                "error": str(e)
+            }
+            return make_response(response_body, 422)
 
+api.add_resource(AllComments, '/comments')
+        
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
