@@ -89,6 +89,38 @@ class ActivityById(Resource):
             return make_response(response_body, 200)
         else:
             return make_response({"error": "Activity not found"}, 404)
+
+    def patch(self, id):
+        activity = db.session.get(Activity, id)
+        if activity:
+            try:
+                for attr in request.json:
+                    setattr(activity, attr, request.json[attr])
+                db.session.commit()
+                response_body = activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos'))
+                return make_response(response_body, 200)
+            except Exception as e:
+                response_body = {
+                    "error": str(e)
+                }
+                return make_response(response_body, 422)
+        else:
+            response_body = {
+                "error": "Activity not found"
+            }
+            return make_response(response_body, 404)
+        
+    def delete(self, id):
+        activity = db.session.get(Activity, id)
+        if activity:
+            db.session.delete(activity)
+            db.session.commit()
+            return make_response({}, 204)
+        else:
+            response_body = {
+                "error": "Activity not found"
+            }
+            return make_response(response_body, 404)
         
 api.add_resource(ActivityById, '/activities/<int:id>')
 
