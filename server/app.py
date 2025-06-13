@@ -152,7 +152,52 @@ class AllComments(Resource):
             return make_response(response_body, 422)
 
 api.add_resource(AllComments, '/comments')
+
+class CommentById(Resource):
+    def get(self, id):
+        comment = db.session.get(Comment, id)
+        if comment:
+            response_body = comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id'))
+            return make_response(response_body, 200)
+        else:
+            response_body = {
+                "error": "Comment not found"
+            }
+            return make_response(response_body, 404)
         
+    def patch(self, id):
+        comment = db.session.get(Comment, id)
+        if comment:
+            try:
+                for attr in request.json:
+                    setattr(comment, attr, request.json[attr])
+                db.session.commit()
+                response_body = comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id'))
+                return make_response(response_body, 200)
+            except Exception as e:
+                response_body = {
+                    "error": str(e)
+                }
+                return make_response(response_body, 422)
+        else:
+            response_body = {
+                "error": "Comment not found"
+            }
+            return make_response(response_body, 404)
+        
+    def delete(self, id):
+        comment = db.session.get(Comment, id)
+        if comment:
+            db.session.delete(comment)
+            db.session.commit()
+            return make_response({}, 204)
+        else:
+            response_body = {
+                "error": "Comment not found"
+            }
+            return make_response(response_body, 404)
+        
+api.add_resource(CommentById, '/comments/<int:id>')              
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
