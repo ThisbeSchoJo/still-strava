@@ -1,7 +1,7 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
-
+from datetime import datetime
 from config import db
 
 # Models go here!
@@ -16,31 +16,31 @@ class User(db.Model, SerializerMixin):
 
     # Relationships
     activities = db.relationship('Activity', backref='user', lazy=True)
-    comments = db.relationship('Comment', backref='user', lazy=True)
+    comments = db.relationship('Comment', lazy=True)
 
     # Serialization rules to avoid circular references
     serialize_rules = ('-activities.user', '-comments.user')
 
     # Validation methods
     @validates('username', 'image')
-    def validate_username(self, column_name, value):
+    def validate_username(self, key, value):
         if type(value) != str:
-            raise TypeError(f"{column_name} must be a string")
+            raise TypeError(f"{key} must be a string")
         elif len(value) < 5:
-            raise ValueError(f"{column_name} must be at least 5 characters long")
+            raise ValueError(f"{key} must be at least 5 characters long")
         else:
             return value
 
     @validates('email')
-    def validate_email(self, email):
-        if type(email) != str:
+    def validate_email(self, key, value):
+        if type(value) != str:
             raise TypeError("Email must be a string")
-        elif '@' not in email:
+        elif '@' not in value:
             raise ValueError("Invalid email address")
-        elif len(email) < 10:
+        elif len(value) < 10:
             raise ValueError("Email must be at least 10 characters long")
         else:
-            return email
+            return value
 
     def __repr__(self):
         return f'<User {self.username}, Email: {self.email}, Image: {self.image}>'
@@ -64,36 +64,36 @@ class Activity(db.Model, SerializerMixin):
 
     # Validation methods
     @validates('name')
-    def validate_name(self, name):
-        if type(name) != str:
+    def validate_name(self, key, value):
+        if type(value) != str:
             raise TypeError("Name must be a string")
-        elif len(name) < 3:
+        elif len(value) < 3:
             raise ValueError("Name must be at least 3 characters long")
         else:
-            return name
+            return value
     
     @validates('description')
-    def validate_description(self, description):
-        if type(description) != str:
+    def validate_description(self, key, value):
+        if type(value) != str:
             raise TypeError("Description must be a string")
-        elif len(description) < 10:
+        elif len(value) < 10:
             raise ValueError("Description must be at least 10 characters long")
         else:
-            return description
+            return value
         
     @validates('datetime')
-    def validate_datetime(self, datetime):
-        if type(datetime) != datetime.datetime:
+    def validate_datetime(self, key, value):
+        if type(value) != datetime:
             raise TypeError("Datetime must be a datetime object")
         else:
-            return datetime
+            return value
 
     @validates('photos')
-    def validate_photos(self, photos):
-        if type(photos) != str:
+    def validate_photos(self, key, value):
+        if type(value) != str:
             raise TypeError("Photos must be a string")
         else:
-            return photos
+            return value
 
     def __repr__(self):
         return f'<Activity {self.name}, Description: {self.description}, Datetime: {self.datetime}, Photos: {self.photos}>'
@@ -109,28 +109,28 @@ class Comment(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationships
-    activity = db.relationship('Activity', backref='comments', lazy=True)
-    user = db.relationship('User', backref='comments', lazy=True)
+    # activity = db.relationship('Activity', backref='comments', lazy=True)
+    # user = db.relationship('User', backref='comments', lazy=True)
 
     # Serialization rules to avoid circular references
     serialize_rules = ('-activity.comments', '-user.comments')
 
     # Validation methods
     @validates('content')
-    def validate_content(self, content):
-        if type(content) != str:
+    def validate_content(self, key, value):
+        if type(value) != str:
             raise TypeError("Content must be a string")
-        elif len(content) < 10:
+        elif len(value) < 10:
             raise ValueError("Content must be at least 10 characters long")
         else:
-            return content
+            return value
         
     @validates('datetime')
-    def validate_datetime(self, datetime):
-        if type(datetime) != datetime.datetime:
+    def validate_datetime(self, key, value):
+        if type(value) != datetime:
             raise TypeError("Datetime must be a datetime object")
         else:
-            return datetime
+            return value
 
     def __repr__(self):
         return f'<Comment {self.content}, Datetime: {self.datetime}, Activity: {self.activity_id}, User: {self.user_id}>'
