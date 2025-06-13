@@ -78,11 +78,21 @@ class AllActivities(Resource):
                 "error": str(e)
             }
             return make_response(response_body, 422)    
-        
+
 api.add_resource(AllActivities, '/activities')
+
+class ActivityById(Resource):
+    def get(self, id):
+        activity = db.session.get(Activity, id)
+        if activity:
+            response_body = activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos'))
+            return make_response(response_body, 200)
+        else:
+            return make_response({"error": "Activity not found"}, 404)
         
-    
-    
+api.add_resource(ActivityById, '/activities/<int:id>')
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
