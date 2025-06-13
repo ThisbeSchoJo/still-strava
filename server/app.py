@@ -47,6 +47,8 @@ class UserById(Resource):
     def get(self, id):
         user = User.query.filter_by(id=id).first()
 
+api.add_resource(UserById, '/users/<int:id>')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
