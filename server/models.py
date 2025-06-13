@@ -8,16 +8,20 @@ from config import db
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
+    # Database columns
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     image = db.Column(db.String, nullable=False)
 
+    # Relationships
     activities = db.relationship('Activity', backref='user', lazy=True)
     comments = db.relationship('Comment', backref='user', lazy=True)
 
+    # Serialization rules to avoid circular references
     serialize_rules = ('-activities.user', '-comments.user')
 
+    # Validation methods
     @validates('username', 'image')
     def validate_username(self, column_name, value):
         if type(value) != str:
@@ -44,6 +48,7 @@ class User(db.Model, SerializerMixin):
 class Activity(db.Model, SerializerMixin):
     __tablename__ = 'activities'
 
+    # Database columns
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
@@ -51,10 +56,13 @@ class Activity(db.Model, SerializerMixin):
     photos = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    # Relationships
     comments = db.relationship('Comment', backref='activity', lazy=True)
     
+    # Serialization rules to avoid circular references
     serialize_rules = ('-comments.activity',)
 
+    # Validation methods
     @validates('name')
     def validate_name(self, name):
         if type(name) != str:
@@ -93,14 +101,21 @@ class Activity(db.Model, SerializerMixin):
 class Comment(db.Model, SerializerMixin):
     __tablename__ = 'comments'
 
+    # Database columns
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String)
     datetime = db.Column(db.DateTime)
     activity_id = db.Column(db.Integer, db.ForeignKey('activities.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    
+
+    # Relationships
+    activity = db.relationship('Activity', backref='comments', lazy=True)
+    user = db.relationship('User', backref='comments', lazy=True)
+
+    # Serialization rules to avoid circular references
     serialize_rules = ('-activity.comments', '-user.comments')
-    
+
+    # Validation methods
     @validates('content')
     def validate_content(self, content):
         if type(content) != str:

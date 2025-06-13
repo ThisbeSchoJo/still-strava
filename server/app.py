@@ -14,6 +14,7 @@ from models import User, Activity, Comment
 
 # Views go here!
 
+# Root route - serves as API landing page
 @app.route('/')
 def index():
     return '<h1>Still Strava</h1>'
