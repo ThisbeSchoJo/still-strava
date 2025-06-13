@@ -14,3 +14,15 @@ class User(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'<User {self.username}, Email: {self.email}, Image: {self.image}>'
+    
+class Activity(db.Model, SerializerMixin):
+    __tablename__ = 'activities'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    datetime = db.Column(db.DateTime)
+    photos = db.Column(db.String)
+
+    def __repr__(self):
+        return f'<Activity {self.name}, Description: {self.description}, Datetime: {self.datetime}, Photos: {self.photos}>'
