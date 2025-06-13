@@ -48,8 +48,48 @@ api.add_resource(AllUsers, '/users')
 
 class UserById(Resource):
     def get(self, id):
-        user = User.query.filter_by(id=id).first()
-
+        user = db.session.get(User, id)
+        if user:
+            response_body = user.to_dict(only=('id', 'username', 'email', 'image'))
+            return make_response(response_body, 200)
+        else:
+            response_body = {
+                "error": "User not found"
+            }
+            return make_response(response_body, 404)
+        
+    def patch(self, id):
+        user = db.session.get(User, id)
+        if user:
+            try:
+                for attr in request.json:
+                    setattr(user, attr, request.json[attr])
+                db.session.commit()
+                response_body = user.to_dict(only=('id', 'username', 'email', 'image'))
+                return make_response(response_body, 200)
+            except Exception as e:
+                response_body = {
+                    "error": str(e)
+                }
+                return make_response(response_body, 422)
+        else:
+            response_body = {
+                "error": "User not found"
+            }
+            return make_response(response_body, 404)
+        
+    def delete(self, id):
+        user = db.session.get(User, id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return make_response({}, 204)
+        else:
+            response_body = {
+                "error": "User not found"
+            }
+            return make_response(response_body, 404)
+        
 api.add_resource(UserById, '/users/<int:id>')
 
 # CRUD for activities
