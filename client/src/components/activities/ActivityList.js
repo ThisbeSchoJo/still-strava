@@ -1,5 +1,5 @@
 
-function ActivityFeed() {
+function ActivityList() {
     return (
         <div>
             <h1>Activity Feed</h1>
@@ -7,4 +7,4 @@ function ActivityFeed() {
     )
 }
 
-export default ActivityFeed;
+export default ActivityList;
