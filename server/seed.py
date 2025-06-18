@@ -68,7 +68,8 @@ if __name__ == '__main__':
         
         for i in range(20):
             activity = Activity(
-                name=rc(activity_types),
+                title=rc(activity_types),
+                activity_type=rc(activity_types),
                 description=fake.paragraph(nb_sentences=3),
                 datetime=fake.date_time_this_year(),
                 photos=fake.image_url(),

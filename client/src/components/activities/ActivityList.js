@@ -1,3 +1,4 @@
+import ActivityCard from "./ActivityCard";
 
 function ActivityList() {
     return (

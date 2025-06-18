@@ -50,7 +50,8 @@ class Activity(db.Model, SerializerMixin):
 
     # Database columns
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    activity_type = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     datetime = db.Column(db.DateTime)
     photos = db.Column(db.String)
