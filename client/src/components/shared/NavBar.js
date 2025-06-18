@@ -7,6 +7,7 @@ function NavBar() {
         <nav>
             <NavLink to="/" className="nav-brand">Home</NavLink>
             <NavLink to="/activity-feed" className="nav-links">Activity Feed</NavLink>
+            <NavLink to="/user-profile" className="nav-links">Profile</NavLink>
         </nav>
     )
 }
