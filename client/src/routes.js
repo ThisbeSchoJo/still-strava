@@ -1,6 +1,6 @@
 import App from "./components/App";
 import Home from "./components/Home";
-import ErrorPage from "./components/ErrorPage"
+import ErrorPage from "./components/shared/ErrorPage";
 import ActivityFeed from "./components/ActivityFeed";
 
 const routes = [
