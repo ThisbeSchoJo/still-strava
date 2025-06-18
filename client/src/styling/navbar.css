@@ -1,44 +1,50 @@
 nav {
-  background-color: #ffffff;
+  background-color: var(--strava-white);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 1000;
+  font-family: "Lato", sans-serif;
 }
 
 /* Style for NavLink components */
 nav a {
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
+  color: var(--strava-gray);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
   padding: 0.5rem 1rem;
   margin: 0 0.5rem;
   border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Hover effect */
 nav a:hover {
-  background-color: #f0f0f0;
-  color: #007bff;
+  color: var(--strava-orange);
+  background-color: transparent;
 }
 
 /* Active link style */
 nav a.active {
-  color: #007bff;
-  background-color: #e6f3ff;
+  color: var(--strava-orange);
+  background-color: transparent;
+  font-weight: 700;
 }
 
-/* Add a logo or brand name if you want */
+/* Brand name styling */
 .nav-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #007bff;
+  font-size: var(--font-size-xl);
+  font-weight: 900;
+  color: var(--strava-orange);
   text-decoration: none;
+  letter-spacing: -0.5px;
 }
 
 /* Responsive design */
@@ -52,5 +58,10 @@ nav a.active {
   nav a {
     width: 100%;
     text-align: center;
+    font-size: var(--font-size-base);
+  }
+
+  .nav-brand {
+    font-size: var(--font-size-lg);
   }
 }
