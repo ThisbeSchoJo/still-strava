@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
 # Standard library imports
+from datetime import datetime
 
 # Remote library imports
 from flask import request, make_response
 from flask_restful import Resource
 
+
 # Local imports
 from config import app, db, api
+from sqlalchemy import select
+
+
 # Add your model imports
 from models import User, Activity, Comment
 
@@ -93,6 +98,14 @@ class UserById(Resource):
         
 api.add_resource(UserById, '/users/<int:id>')
 
+def parse_datetime(datetime_str):
+    if not datetime_str:
+        return None
+    try:
+        return datetime.fromisoformat(datetime_str)
+    except ValueError as e:
+        raise ValueError("Invalid datetime format. Expected ISO format (YYYY-MM-DD HH:MM:SS)")
+
 # CRUD for activities
 class AllActivities(Resource):
     def get(self):
@@ -107,13 +120,18 @@ class AllActivities(Resource):
             new_activity = Activity(
                 name=request.json.get('name'),
                 description=request.json.get('description'),
-                datetime=request.json.get('datetime'),
+                datetime=parse_datetime(request.json.get('datetime')),
                 photos=request.json.get('photos')
             )
             db.session.add(new_activity)
             db.session.commit()
             response_body = new_activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos'))
             return make_response(response_body, 201)
+        except ValueError as e:
+            response_body = {
+                "error": str(e)
+            }
+            return make_response(response_body, 422)
         except Exception as e:
             response_body = {
                 "error": str(e)
