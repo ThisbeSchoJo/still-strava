@@ -1,1 +1,151 @@
-Single-database configuration for Flask.
+# Still Strava
+
+Still Strava is a social platform for sharing and discovering outdoor activities that don't require movement. Whether you're stargazing, bird watching, or enjoying a sunset, Still Strava helps you connect with others who appreciate the beauty of being still in nature.
+
+## Features
+
+- User profiles with customizable information
+- Activity sharing with photos and descriptions
+- Activity feed showing recent posts from the community
+- Activity types including:
+  - Stargazing
+  - Bird Watching
+  - Sunset/Sunrise Watching
+  - Rockhounding
+  - And many more!
+- Comments and social interaction
+- Responsive design for all devices
+
+## Tech Stack
+
+### Backend
+
+- Python
+- Flask
+- SQLAlchemy
+- Flask-RESTful
+- Flask-Migrate
+- SQLAlchemy-Serializer
+
+### Frontend
+
+- React
+- React Router
+- CSS3
+
+## Setup and Installation
+
+1. Clone the repository:
+
+```bash
+git clone [your-repo-url]
+cd still-strava
+```
+
+2. Set up the backend:
+
+```bash
+cd server
+pipenv install
+pipenv shell
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade head
+python seed.py
+```
+
+3. Set up the frontend:
+
+```bash
+cd ../client
+npm install
+```
+
+4. Start the servers:
+
+In the server directory:
+
+```bash
+python app.py
+```
+
+In the client directory:
+
+```bash
+npm start
+```
+
+The application will be available at:
+
+- Frontend: http://localhost:3000
+- Backend: http://localhost:5555
+
+## Database Schema
+
+### Users
+
+- id (Primary Key)
+- username (String, unique)
+- email (String, unique)
+- image (String)
+
+### Activities
+
+- id (Primary Key)
+- title (String)
+- activity_type (String)
+- description (String)
+- datetime (DateTime)
+- photos (String)
+- user_id (Foreign Key)
+
+### Comments
+
+- id (Primary Key)
+- content (String)
+- datetime (DateTime)
+- activity_id (Foreign Key)
+- user_id (Foreign Key)
+
+## API Endpoints
+
+### Users
+
+- GET /users - Get all users
+- GET /users/:id - Get user by ID
+- POST /users - Create new user
+- PATCH /users/:id - Update user
+- DELETE /users/:id - Delete user
+
+### Activities
+
+- GET /activities - Get all activities
+- GET /activities/:id - Get activity by ID
+- POST /activities - Create new activity
+- PATCH /activities/:id - Update activity
+- DELETE /activities/:id - Delete activity
+
+### Comments
+
+- GET /comments - Get all comments
+- GET /comments/:id - Get comment by ID
+- POST /comments - Create new comment
+- PATCH /comments/:id - Update comment
+- DELETE /comments/:id - Delete comment
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+## Acknowledgments
+
+- Inspired by Strava's social features
+- Built with love for the outdoor community
