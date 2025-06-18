@@ -101,23 +101,30 @@ api.add_resource(UserById, '/users/<int:id>')
 # CRUD for activities
 class AllActivities(Resource):
     def get(self):
+        print("Fetching all activities...")
         stmt = select(Activity)
         result = db.session.execute(stmt)
         activities = result.scalars().all()
-        response_body = [activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos')) for activity in activities]
+        print(f"Found {len(activities)} activities")
+        
+        response_body = [activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user')) for activity in activities]
+        print("Response body:", response_body)
+        
         return make_response(response_body, 200)
     
     def post(self):
         try:
             new_activity = Activity(
-                name=request.json.get('name'),
+                title=request.json.get('title'),
+                activity_type=request.json.get('activity_type'),
                 description=request.json.get('description'),
                 datetime=request.json.get('datetime'),
-                photos=request.json.get('photos')
+                photos=request.json.get('photos'),
+                user_id=request.json.get('user_id')
             )
             db.session.add(new_activity)
             db.session.commit()
-            response_body = new_activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos'))
+            response_body = new_activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user'))
             return make_response(response_body, 201)
         except Exception as e:
             response_body = {
@@ -131,7 +138,7 @@ class ActivityById(Resource):
     def get(self, id):
         activity = db.session.get(Activity, id)
         if activity:
-            response_body = activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos'))
+            response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user'))
             return make_response(response_body, 200)
         else:
             return make_response({"error": "Activity not found"}, 404)
@@ -143,7 +150,7 @@ class ActivityById(Resource):
                 for attr in request.json:
                     setattr(activity, attr, request.json[attr])
                 db.session.commit()
-                response_body = activity.to_dict(only=('id', 'name', 'description', 'datetime', 'photos'))
+                response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user'))
                 return make_response(response_body, 200)
             except Exception as e:
                 response_body = {

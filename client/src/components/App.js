@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import NavBar from "./shared/NavBar";
 
 function App() {
@@ -6,8 +7,9 @@ function App() {
     <div>
       <h1>Still Strava</h1>
       <NavBar />
+      <Outlet />
     </div>
-  )
+  );
 }
 
 export default App;
