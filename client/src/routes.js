@@ -1,7 +1,7 @@
 import App from "./components/App";
 import Home from "./components/Home";
 import ErrorPage from "./components/shared/ErrorPage";
-import ActivityFeed from "./components/ActivityFeed";
+import ActivityList from "./components/activities/ActivityList";
 
 const routes = [
     {
@@ -15,7 +15,7 @@ const routes = [
         },
         {
           path: "/activity-feed",
-          element: <ActivityFeed />,
+          element: <ActivityList />,
         },
       ],
     },
