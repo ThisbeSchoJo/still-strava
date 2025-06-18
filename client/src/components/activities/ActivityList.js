@@ -1,3 +1,5 @@
+import '../../styling/activitylist.css';
+
 // useState to store our activities data
 // useEffect to fetch activities from the server when the component mounts
 import { useState, useEffect } from "react";
