@@ -1,4 +1,4 @@
-
+import "../../styling/commentform.css";
 
 function CommentForm() {
     return (
