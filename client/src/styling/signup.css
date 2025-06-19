@@ -1,3 +1,6 @@
+/* client/src/styling/signup.css */
+
+/* Signup form container - centered card layout */
 .signup-container {
   max-width: 400px;
   margin: 2rem auto;
@@ -50,6 +53,7 @@
   transition: border-color 0.2s ease;
 }
 
+/* Focus state with Strava orange highlight */
 .form-group input:focus {
   outline: none;
   border-color: #fc4c02;
@@ -95,7 +99,7 @@
   text-decoration: underline;
 }
 
-/* Password requirements list */
+/* Password requirements list styling */
 .password-requirements {
   margin-top: 0.5rem;
   padding-left: 1rem;
@@ -121,7 +125,7 @@
   margin-top: 0.25rem;
 }
 
-/* Responsive design */
+/* Mobile responsive design */
 @media (max-width: 480px) {
   .signup-container {
     margin: 1rem;
