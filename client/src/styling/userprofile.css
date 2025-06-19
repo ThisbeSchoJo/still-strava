@@ -1,0 +1,215 @@
+.user-profile {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0;
+  background: white;
+}
+
+.user-profile-header {
+  background: linear-gradient(to bottom, #fc4c02, #e34402);
+  padding: 2rem 2rem 4rem;
+  color: white;
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.user-profile-image {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+}
+
+.user-profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-profile-username {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.user-profile-info {
+  padding: 0 2rem;
+  margin-bottom: 2rem;
+}
+
+.user-profile-details {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.user-profile-email {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.user-profile-bio {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.user-profile-location {
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.user-profile-location::before {
+  content: "📍";
+}
+
+.user-profile-social {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.user-profile-social a {
+  color: #666;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-profile-social a:hover {
+  color: #fc4c02;
+  background-color: #f7f7f7;
+}
+
+.user-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: #f7f7f7;
+  border-radius: 8px;
+  margin: 0 2rem;
+}
+
+.stat {
+  text-align: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Activity section */
+.user-profile-activities {
+  margin-top: 2rem;
+  padding: 0 2rem;
+}
+
+.user-profile-activities h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .user-profile {
+    margin: 0;
+  }
+
+  .user-profile-header {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .user-profile-image {
+    width: 100px;
+    height: 100px;
+    bottom: -50px;
+  }
+
+  .user-profile-info {
+    padding: 0 1rem;
+  }
+
+  .user-profile-stats {
+    grid-template-columns: 1fr;
+    margin: 0 1rem;
+    padding: 1rem;
+  }
+
+  .user-profile-activities {
+    padding: 0 1rem;
+  }
+}
+
+/* Loading and error states */
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* Optional: Add a subtle animation when the profile loads */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-profile {
+  animation: fadeIn 0.5s ease-out;
+}
