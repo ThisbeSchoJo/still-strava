@@ -1,3 +1,4 @@
+import "../../styling/activityform.css";
 
 function ActivityForm() {
     return (
