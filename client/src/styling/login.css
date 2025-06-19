@@ -1,3 +1,4 @@
+/* Login form container - centered card layout */
 .login-container {
   max-width: 400px;
   margin: 2rem auto;
@@ -50,6 +51,7 @@
   transition: border-color 0.2s ease;
 }
 
+/* Focus state with Strava orange highlight */
 .form-group input:focus {
   outline: none;
   border-color: #fc4c02;
@@ -101,7 +103,7 @@
   margin-top: 0.25rem;
 }
 
-/* Responsive design */
+/* Mobile responsive design */
 @media (max-width: 480px) {
   .login-container {
     margin: 1rem;
