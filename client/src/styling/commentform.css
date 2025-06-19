@@ -1,3 +1,6 @@
+/* client/src/styling/commentform.css */
+
+/* Comment form container - inline card layout */
 .comment-form-container {
   background: white;
   border-radius: 8px;
@@ -47,12 +50,14 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Focus state with Strava orange highlight */
 .form-group textarea:focus {
   outline: none;
   border-color: #fc4c02;
   box-shadow: 0 0 0 2px rgba(252, 76, 2, 0.1);
 }
 
+/* Footer with character count and buttons */
 .comment-form-footer {
   display: flex;
   justify-content: space-between;
@@ -62,17 +67,18 @@
   background-color: #f7f7f7;
 }
 
+/* Character count with color states */
 .comment-character-count {
   color: #666;
   font-size: 0.8rem;
 }
 
 .comment-character-count.near-limit {
-  color: #f39c12;
+  color: #f39c12;                                            /* Warning orange */
 }
 
 .comment-character-count.at-limit {
-  color: #dc3545;
+  color: #dc3545;                                            /* Error red */
 }
 
 .comment-form-buttons {
@@ -118,6 +124,7 @@
   border-color: #999;
 }
 
+/* Error and success message styling */
 .error-message {
   color: #dc3545;
   font-size: 0.9rem;
@@ -136,13 +143,13 @@
   border-radius: 4px;
 }
 
-/* Loading state */
+/* Loading state - reduces opacity and disables interactions */
 .comment-form-loading {
   opacity: 0.6;
   pointer-events: none;
 }
 
-/* Responsive design */
+/* Mobile responsive design */
 @media (max-width: 768px) {
   .comment-form-container {
     margin: 0.5rem 0;
@@ -153,7 +160,7 @@
   }
 
   .comment-form-footer {
-    flex-direction: column;
+    flex-direction: column;                                   /* Stack vertically on mobile */
     gap: 1rem;
     align-items: stretch;
   }
@@ -163,7 +170,7 @@
   }
 }
 
-/* Optional: Add a subtle animation when the form appears */
+/* Slide-in animation for form appearance */
 @keyframes slideIn {
   from {
     opacity: 0;
