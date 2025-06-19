@@ -1,3 +1,6 @@
+/* client/src/styling/activityform.css */
+
+/* Activity form container - centered card layout */
 .activity-form-container {
   max-width: 600px;
   margin: 2rem auto;
@@ -55,6 +58,7 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Focus state with Strava orange highlight */
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
@@ -73,6 +77,7 @@
   cursor: pointer;
 }
 
+/* Activity type selection grid */
 .activity-type-options {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -101,6 +106,7 @@
   color: white;
 }
 
+/* Drag and drop image upload area */
 .image-upload-section {
   border: 2px dashed #ddd;
   border-radius: 4px;
@@ -114,7 +120,7 @@
 }
 
 .image-upload-section input[type="file"] {
-  display: none;
+  display: none; /* Hide default file input */
 }
 
 .image-upload-label {
@@ -184,7 +190,7 @@
   margin-top: 0.25rem;
 }
 
-/* Responsive design */
+/* Mobile responsive design */
 @media (max-width: 768px) {
   .activity-form-container {
     margin: 1rem;
@@ -192,10 +198,10 @@
   }
 
   .activity-form-buttons {
-    flex-direction: column;
+    flex-direction: column; /* Stack buttons vertically */
   }
 
   .activity-type-options {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Single column on mobile */
   }
 }
