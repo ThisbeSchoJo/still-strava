@@ -1,0 +1,201 @@
+.activity-form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.activity-form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.activity-form-header h1 {
+  color: #333;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.activity-form-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.activity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: "Lato", sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #fc4c02;
+  box-shadow: 0 0 0 2px rgba(252, 76, 2, 0.1);
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-group select {
+  background-color: white;
+  cursor: pointer;
+}
+
+.activity-type-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.activity-type-option {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.activity-type-option:hover {
+  border-color: #fc4c02;
+  background-color: #f7f7f7;
+}
+
+.activity-type-option.selected {
+  border-color: #fc4c02;
+  background-color: #fc4c02;
+  color: white;
+}
+
+.image-upload-section {
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  padding: 2rem;
+  text-align: center;
+  transition: border-color 0.2s ease;
+}
+
+.image-upload-section:hover {
+  border-color: #fc4c02;
+}
+
+.image-upload-section input[type="file"] {
+  display: none;
+}
+
+.image-upload-label {
+  color: #666;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.image-upload-label:hover {
+  color: #fc4c02;
+}
+
+.activity-form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.submit-button {
+  background-color: #fc4c02;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex: 1;
+}
+
+.submit-button:hover {
+  background-color: #e34402;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: #666;
+  padding: 0.75rem 2rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+  background-color: #f7f7f7;
+  border-color: #999;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .activity-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .activity-form-buttons {
+    flex-direction: column;
+  }
+
+  .activity-type-options {
+    grid-template-columns: 1fr;
+  }
+}
