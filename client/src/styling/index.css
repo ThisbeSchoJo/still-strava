@@ -1,62 +1,79 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
 
-/* Global Styling */
+/* 
+ * Global CSS Variables (Custom Properties)
+ * These define our design system colors and sizes that can be reused throughout the app
+ */
 :root {
-  /* Strava's color palette */
-  --strava-orange: #fc4c02;
-  --strava-orange-hover: #e34402;
-  --strava-gray: #666666;
-  --strava-light-gray: #f7f7f7;
-  --strava-dark: #333333;
-  --strava-white: #ffffff;
+  /* Strava's official color palette - these are the exact colors used by Strava */
+  --strava-orange: #fc4c02; /* Primary brand color - used for buttons, links, highlights */
+  --strava-orange-hover: #e34402; /* Darker orange for hover states */
+  --strava-gray: #666666; /* Secondary text color */
+  --strava-light-gray: #f7f7f7; /* Background color for cards and sections */
+  --strava-dark: #333333; /* Primary text color */
+  --strava-white: #ffffff; /* White for backgrounds and text on dark elements */
 
-  /* Font sizes */
-  --font-size-xs: 0.75rem; /* 12px */
-  --font-size-sm: 0.875rem; /* 14px */
-  --font-size-base: 1rem; /* 16px */
-  --font-size-lg: 1.125rem; /* 18px */
-  --font-size-xl: 1.25rem; /* 20px */
-  --font-size-2xl: 1.5rem; /* 24px */
+  /* Typography scale - consistent font sizes throughout the app */
+  --font-size-xs: 0.75rem; /* 12px - for small labels and captions */
+  --font-size-sm: 0.875rem; /* 14px - for body text on mobile */
+  --font-size-base: 1rem; /* 16px - default body text size */
+  --font-size-lg: 1.125rem; /* 18px - for subheadings */
+  --font-size-xl: 1.25rem; /* 20px - for section headings */
+  --font-size-2xl: 1.5rem; /* 24px - for page titles */
 }
 
-/* Base styles */
+/* 
+ * CSS Reset - removes default browser styling to ensure consistent appearance
+ * across different browsers and devices
+ */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 0; /* Remove default margins */
+  padding: 0; /* Remove default padding */
+  box-sizing: border-box; /* Include padding and border in element's total width/height */
 }
 
+/* 
+ * Base body styles - these apply to the entire page
+ */
 body {
+  /* Font stack - Lato first, then fallback to system fonts if Lato fails to load */
   font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  color: var(--strava-dark);
-  background-color: var(--strava-light-gray);
+  font-size: var(--font-size-base); /* Use our design system font size */
+  line-height: 1.5; /* Comfortable reading line height */
+  color: var(--strava-dark); /* Use our design system text color */
+  background-color: var(
+    --strava-light-gray
+  ); /* Light gray background like Strava */
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Lato", sans-serif;
-  font-weight: 700;
-  line-height: 1.2;
+/* 
+ * Heading styles - all headings use Lato font with bold weight
+ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lato", sans-serif; /* Ensure headings use Lato */
+  font-weight: 700; /* Bold weight for headings */
+  line-height: 1.2; /* Tighter line height for headings */
 }
 
+/* 
+ * Link styles - default styling for all links in the app
+ */
 a {
-  color: var(--strava-orange);
-  text-decoration: none;
-  transition: color 0.2s ease;
+  color: var(--strava-orange); /* Use Strava orange for links */
+  text-decoration: none; /* Remove default underline */
+  transition: color 0.2s ease; /* Smooth color transition on hover */
 }
 
+/* Hover state for links - darker orange when user hovers */
 a:hover {
   color: var(--strava-orange-hover);
 }
 
+/* 
+ * Button styles - ensure all buttons use consistent font
+ */
 button {
-  font-family: "Lato", sans-serif;
-  font-weight: 600;
+  font-family: "Lato", sans-serif; /* Consistent font for all buttons */
+  font-weight: 600; /* Semi-bold weight for buttons */
 }
