@@ -3,6 +3,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
 from datetime import datetime
 from config import db
+import bcrypt
 
 # Models go here!
 class User(db.Model, SerializerMixin):
@@ -12,6 +13,7 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
+    password_hash = db.Column(db.String, nullable=False)
     image = db.Column(db.String, nullable=False)
 
     # Relationships
@@ -19,7 +21,17 @@ class User(db.Model, SerializerMixin):
     comments = db.relationship('Comment', back_populates='user')
 
     # Serialization rules to avoid circular references
-    serialize_rules = ('-activities', '-comments')
+    serialize_rules = ('-activities', '-comments', '-password_hash')
+
+    # Password methods
+    def set_password(self, password):
+        """Hash and set the user's password"""
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        self.password_hash = password_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        """Verify the user's password"""
+        return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
     # Validation methods
     @validates('username', 'image')

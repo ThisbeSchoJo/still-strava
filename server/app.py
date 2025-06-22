@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 # Remote library imports
-from flask import request, make_response
+from flask import request, make_response, current_app
 from flask_restful import Resource
+import jwt
+# from resources.signup import Signup
 
 
 # Local imports
@@ -24,6 +26,65 @@ from models import User, Activity, Comment
 def index():
     return '<h1>Still Strava</h1>'
 
+# Login route
+class Login(Resource):
+    def post(self):
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+    
+        if not email or not password:
+            return {'error': 'Email and password are required'}, 400
+    
+        user = User.query.filter_by(email=email).first()
+    
+        if not user or not user.authenticate(password):
+            return {'error': 'Invalid email or password'}, 401
+    
+        # Generate JWT token
+        payload = {
+            'user_id': user.id,
+            'exp': datetime.now(timezone.utc) + timedelta(hours=24)
+        }
+        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+    
+        return  {
+            'token': token,
+            'user': user.to_dict(only=('id', 'username', 'email', 'image'))
+        }, 200
+api.add_resource(Login, '/login')
+
+class Signup(Resource):
+    def post(self):
+        data = request.json
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        image = data.get('image')
+
+        if not all([username, email, password, image]):
+            return {'error':'All fields are required'}, 400
+        if User.query.filter_by(email=email).first():
+            return {'error':'Email already in use'}, 400
+        
+        user = User(username=username, email=email, image=image)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+
+        payload = {
+            'user_id': user.id,
+            'exp': datetime.now(timezone.utc)+timedelta(hours=24)
+        }
+        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+
+        return {
+            'token': token,
+            'user': user.to_dict(only=('id', 'username','email','image'))
+        }, 201
+
+api.add_resource(Signup, '/signup')
+
 # CRUD for users
 class AllUsers(Resource):
     def get(self):
@@ -33,13 +94,18 @@ class AllUsers(Resource):
         response_body = [user.to_dict(only=('id', 'username', 'email', 'image')) for user in users]
         return make_response(response_body, 200)
     
+    # update : data=request.json >>> data.get('password') etc
     def post(self):
         try:
+            password = request.json.get('password')
+            if not password:
+                return make_response({"error": "Password is required"}, 400)
             new_user = User(
                 username=request.json.get('username'),
                 email=request.json.get('email'),
                 image=request.json.get('image')
             )
+            new_user.set_password(password)
             db.session.add(new_user)
             db.session.commit()
             response_body = new_user.to_dict(only=('id', 'username', 'email', 'image'))
