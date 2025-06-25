@@ -1,6 +1,9 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 
+import "../../styling/editprofileform.css";
+
+
 function EditProfileForm({ user, onClose }) {
   const { setUser } = useContext(UserContext);
 
