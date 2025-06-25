@@ -11,7 +11,10 @@ function NavBar() {
             <NavLink to="/" className="nav-brand">Home</NavLink>
             <NavLink to="/activity-feed" className="nav-links">Activity Feed</NavLink>
             {user && (
-                <NavLink to={`/users/${user.id}`} className="nav-links">Profile</NavLink>
+                <>
+                    <NavLink to={`/users/${user.id}`} className="nav-links">Profile</NavLink>
+                    <NavLink to="/logout" className="nav-links">Logout</NavLink>
+                </>
             )}
             {!user && (
                 <NavLink to="/login" className="nav-links">Login</NavLink>
