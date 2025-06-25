@@ -4,6 +4,7 @@ import ErrorPage from "./components/shared/ErrorPage";
 import ActivityList from "./components/activities/ActivityList";
 import UserProfile from "./components/users/UserProfile";
 import Login from "./components/auth/Login";
+import Logout from "./components/auth/Logout";
 import SignUp from "./components/auth/SignUp";
 import UserProfilePage from "./components/users/UserProfilePage";
 
@@ -28,6 +29,10 @@ const routes = [
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/logout",
+        element: <Logout />
       },
       {
         path: "/signup",
