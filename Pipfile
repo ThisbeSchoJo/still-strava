@@ -12,9 +12,11 @@ flask-migrate = "*"
 sqlalchemy-serializer = "*"
 flask-restful = "*"
 flask-cors = "*"
-faker = "*"
 bcrypt = "*"
 PyJWT = "*"
+faker = "*"
 
 [requires]
 python_full_version = "3.8.13"
+
+[dev-packages]
