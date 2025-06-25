@@ -57,20 +57,27 @@ api.add_resource(Login, '/login')
 class Signup(Resource):
     def post(self):
         data = request.json
+        print("SIGNUP data received:", data)
+
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        image = data.get('image')
+        image = data.get('image') or "https://i.imgur.com/default-avatar.png"
 
-        if not all([username, email, password, image]):
-            return {'error':'All fields are required'}, 400
+        if not all([username, email, password]):
+            return {'error': 'Username, email, and password are required'}, 400
+
         if User.query.filter_by(email=email).first():
-            return {'error':'Email already in use'}, 400
-        
-        user = User(username=username, email=email, image=image)
-        user.set_password(password)
-        db.session.add(user)
-        db.session.commit()
+            return {'error': 'Email already in use'}, 400
+
+        try:
+            user = User(username=username, email=email, image=image)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+        except Exception as e:
+            print("Error during user creation:", e)  # <-- ADD THIS
+            return {'error': str(e)}, 400
 
         payload = {
             'user_id': user.id,
