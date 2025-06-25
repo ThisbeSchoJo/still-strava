@@ -14,7 +14,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String, nullable=False)
-    image = db.Column(db.String, nullable=False)
+    image = db.Column(db.String)
 
     # Relationships
     activities = db.relationship('Activity', back_populates='user')
@@ -34,14 +34,23 @@ class User(db.Model, SerializerMixin):
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
     # Validation methods
-    @validates('username', 'image')
+    @validates('username')
     def validate_username(self, key, value):
         if type(value) != str:
-            raise TypeError(f"{key} must be a string")
-        elif len(value) < 5:
-            raise ValueError(f"{key} must be at least 5 characters long")
-        else:
-            return value
+            raise TypeError("Username must be a string")
+        elif len(value) < 4:
+            raise ValueError("Username must be at least 4 characters long")
+        return value
+
+    @validates('image')
+    def validate_image(self, key, value):
+        # Only validate if an image is provided
+        if value:
+            if type(value) != str:
+                raise TypeError("Image must be a string")
+            elif len(value) < 5:
+                raise ValueError("Image URL must be at least 5 characters long")
+        return value
 
     @validates('email')
     def validate_email(self, key, value):
