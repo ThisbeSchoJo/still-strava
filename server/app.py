@@ -62,7 +62,7 @@ class Signup(Resource):
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        image = data.get('image') or "https://i.imgur.com/default-avatar.png"
+        image = data.get('image') or "https://i.pinimg.com/originals/94/9e/9a/949e9acf4df6075391f21248765bd8c3.jpg"  # ← default image URL
 
         if not all([username, email, password]):
             return {'error': 'Username, email, and password are required'}, 400
