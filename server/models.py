@@ -15,6 +15,11 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String, nullable=False)
     image = db.Column(db.String)
+    bio = db.Column(db.String)
+    location = db.Column(db.String)
+    website = db.Column(db.String)
+    twitter = db.Column(db.String)
+    instagram = db.Column(db.String)
 
     # Relationships
     activities = db.relationship('Activity', back_populates='user')
