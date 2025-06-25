@@ -85,6 +85,27 @@ class Signup(Resource):
 
 api.add_resource(Signup, '/signup')
 
+class Me(Resource):
+    def get(self):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return {'error': 'Authorization header missing'}, 401
+
+        token = auth_header.split(" ")[1]  # Expecting "Bearer <token>"
+        try:
+            payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+            user = db.session.get(User, payload['user_id'])
+            if not user:
+                return {'error': 'User not found'}, 404
+            return user.to_dict(only=('id', 'username', 'email', 'image'))
+        except jwt.ExpiredSignatureError:
+            return {'error': 'Token expired'}, 401
+        except jwt.InvalidTokenError:
+            return {'error': 'Invalid token'}, 401
+
+api.add_resource(Me, '/me')
+
+
 # CRUD for users
 class AllUsers(Resource):
     def get(self):
