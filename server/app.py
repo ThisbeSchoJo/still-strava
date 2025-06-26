@@ -150,7 +150,11 @@ class UserById(Resource):
     def get(self, id):
         user = db.session.get(User, id)
         if user:
-            response_body = user.to_dict(only=('id', 'username', 'email', 'image'))
+            response_body = user.to_dict(only=(
+                'id', 'username', 'email', 'image',
+                'bio', 'location', 'website', 'twitter', 'instagram',
+                'activities', 'comments'
+            ))
             return make_response(response_body, 200)
         else:
             response_body = {
@@ -159,13 +163,18 @@ class UserById(Resource):
             return make_response(response_body, 404)
         
     def patch(self, id):
+        USER_PROFILE_FIELDS = (
+            'id', 'username', 'email', 'image',
+            'bio', 'location', 'website', 'twitter', 'instagram',
+            'activities', 'comments'
+        )
         user = db.session.get(User, id)
         if user:
             try:
                 for attr in request.json:
                     setattr(user, attr, request.json[attr])
                 db.session.commit()
-                response_body = user.to_dict(only=('id', 'username', 'email', 'image'))
+                response_body = user.to_dict(only=USER_PROFILE_FIELDS)
                 return make_response(response_body, 200)
             except Exception as e:
                 response_body = {
