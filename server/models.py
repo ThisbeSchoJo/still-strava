@@ -81,6 +81,7 @@ class Activity(db.Model, SerializerMixin):
     description = db.Column(db.String)
     datetime = db.Column(db.DateTime)
     photos = db.Column(db.String)
+    likes = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationships

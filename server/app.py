@@ -210,7 +210,7 @@ class AllActivities(Resource):
         activities = result.scalars().all()
         print(f"Found {len(activities)} activities")
         
-        response_body = [activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user')) for activity in activities]
+        response_body = [activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'likes', 'user')) for activity in activities]
         print("Response body:", response_body)
         
         return make_response(response_body, 200)
@@ -227,7 +227,7 @@ class AllActivities(Resource):
             )
             db.session.add(new_activity)
             db.session.commit()
-            response_body = new_activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user'))
+            response_body = new_activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'likes', 'user'))
             return make_response(response_body, 201)
         except Exception as e:
             response_body = {
@@ -241,7 +241,7 @@ class ActivityById(Resource):
     def get(self, id):
         activity = db.session.get(Activity, id)
         if activity:
-            response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user'))
+            response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'likes', 'user'))
             return make_response(response_body, 200)
         else:
             return make_response({"error": "Activity not found"}, 404)
@@ -253,7 +253,7 @@ class ActivityById(Resource):
                 for attr in request.json:
                     setattr(activity, attr, request.json[attr])
                 db.session.commit()
-                response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'user'))
+                response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'datetime', 'photos', 'likes', 'user'))
                 return make_response(response_body, 200)
             except Exception as e:
                 response_body = {
