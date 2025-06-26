@@ -54,12 +54,12 @@ function EditProfileForm({ user, onClose }) {
 
       <label>
         Username:
-        <input name="username" value={formData.username} onChange={handleChange} />
+        <input type="text" name="username" value={formData.username} onChange={handleChange} />
       </label>
 
       <label>
         Email:
-        <input name="email" value={formData.email} onChange={handleChange} />
+        <input type="email" name="email" value={formData.email} onChange={handleChange} />
       </label>
 
       <label>
@@ -69,7 +69,7 @@ function EditProfileForm({ user, onClose }) {
 
       <label>
         Bio:
-        <input name="bio" value={formData.bio} onChange={handleChange} />
+        <textarea name="bio" value={formData.bio} onChange={handleChange} />
       </label>
 
       <label>
