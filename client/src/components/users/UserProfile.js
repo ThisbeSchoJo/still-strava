@@ -19,12 +19,16 @@ function UserProfile({ user }) {
         <div className="user-profile-image">
           <img src={user.image} alt={user.username} />
         </div>
-        <h1 className="user-profile-username">{user.username}</h1>
-        {isCurrentUser && (
-          <button className="edit-profile-button" onClick={() => setEditing(!editing)}>
-          {editing ? "Cancel" : "Edit Profile"}
-          </button>
-        )}
+        <div className="user-profile-header-details">
+          <h1 className="user-profile-username">{user.username}</h1>
+          <p className="user-profile-email">{user.email}</p>
+          {user.location && <p className="user-profile-location">{user.location}</p>}
+          {isCurrentUser && (
+            <button className="edit-profile-button" onClick={() => setEditing(!editing)}>
+              {editing ? "Cancel" : "Edit Profile"}
+            </button>
+          )}
+        </div>
       </div>
       {editing ? (
         <EditProfileForm user={user} onClose={() => setEditing(false)} />

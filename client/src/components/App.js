@@ -1,14 +1,18 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./shared/NavBar";
+import "../styling/app.css";
+
 
 function App() {
   return (
-    <div>
-      <h1>Still Strava</h1>
+    <>
+      <header>
+        <h1>Still Strava</h1>
+      </header>
       <NavBar />
       <Outlet />
-    </div>
+    </>
   );
 }
 

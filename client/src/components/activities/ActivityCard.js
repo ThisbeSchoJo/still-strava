@@ -1,5 +1,7 @@
-import "../../styling/activitycard.css";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import "../../styling/activitycard.css";
+
 // client/src/components/activities/ActivityCard.js
 
 /*
@@ -18,17 +20,30 @@ import { Link } from "react-router-dom";
  * - id: number for the unique activity identifier
  */
 function ActivityCard({ activity }) {
+  const [likes, setLikes] = useState(activity.likes || 0);
+
+  const handleLike = () => {
+    fetch(`http://localhost:5555/activities/${activity.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ likes: likes + 1 }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to like activity");
+        return res.json();
+      })
+      .then((updated) => {
+        setLikes(updated.likes);
+      })
+      .catch((err) => console.error(err));
+  };
+
   return (
-    // Main container for the activity card with CSS class for styling
     <div className="activity-card">
-      {/* Header section containing user information */}
       <div className="activity-card-header">
         <div className="activity-card-user">
-          {/* Link to user's profile page - clicking on user info navigates to their profile */}
           <Link to={`/users/${activity.user.id}`}>
-            {/* User's profile image with alt text for accessibility */}
             <img src={activity.user.image} alt={activity.user.username} />
-            {/* Username displayed next to the profile image */}
             <span className="activity-card-username">
               {activity.user.username}
             </span>
@@ -36,42 +51,27 @@ function ActivityCard({ activity }) {
         </div>
       </div>
 
-      {/* Activity title - main heading for the activity */}
       <h2 className="activity-card-title">{activity.title}</h2>
 
-      {/* Image section displaying the activity photo */}
       <div className="activity-card-image">
-        {/* Activity image with alt text using the activity title for accessibility */}
         <img src={activity.photos} alt={activity.title} />
       </div>
 
-      {/* Information section containing activity details */}
       <div className="activity-card-info">
-        {/* Stats row showing activity type and date */}
         <div className="activity-card-stats">
-          {/* Display the type of activity */}
           <span>Activity Type: {activity.activity_type}</span>
-          {/* Display the date when the activity occurred, formatted for readability */}
           <span>Date: {new Date(activity.datetime).toLocaleDateString()}</span>
         </div>
-
-        {/* Activity description - detailed text about the activity */}
         <p className="activity-card-description">{activity.description}</p>
       </div>
 
-      {/* Actions section for future interactive elements */}
+      {/* 💖 Like Button */}
       <div className="activity-card-actions">
-        {/* 
-          This section is reserved for future features like:
-          - Like/Unlike buttons
-          - Comment buttons
-          - Share buttons
-          - Edit/Delete buttons (for activity owner)
-        */}
+        <button className="like-button" onClick={handleLike}>❤️ Like</button>
+        <span className="like-count">{likes} {likes === 1 ? "like" : "likes"}</span>
       </div>
     </div>
   );
 }
 
-// Export the component so it can be imported and used in other components
 export default ActivityCard;
