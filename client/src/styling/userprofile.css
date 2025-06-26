@@ -11,7 +11,7 @@
 .user-profile-header {
   display: flex;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   background: linear-gradient(to right, #fc4c02, #e34402);
   color: white;
 }

@@ -1,11 +1,13 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import EditProfileForm from "./EditProfileForm"; // New component
-
+import ActivityCard from "../activities/ActivityCard";
 
 import "../../styling/userprofile.css";
 
 function UserProfile({ user }) {
+  console.log("User in UserProfile:", user);
+
 
   const { user: currentUser, setUser } = useContext(UserContext);
   const [editing, setEditing] = useState(false);
@@ -36,11 +38,10 @@ function UserProfile({ user }) {
         <>
           <div className="user-profile-info">
           <div className="user-profile-details">
-            <p className="user-profile-email">{user.email}</p>
             {user.bio && <p className="user-profile-bio">{user.bio}</p>}
-            {user.location && (
+            {/* {user.location && (
               <p className="user-profile-location">{user.location}</p>
-            )}
+            )} */}
           </div>
 
           <div className="user-profile-social">
@@ -85,7 +86,13 @@ function UserProfile({ user }) {
 
         <div className="user-profile-activities">
           <h2>Recent Activities</h2>
-          {/* Add ActivityList component here when ready */}
+          {user.activities && user.activities.length > 0 ? (
+            user.activities.map((activity) => (
+              <ActivityCard key={activity.id} activity={activity} />
+            ))
+          ) : (
+            <p>No activities yet</p>
+          )}
         </div>
         </>
 
