@@ -3,6 +3,7 @@ import '../../styling/activitylist.css';
 // useState to store our activities data
 // useEffect to fetch activities from the server when the component mounts
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import ActivityCard from "./ActivityCard";
 
@@ -11,6 +12,11 @@ function ActivityList() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  const handleAddActivity = () => {
+    navigate("/activities/new");
+  };
 
   // useEffect to fetch activities from the server when the component mounts
   // makes a GET request to the server to fetch all activities
