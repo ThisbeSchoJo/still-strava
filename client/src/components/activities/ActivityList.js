@@ -45,6 +45,9 @@ function ActivityList() {
   return (
     <div className="activity-list-container">
       <h1>Activity Feed</h1>
+      <div>
+        <button className="add-activity-button">Add Activity</button>
+      </div>
       <div className="activity-list">
         {activities && activities.length > 0 ? (
           activities.map((activity) => {
