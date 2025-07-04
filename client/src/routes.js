@@ -7,6 +7,7 @@ import Login from "./components/auth/Login";
 import Logout from "./components/auth/Logout";
 import SignUp from "./components/auth/SignUp";
 import UserProfilePage from "./components/users/UserProfilePage";
+import ActivityForm from "./components/activities/ActivityForm";
 
 const routes = [
   {
@@ -17,6 +18,10 @@ const routes = [
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/activities/new",
+        element: <ActivityForm />,
       },
       {
         path: "/activity-feed",
