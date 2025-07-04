@@ -1,6 +1,12 @@
 import "../../styling/activityform.css";
+import { useNavigate } from "react-router-dom";
 
 function ActivityForm() {
+  const navigate = useNavigate();
+  const handleCancel = () => {
+    navigate("/activity-feed");
+  };
+
   return (
     <div className="activity-form-container">
       <div className="activity-form-header">
@@ -75,7 +81,7 @@ function ActivityForm() {
           <button type="submit" className="submit-button">
             Create Activity
           </button>
-          <button type="button" className="cancel-button">
+          <button type="button" className="cancel-button" onClick={handleCancel}>
             Cancel
           </button>
         </div>
