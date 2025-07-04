@@ -1,0 +1,68 @@
+/* Simple Home page styling */
+
+.homepage {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 100%);
+}
+
+.homepage h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.homepage p {
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* Simple call-to-action button */
+.cta-button {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-button.primary {
+  background-color: #fc4c02;
+  color: white;
+}
+
+.cta-button.primary:hover {
+  background-color: #e34402;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(252, 76, 2, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .homepage {
+    padding: 1rem;
+    min-height: 60vh;
+  }
+
+  .homepage h2 {
+    font-size: 2rem;
+  }
+
+  .homepage p {
+    font-size: 1.1rem;
+  }
+}
