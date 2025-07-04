@@ -52,7 +52,7 @@ function ActivityList() {
     <div className="activity-list-container">
       <h1>Activity Feed</h1>
       <div>
-        <button className="add-activity-button">Add Activity</button>
+        <button className="add-activity-button" onClick={handleAddActivity}>Add Activity</button>
       </div>
       <div className="activity-list">
         {activities && activities.length > 0 ? (
