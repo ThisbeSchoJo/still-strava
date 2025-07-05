@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
+import { UserContext } from "../../context/UserContext";
 
 // client/src/components/activities/ActivityCard.js
 
@@ -21,6 +22,7 @@ import "../../styling/activitycard.css";
  */
 function ActivityCard({ activity }) {
   const [likes, setLikes] = useState(activity.likes || 0);
+  const { user } = useContext(UserContext);
 
   const handleLike = () => {
     fetch(`http://localhost:5555/activities/${activity.id}`, {
@@ -85,7 +87,10 @@ function ActivityCard({ activity }) {
       </div>
       {/* Delete Button */}
       <div className="activity-card-actions">
-        <button className="delete-button" onClick={handleDelete}>Delete</button>
+        {/* Check if user is the owner of the activity */}
+        {activity.user.id === user.id && (
+          <button className="delete-button" onClick={handleDelete}>Delete</button>
+        )}
       </div>
     </div>
   );
