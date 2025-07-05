@@ -11,6 +11,22 @@
   background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 100%);
 }
 
+.hero-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .homepage h2 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -29,8 +45,8 @@
 .homepage .description {
   font-size: 1rem;
   color: #888;
-  margin-bottom: 2rem;
-  max-width: 500px;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
   line-height: 1.6;
 }
 
@@ -67,16 +83,14 @@
 }
 
 .cta-button.secondary {
-  background-color: transparent;
-  color: #fc4c02;
-  border: 2px solid #fc4c02;
+  background-color: #fc4c02;
+  color: white;
 }
 
 .cta-button.secondary:hover {
-  background-color: #fc4c02;
-  color: white;
+  background-color: #e34402;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(252, 76, 2, 0.2);
+  box-shadow: 0 6px 16px rgba(252, 76, 2, 0.3);
 }
 
 /* Responsive design */
@@ -84,6 +98,10 @@
   .homepage {
     padding: 1rem;
     min-height: 60vh;
+  }
+
+  .hero-icon {
+    font-size: 3rem;
   }
 
   .homepage h2 {
@@ -96,6 +114,7 @@
 
   .homepage .description {
     font-size: 0.95rem;
+    margin-bottom: 2rem;
   }
 
   .cta-buttons {
