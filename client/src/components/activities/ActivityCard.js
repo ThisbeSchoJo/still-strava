@@ -23,12 +23,15 @@ import { UserContext } from "../../context/UserContext";
 function ActivityCard({ activity }) {
   const [likes, setLikes] = useState(activity.likes || 0);
   const { user } = useContext(UserContext);
+  const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = () => {
+    const updatedLikes = isLiked ? likes - 1 : likes + 1;
+
     fetch(`http://localhost:5555/activities/${activity.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ likes: likes + 1 }),
+      body: JSON.stringify({ likes: updatedLikes }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to like activity");
@@ -36,6 +39,7 @@ function ActivityCard({ activity }) {
       })
       .then((updated) => {
         setLikes(updated.likes);
+        setIsLiked(!isLiked);
       })
       .catch((err) => console.error(err));
   };
@@ -75,9 +79,12 @@ function ActivityCard({ activity }) {
         <p className="activity-card-description">{activity.description}</p>
       </div>
 
-      {/* 💖 Like Button */}
+      {/* Like Button */}
       <div className="activity-card-actions">
-        <button className="like-button" onClick={handleLike}>❤️ Like</button>
+        {/* toggle between like and unlike   */}
+        <button className="like-button" onClick={handleLike}>
+          {isLiked ? "Unlike" : "❤️ Like"}
+        </button>
         <span className="like-count">{likes} {likes === 1 ? "like" : "likes"}</span>
       </div>
       {/* Comment Button */}
