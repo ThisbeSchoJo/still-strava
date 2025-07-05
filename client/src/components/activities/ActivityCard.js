@@ -38,6 +38,14 @@ function ActivityCard({ activity }) {
       .catch((err) => console.error(err));
   };
 
+  const handleComment = () => {
+    console.log("Commenting on activity:", activity.id);
+  };
+  
+  const handleDelete = () => {
+    console.log("Deleting activity:", activity.id);
+  };
+
   return (
     <div className="activity-card">
       <div className="activity-card-header">
@@ -69,6 +77,15 @@ function ActivityCard({ activity }) {
       <div className="activity-card-actions">
         <button className="like-button" onClick={handleLike}>❤️ Like</button>
         <span className="like-count">{likes} {likes === 1 ? "like" : "likes"}</span>
+      </div>
+      {/* Comment Button */}
+      <div className="activity-card-actions">
+        <button className="comment-button" onClick={handleComment}>Comment</button>
+        {/* ADD FUNCTIONALITY TO COMMENT */}
+      </div>
+      {/* Delete Button */}
+      <div className="activity-card-actions">
+        <button className="delete-button" onClick={handleDelete}>Delete</button>
       </div>
     </div>
   );
