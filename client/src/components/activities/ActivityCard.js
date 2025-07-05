@@ -83,7 +83,7 @@ function ActivityCard({ activity }) {
       <div className="activity-card-actions">
         {/* toggle between like and unlike   */}
         <button className="like-button" onClick={handleLike}>
-          {isLiked ? "Unlike" : "❤️ Like"}
+          {isLiked ? "Unlike" : "Like"}
         </button>
         <span className="like-count">{likes} {likes === 1 ? "like" : "likes"}</span>
       </div>
