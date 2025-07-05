@@ -217,11 +217,15 @@ class AllActivities(Resource):
     
     def post(self):
         try:
+            # Convert datetime string to datetime object if provided
+            datetime_str = request.json.get('datetime')
+            datetime_obj = datetime.fromisoformat(datetime_str) if datetime_str else datetime.now(timezone.utc)
+            
             new_activity = Activity(
                 title=request.json.get('title'),
                 activity_type=request.json.get('activity_type'),
                 description=request.json.get('description'),
-                datetime=request.json.get('datetime'),
+                datetime=datetime_obj,
                 photos=request.json.get('photos'),
                 user_id=request.json.get('user_id')
             )

@@ -1,8 +1,60 @@
 import "../../styling/activityform.css";
 import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 function ActivityForm() {
+  const [title, setTitle] = useState("");
+  const [activityType, setActivityType] = useState("");
+  const [description, setDescription] = useState("");
+  const [photos, setPhotos] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { user } = useContext(UserContext);
+
   const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5555/activities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          activity_type: activityType,
+          description: description,
+          photos: photos,
+          user_id: user.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create activity");
+      }
+
+      const data = await response.json();
+      console.log("Activity created:", data);
+      navigate("/activity-feed");
+    } catch (error) {
+      console.error("Error creating activity:", error);
+      setError("Failed to create activity. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleCancel = () => {
     navigate("/activity-feed");
   };
@@ -14,20 +66,27 @@ function ActivityForm() {
         <p>Share your outdoor adventure with the community</p>
       </div>
 
-      <form className="activity-form">
+      <form className="activity-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="title">Title</label>
           <input
             type="text"
             id="title"
             name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="Give your activity a catchy title"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="activity_type">Activity Type</label>
-          <select id="activity_type" name="activity_type">
+          <select
+            id="activity_type"
+            name="activity_type"
+            value={activityType}
+            onChange={(e) => setActivityType(e.target.value)}
+          >
             <option value="">Select an activity type</option>
             <option value="Hammocking">Hammocking</option>
             <option value="Rockhounding">Rockhounding</option>
@@ -63,6 +122,8 @@ function ActivityForm() {
           <textarea
             id="description"
             name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Tell us about your adventure..."
           />
         </div>
@@ -73,6 +134,8 @@ function ActivityForm() {
             type="text"
             id="photos"
             name="photos"
+            value={photos}
+            onChange={(e) => setPhotos(e.target.value)}
             placeholder="Add a photo URL (optional)"
           />
         </div>
@@ -81,7 +144,11 @@ function ActivityForm() {
           <button type="submit" className="submit-button">
             Create Activity
           </button>
-          <button type="button" className="cancel-button" onClick={handleCancel}>
+          <button
+            type="button"
+            className="cancel-button"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
         </div>
