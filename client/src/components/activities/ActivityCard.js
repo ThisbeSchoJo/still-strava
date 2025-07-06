@@ -52,6 +52,10 @@ function ActivityCard({ activity }) {
     console.log("Deleting activity:", activity.id);
   };
 
+  const handleEdit = () => {
+    console.log("Editing activity:", activity.id);
+  };
+
   return (
     <div className="activity-card">
       <div className="activity-card-header">
@@ -96,7 +100,10 @@ function ActivityCard({ activity }) {
       <div className="activity-card-actions">
         {/* Check if user is the owner of the activity */}
         {activity.user.id === user.id && (
-          <button className="delete-button" onClick={handleDelete}>Delete</button>
+          <>
+            <button className="delete-button" onClick={handleDelete}>Delete</button>
+            <button className="edit-button" onClick={handleEdit}>Edit</button>
+          </>
         )}
       </div>
     </div>

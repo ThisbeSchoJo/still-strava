@@ -171,6 +171,30 @@
   box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
 }
 
+/* Edit Button Styling */
+.edit-button {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-button:hover {
+  background-color: #f8f9fa;
+  border-color: #28a745;
+  color: #28a745;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
 /* Like Count Styling */
 .like-count {
   font-size: 0.9rem;
@@ -195,6 +219,11 @@
   font-size: 1rem;
 }
 
+.edit-button::before {
+  content: "✏️";
+  font-size: 1rem;
+}
+
 .delete-button::before {
   content: "🗑️";
   font-size: 1rem;
@@ -203,6 +232,7 @@
 /* Disabled state for buttons */
 .like-button:disabled,
 .comment-button:disabled,
+.edit-button:disabled,
 .delete-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -211,6 +241,7 @@
 
 .like-button:disabled:hover,
 .comment-button:disabled:hover,
+.edit-button:disabled:hover,
 .delete-button:disabled:hover {
   background-color: transparent;
   border-color: #ddd;
@@ -240,6 +271,7 @@
 
   .like-button,
   .comment-button,
+  .edit-button,
   .delete-button {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
