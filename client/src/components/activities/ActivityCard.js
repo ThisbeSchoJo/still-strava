@@ -11,7 +11,6 @@ import { UserContext } from "../../context/UserContext";
  * This component displays a single activity in a card format, similar to Strava's activity feed.
  * It receives an activity object as a prop and renders all the activity information in a structured layout.
  *
- * The activity object should contain:
  * - user: object with id, username, and image
  * - title: string for the activity title
  * - activity_type: string for the type of activity
@@ -20,7 +19,7 @@ import { UserContext } from "../../context/UserContext";
  * - photos: string URL for the activity image
  * - id: number for the unique activity identifier
  */
-function ActivityCard({ activity }) {
+function ActivityCard({ activity, activities, setActivities }) {
   const [likes, setLikes] = useState(activity.likes || 0);
   const { user } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
@@ -47,13 +46,27 @@ function ActivityCard({ activity }) {
   const handleComment = () => {
     console.log("Commenting on activity:", activity.id);
   };
-  
-  const handleDelete = () => {
-    console.log("Deleting activity:", activity.id);
-  };
 
   const handleEdit = () => {
     console.log("Editing activity:", activity.id);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this activity?")) {
+      fetch(`http://localhost:5555/activities/${activity.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to delete activity");
+        setActivities(activities.filter((a) => a.id !== activity.id));
+      })
+      .catch((err) => {
+        console.error("Error deleting activity:", err);
+      });
+    }
   };
 
   return (
