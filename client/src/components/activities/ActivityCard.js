@@ -123,6 +123,9 @@ function ActivityCard({ activity, activities, setActivities }) {
       </div>
 
       <h2 className="activity-card-title">{activity.title}</h2>
+      <div className="activity-card-image">
+        <img src={activity.photos} alt={activity.title} />
+      </div>
 
       {isEditing && (
         <div>
@@ -224,7 +227,6 @@ function ActivityCard({ activity, activities, setActivities }) {
           </div>
         </div>
       )}
-
 
       <div className="activity-card-info">
         <div className="activity-card-stats">
