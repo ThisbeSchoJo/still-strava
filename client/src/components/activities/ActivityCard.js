@@ -64,23 +64,31 @@ function ActivityCard({ activity, activities, setActivities }) {
     });
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
     fetch(`http://localhost:5555/activities/${activity.id}`, {
       // update the activity with the new title, activity_type, description, and photos
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: editedActivity.title, activity_type: editedActivity.activity_type, description: editedActivity.description, photos: editedActivity.photos }),
+      body: JSON.stringify({
+        title: editedActivity.title,
+        activity_type: editedActivity.activity_type,
+        description: editedActivity.description,
+        photos: editedActivity.photos,
+      }),
     })
-    .then((res) => {
-      if (!res.ok) throw new Error("Failed to edit activity");
-      return res.json();
-    })
-    .then((updated) => {
-      console.log("Edited activity:", updated);
-      setActivities((prev) => prev.map((a) => a.id === activity.id ? updated : a));
-      setIsEditing(false);
-    })
-    .catch((err) => console.error(err));
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to edit activity");
+        return res.json();
+      })
+      .then((updated) => {
+        console.log("Edited activity:", updated);
+        setActivities((prev) =>
+          prev.map((a) => (a.id === activity.id ? updated : a))
+        );
+        setIsEditing(false);
+      })
+      .catch((err) => console.error(err));
   };
 
   const handleDelete = () => {
@@ -91,13 +99,13 @@ function ActivityCard({ activity, activities, setActivities }) {
           "Content-Type": "application/json",
         },
       })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to delete activity");
-        setActivities(activities.filter((a) => a.id !== activity.id));
-      })
-      .catch((err) => {
-        console.error("Error deleting activity:", err);
-      });
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to delete activity");
+          setActivities(activities.filter((a) => a.id !== activity.id));
+        })
+        .catch((err) => {
+          console.error("Error deleting activity:", err);
+        });
     }
   };
 
@@ -117,28 +125,103 @@ function ActivityCard({ activity, activities, setActivities }) {
       <h2 className="activity-card-title">{activity.title}</h2>
 
       {isEditing && (
-        <div className="edit-form">
-          <input
-            type="text"
-            value={editedActivity.title}
-            onChange={(e) => setEditedActivity({ ...editedActivity, title: e.target.value })}
-          />
-          <input
-            type="text"
-            value={editedActivity.activity_type}
-            onChange={(e) => setEditedActivity({ ...editedActivity, activity_type: e.target.value })}
-          />
-          <textarea
-            value={editedActivity.description}
-            onChange={(e) => setEditedActivity({ ...editedActivity, description: e.target.value })}
-          />
-          <input
-            type="text"
-            value={editedActivity.photos}
-            onChange={(e) => setEditedActivity({ ...editedActivity, photos: e.target.value })}
-          />
-          <button onClick={handleSaveEdit}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+        <div>
+          <div className="edit-modal">
+            {/* Modal Header */}
+            <div className="edit-modal-header">
+              <h2 className="edit-modal-title">Edit Activity</h2>
+              <button
+                type="button"
+                className="edit-modal-close"
+                onClick={() => setIsEditing(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="edit-modal-body">
+              <form className="edit-form">
+                {/* Form Groups */}
+                <div className="edit-form-group">
+                  <label htmlFor="edit-title">Title</label>
+                  <input
+                    type="text"
+                    id="edit-title"
+                    value={editedActivity.title}
+                    onChange={(e) =>
+                      setEditedActivity({
+                        ...editedActivity,
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="edit-form-group">
+                  <label htmlFor="edit-activity-type">Activity Type</label>
+                  <input
+                    type="text"
+                    id="edit-activity-type"
+                    value={editedActivity.activity_type}
+                    onChange={(e) =>
+                      setEditedActivity({
+                        ...editedActivity,
+                        activity_type: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="edit-form-group">
+                  <label htmlFor="edit-description">Description</label>
+                  <textarea
+                    id="edit-description"
+                    value={editedActivity.description}
+                    onChange={(e) =>
+                      setEditedActivity({
+                        ...editedActivity,
+                        description: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="edit-form-group">
+                  <label htmlFor="edit-photos">Photo URL</label>
+                  <input
+                    type="text"
+                    id="edit-photos"
+                    value={editedActivity.photos}
+                    onChange={(e) =>
+                      setEditedActivity({
+                        ...editedActivity,
+                        photos: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </form>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="edit-modal-footer">
+              <button
+                type="button"
+                className="edit-modal-button secondary"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="edit-modal-button primary"
+                onClick={handleSaveEdit}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -157,11 +240,15 @@ function ActivityCard({ activity, activities, setActivities }) {
         <button className="like-button" onClick={handleLike}>
           {isLiked ? "Unlike" : "Like"}
         </button>
-        <span className="like-count">{likes} {likes === 1 ? "like" : "likes"}</span>
+        <span className="like-count">
+          {likes} {likes === 1 ? "like" : "likes"}
+        </span>
       </div>
       {/* Comment Button */}
       <div className="activity-card-actions">
-        <button className="comment-button" onClick={handleComment}>Comment</button>
+        <button className="comment-button" onClick={handleComment}>
+          Comment
+        </button>
         {/* ADD FUNCTIONALITY TO COMMENT */}
       </div>
       {/* Delete Button */}
@@ -169,8 +256,12 @@ function ActivityCard({ activity, activities, setActivities }) {
         {/* Check if user is the owner of the activity */}
         {activity.user.id === user.id && (
           <>
-            <button className="delete-button" onClick={handleDelete}>Delete</button>
-            <button className="edit-button" onClick={handleEdit}>Edit</button>
+            <button className="delete-button" onClick={handleDelete}>
+              Delete
+            </button>
+            <button className="edit-button" onClick={handleEdit}>
+              Edit
+            </button>
           </>
         )}
       </div>

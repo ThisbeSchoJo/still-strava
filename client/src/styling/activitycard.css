@@ -277,3 +277,143 @@
     font-size: 0.8rem;
   }
 }
+
+/* Modal Container */
+.edit-modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Header */
+.edit-modal-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+}
+
+.edit-modal-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.edit-modal-close {
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.edit-modal-close:hover {
+  color: #000;
+}
+
+/* Body */
+.edit-modal-body {
+  padding: 1.25rem;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.edit-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.edit-form-group input,
+.edit-form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-form-group input:focus,
+.edit-form-group textarea:focus {
+  outline: none;
+  border-color: #fc4c02;
+  box-shadow: 0 0 0 2px rgba(252, 76, 2, 0.15);
+}
+
+.edit-form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Footer */
+.edit-modal-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background-color: #f9f9f9;
+}
+
+.edit-modal-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-weight: 600;
+}
+
+.edit-modal-button.primary {
+  background-color: #fc4c02;
+  color: #fff;
+}
+
+.edit-modal-button.primary:hover {
+  background-color: #e04301;
+}
+
+.edit-modal-button.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.edit-modal-button.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+
