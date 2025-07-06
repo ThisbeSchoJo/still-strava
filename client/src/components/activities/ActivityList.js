@@ -58,7 +58,7 @@ function ActivityList() {
         {activities && activities.length > 0 ? (
           activities.map((activity) => {
             console.log("Rendering activity:", activity);
-            return <ActivityCard key={activity.id} activity={activity} />;
+            return <ActivityCard key={activity.id} activity={activity} activities={activities} setActivities={setActivities} />;
           })
         ) : (
           <p>No activities found</p>
