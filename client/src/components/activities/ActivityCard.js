@@ -23,6 +23,13 @@ function ActivityCard({ activity, activities, setActivities }) {
   const [likes, setLikes] = useState(activity.likes || 0);
   const { user } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedActivity, setEditedActivity] = useState({
+    title: activity.title,
+    activity_type: activity.activity_type,
+    description: activity.description,
+    photos: activity.photos,
+  });
 
   const handleLike = () => {
     const updatedLikes = isLiked ? likes - 1 : likes + 1;
@@ -48,7 +55,32 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   const handleEdit = () => {
-    console.log("Editing activity:", activity.id);
+    setIsEditing(true);
+    setEditedActivity({
+      title: activity.title,
+      activity_type: activity.activity_type,
+      description: activity.description,
+      photos: activity.photos,
+    });
+  };
+
+  const handleSaveEdit = () => {
+    fetch(`http://localhost:5555/activities/${activity.id}`, {
+      // update the activity with the new title, activity_type, description, and photos
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: editedActivity.title, activity_type: editedActivity.activity_type, description: editedActivity.description, photos: editedActivity.photos }),
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to edit activity");
+      return res.json();
+    })
+    .then((updated) => {
+      console.log("Edited activity:", updated);
+      setActivities((prev) => prev.map((a) => a.id === activity.id ? updated : a));
+      setIsEditing(false);
+    })
+    .catch((err) => console.error(err));
   };
 
   const handleDelete = () => {
@@ -84,9 +116,32 @@ function ActivityCard({ activity, activities, setActivities }) {
 
       <h2 className="activity-card-title">{activity.title}</h2>
 
-      <div className="activity-card-image">
-        <img src={activity.photos} alt={activity.title} />
-      </div>
+      {isEditing && (
+        <div className="edit-form">
+          <input
+            type="text"
+            value={editedActivity.title}
+            onChange={(e) => setEditedActivity({ ...editedActivity, title: e.target.value })}
+          />
+          <input
+            type="text"
+            value={editedActivity.activity_type}
+            onChange={(e) => setEditedActivity({ ...editedActivity, activity_type: e.target.value })}
+          />
+          <textarea
+            value={editedActivity.description}
+            onChange={(e) => setEditedActivity({ ...editedActivity, description: e.target.value })}
+          />
+          <input
+            type="text"
+            value={editedActivity.photos}
+            onChange={(e) => setEditedActivity({ ...editedActivity, photos: e.target.value })}
+          />
+          <button onClick={handleSaveEdit}>Save</button>
+          <button onClick={() => setIsEditing(false)}>Cancel</button>
+        </div>
+      )}
+
 
       <div className="activity-card-info">
         <div className="activity-card-stats">
