@@ -6,6 +6,9 @@ import { UserContext } from "../../context/UserContext";
 function ActivityForm() {
   const [title, setTitle] = useState("");
   const [activityType, setActivityType] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState("");
   const [error, setError] = useState(null);
@@ -34,6 +37,9 @@ function ActivityForm() {
         body: JSON.stringify({
           title: title,
           activity_type: activityType,
+          latitude: latitude,
+          longitude: longitude,
+          location_name: locationName,
           description: description,
           photos: photos,
           user_id: user.id,
@@ -118,6 +124,18 @@ function ActivityForm() {
         </div>
 
         <div className="form-group">
+          <label htmlFor="location_name">Location Name</label>
+          <input
+            type="text"
+            id="location_name"
+            name="location_name"
+            value={locationName}
+            onChange={(e) => setLocationName(e.target.value)}
+            placeholder="e.g., Central Park, NYC"
+          />
+        </div>
+
+        <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
@@ -127,6 +145,8 @@ function ActivityForm() {
             placeholder="Tell us about your adventure..."
           />
         </div>
+
+        {/* NEED TO ADD MAP HERE SO USER CAN SELECT LOCATION */}
 
         <div className="form-group">
           <label htmlFor="photos">Photo URL</label>
