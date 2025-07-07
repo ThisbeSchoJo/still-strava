@@ -195,7 +195,7 @@ function ActivityForm() {
               onClick={handleGetCurrentLocation}
               className="current-location-btn"
             >
-              📍 Use My Location
+              Use My Location
             </button>
             <MapPicker
               center={mapCenter}
