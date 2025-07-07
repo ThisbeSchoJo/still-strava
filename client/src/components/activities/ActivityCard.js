@@ -113,12 +113,14 @@ function ActivityCard({ activity, activities, setActivities }) {
     <div className="activity-card">
       <div className="activity-card-header">
         <div className="activity-card-user">
-          <Link to={`/users/${activity.user.id}`}>
-            <img src={activity.user.image} alt={activity.user.username} />
-            <span className="activity-card-username">
-              {activity.user.username}
-            </span>
-          </Link>
+          {activity.user && (
+            <Link to={`/users/${activity.user.id}`}>
+              <img src={activity.user.image} alt={activity.user.username} />
+              <span className="activity-card-username">
+                {activity.user.username}
+              </span>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -256,7 +258,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       {/* Delete Button */}
       <div className="activity-card-actions">
         {/* Check if user is the owner of the activity */}
-        {activity.user.id === user.id && (
+        {activity.user && user && activity.user.id === user.id && (
           <>
             <button className="delete-button" onClick={handleDelete}>
               Delete
