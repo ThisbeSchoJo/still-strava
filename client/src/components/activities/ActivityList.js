@@ -21,7 +21,6 @@ function ActivityList() {
   // useEffect to fetch activities from the server when the component mounts
   // makes a GET request to the server to fetch all activities
   useEffect(() => {
-    console.log("Starting to fetch activities...");
     fetch("http://localhost:5555/activities")
       .then((response) => {
         console.log("Response status:", response.status);
@@ -31,7 +30,6 @@ function ActivityList() {
         return response.json();
       })
       .then((data) => {
-        console.log("Received activities data:", data);
         setActivities(data);
       })
       .catch((error) => {
@@ -43,7 +41,6 @@ function ActivityList() {
       });
   }, []);
 
-  console.log("Current activities state:", activities);
 
   if (loading) return <div className="loading">Loading activities...</div>;
   if (error) return <div className="error">Error: {error}</div>;
@@ -57,7 +54,6 @@ function ActivityList() {
       <div className="activity-list">
         {activities && activities.length > 0 ? (
           activities.map((activity) => {
-            console.log("Rendering activity:", activity);
             return <ActivityCard key={activity.id} activity={activity} activities={activities} setActivities={setActivities} />;
           })
         ) : (
