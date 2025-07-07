@@ -115,19 +115,21 @@ class Activity(db.Model, SerializerMixin):
 
     @validates('longitude', 'latitude')
     def validate_location(self, key, value):
-        if type(value) != float:
-            raise TypeError("Location must be a float")
-        else:
-            return value
+        if value is not None and value != "":
+            try:
+                return float(value)
+            except (ValueError, TypeError):
+                raise TypeError("Location must be a valid number")
+        return None
         
     @validates('location_name')
     def validate_location_name(self, key, value):
-        if type(value) != str:
-            raise TypeError("Location name must be a string")
-        elif len(value) < 3:
-            raise ValueError("Location name must be at least 3 characters long")
-        else:
-            return value
+        if value is not None and value != "":
+            if type(value) != str:
+                raise TypeError("Location name must be a string")
+            elif len(value) < 3:
+                raise ValueError("Location name must be at least 3 characters long")
+        return value
         
     @validates('datetime')
     def validate_datetime(self, key, value):

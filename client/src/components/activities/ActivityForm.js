@@ -28,22 +28,24 @@ function ActivityForm() {
       return;
     }
 
+    const activityData = {
+      title: title,
+      activity_type: activityType,
+      latitude: latitude || null,
+      longitude: longitude || null,
+      location_name: locationName || null,
+      description: description,
+      photos: photos,
+      user_id: user.id,
+    };
+
     try {
       const response = await fetch("http://localhost:5555/activities", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title: title,
-          activity_type: activityType,
-          latitude: latitude,
-          longitude: longitude,
-          location_name: locationName,
-          description: description,
-          photos: photos,
-          user_id: user.id,
-        }),
+        body: JSON.stringify(activityData),
       });
 
       if (!response.ok) {
@@ -51,10 +53,8 @@ function ActivityForm() {
       }
 
       const data = await response.json();
-      console.log("Activity created:", data);
       navigate("/activity-feed");
     } catch (error) {
-      console.error("Error creating activity:", error);
       setError("Failed to create activity. Please try again.");
     } finally {
       setIsLoading(false);

@@ -57,7 +57,6 @@ api.add_resource(Login, '/login')
 class Signup(Resource):
     def post(self):
         data = request.json
-        print("SIGNUP data received:", data)
 
         username = data.get('username')
         email = data.get('email')
@@ -211,7 +210,6 @@ class AllActivities(Resource):
         print(f"Found {len(activities)} activities")
         
         response_body = [activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'likes', 'user')) for activity in activities]
-        print("Response body:", response_body)
         
         return make_response(response_body, 200)
     
@@ -226,8 +224,6 @@ class AllActivities(Resource):
                 activity_type=request.json.get('activity_type'),
                 description=request.json.get('description'),
                 latitude=request.json.get('latitude'),
-                longitude=request.json.get('longitude'),
-                location_name=request.json.get('location_name'),
                 datetime=datetime_obj,
                 photos=request.json.get('photos'),
                 user_id=request.json.get('user_id')
