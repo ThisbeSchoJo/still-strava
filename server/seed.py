@@ -57,7 +57,10 @@ with app.app_context():
             datetime=datetime(2025, 6, 20, 6, 30),
             photos="https://th.bing.com/th/id/OIP.2G7wnXuBOqQAu7rH7Z17lQHaFj?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2",
             user_id=users[0].id,
-            likes=random.randint(0, 10)
+            likes=random.randint(0, 10),
+            latitude=39.9867,
+            longitude=-105.2750,
+            location_name="Flatirons, Boulder"
         ),
         Activity(
             title="5K Tempo Run",
@@ -66,7 +69,10 @@ with app.app_context():
             datetime=datetime(2025, 6, 21, 7, 15),
             photos="https://th.bing.com/th/id/OIP.jhheKYAobxpgo-vJ7vYAlQHaE8?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2",
             user_id=users[1].id,
-            likes=random.randint(0, 10)
+            likes=random.randint(0, 10),
+            latitude=40.6602,
+            longitude=-73.9690,
+            location_name="Prospect Park, Brooklyn"
         ),
         Activity(
             title="Evening Flow",
@@ -75,7 +81,10 @@ with app.app_context():
             datetime=datetime(2025, 6, 22, 18, 0),
             photos="https://res.cloudinary.com/peloton-cycle/image/fetch/dpr_1.0,f_auto,q_auto:good,w_1800/https://s3.amazonaws.com/peloton-ride-images/96a0b61b8375711d23f73ad94a3c3bd6a94c2b78/img_1631227222_89d81453f6bb490ca8028947789b3671.png",
             user_id=users[2].id,
-            likes=random.randint(0, 10)
+            likes=random.randint(0, 10),
+            latitude=34.4208,
+            longitude=-119.6982,
+            location_name="Santa Barbara Beach"
         ),
         Activity(
             title="Coastal Ride",
@@ -84,7 +93,10 @@ with app.app_context():
             datetime=datetime(2025, 6, 23, 9, 45),
             photos="https://th.bing.com/th/id/R.8215af7573f743fd39436cf4c1900118?rik=AfMS%2fBqXf8yFng&pid=ImgRaw&r=0",
             user_id=users[3].id,
-            likes=random.randint(0, 10)
+            likes=random.randint(0, 10),
+            latitude=32.7157,
+            longitude=-117.1611,
+            location_name="Pacific Coast Highway, San Diego"
         )
     ]
 
