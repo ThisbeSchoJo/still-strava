@@ -79,6 +79,9 @@ class Activity(db.Model, SerializerMixin):
     title = db.Column(db.String, nullable=False)
     activity_type = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
+    longitude = db.Column(db.Float)
+    latitude = db.Column(db.Float)
+    location_name = db.Column(db.String)
     datetime = db.Column(db.DateTime)
     photos = db.Column(db.String)
     likes = db.Column(db.Integer, default=0)
@@ -109,6 +112,22 @@ class Activity(db.Model, SerializerMixin):
             raise ValueError("Description must be at least 10 characters long")
         else:
             return value
+
+    @validates('longitude', 'latitude')
+    def validate_location(self, key, value):
+        if type(value) != float:
+            raise TypeError("Location must be a float")
+        else:
+            return value
+        
+    @validates('location_name')
+    def validate_location_name(self, key, value):
+        if type(value) != str:
+            raise TypeError("Location name must be a string")
+        elif len(value) < 3:
+            raise ValueError("Location name must be at least 3 characters long")
+        else:
+            return value
         
     @validates('datetime')
     def validate_datetime(self, key, value):
@@ -125,7 +144,7 @@ class Activity(db.Model, SerializerMixin):
             return value
 
     def __repr__(self):
-        return f'<Activity {self.title}, Description: {self.description}, Datetime: {self.datetime}, Photos: {self.photos}>'
+        return f'<Activity {self.title}, Description: {self.description}, Location: {self.location_name}, Datetime: {self.datetime}, Photos: {self.photos}>'
 
 class Comment(db.Model, SerializerMixin):
     __tablename__ = 'comments'
