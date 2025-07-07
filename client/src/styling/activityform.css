@@ -205,3 +205,45 @@
     grid-template-columns: 1fr; /* Single column on mobile */
   }
 }
+
+.map-container {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.current-location-btn {
+  background-color: #fc4c02;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.2);
+}
+
+.current-location-btn:hover {
+  background-color: #e34402;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(252, 76, 2, 0.3);
+}
+
+.current-location-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.2);
+}
+
+.current-location-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
