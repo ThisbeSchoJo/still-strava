@@ -2,6 +2,7 @@ import "../../styling/activityform.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import MapPicker from "../shared/MapPicker";
 
 function ActivityForm() {
   const [title, setTitle] = useState("");
@@ -11,12 +12,26 @@ function ActivityForm() {
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState([37.7749, -122.4194]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  const handleLocationSelect = (location) => {
+    console.log("Selected location:", location);
+
+    // Update the form fields with the selected location
+    setLatitude(location.lat);
+    setLongitude(location.lng);
+    setLocationName(location.name || "");
+
+    // Store the full location object for the map
+    setSelectedLocation(location);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
