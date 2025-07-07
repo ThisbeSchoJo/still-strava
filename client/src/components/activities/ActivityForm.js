@@ -46,11 +46,12 @@ function ActivityForm() {
           // Set as selected location
           setLatitude(latitude);
           setLongitude(longitude);
-
         },
         (error) => {
-            console.error("Error getting current location:", error);
-            alert("Unable to get your current location. Please select a location manually.");
+          console.error("Error getting current location:", error);
+          alert(
+            "Unable to get your current location. Please select a location manually."
+          );
         }
       );
     } else {
@@ -186,7 +187,23 @@ function ActivityForm() {
           />
         </div>
 
-        {/* NEED TO ADD MAP HERE SO USER CAN SELECT LOCATION */}
+        <div className="form-group">
+          <label>Location</label>
+          <div className="map-container">
+            <button
+              type="button"
+              onClick={handleGetCurrentLocation}
+              className="current-location-btn"
+            >
+              📍 Use My Location
+            </button>
+            <MapPicker
+              center={mapCenter}
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+            />
+          </div>
+        </div>
 
         <div className="form-group">
           <label htmlFor="photos">Photo URL</label>
