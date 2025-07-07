@@ -225,6 +225,9 @@ class AllActivities(Resource):
                 title=request.json.get('title'),
                 activity_type=request.json.get('activity_type'),
                 description=request.json.get('description'),
+                latitude=request.json.get('latitude'),
+                longitude=request.json.get('longitude'),
+                location_name=request.json.get('location_name'),
                 datetime=datetime_obj,
                 photos=request.json.get('photos'),
                 user_id=request.json.get('user_id')
