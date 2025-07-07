@@ -125,6 +125,14 @@ function ActivityCard({ activity, activities, setActivities }) {
       </div>
 
       <h2 className="activity-card-title">{activity.title}</h2>
+
+      {/* Map Display */}
+      {activity.location_name && (
+        <div className="activity-card-location">
+          {activity.location_name}
+        </div>
+      )}
+
       <div className="activity-card-image">
         <img src={activity.photos} alt={activity.title} />
       </div>
