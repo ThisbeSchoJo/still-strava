@@ -405,3 +405,13 @@
 .edit-modal-button.secondary:hover {
   background-color: #e0e0e0;
 }
+
+.activity-card-location {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}

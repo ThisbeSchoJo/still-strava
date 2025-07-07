@@ -28,6 +28,7 @@ function ActivityCard({ activity, activities, setActivities }) {
     title: activity.title,
     activity_type: activity.activity_type,
     description: activity.description,
+    location_name: activity.location_name,
     photos: activity.photos,
   });
 
@@ -60,6 +61,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       title: activity.title,
       activity_type: activity.activity_type,
       description: activity.description,
+      location_name: activity.location_name,
       photos: activity.photos,
     });
   };
@@ -74,6 +76,7 @@ function ActivityCard({ activity, activities, setActivities }) {
         title: editedActivity.title,
         activity_type: editedActivity.activity_type,
         description: editedActivity.description,
+        location_name: editedActivity.location_name,
         photos: editedActivity.photos,
       }),
     })
@@ -185,6 +188,22 @@ function ActivityCard({ activity, activities, setActivities }) {
                     }
                   />
                 </div>
+
+                <div className="edit-form-group">
+                  <label htmlFor="edit-location-name">Location Name</label>
+                  <input
+                    type="text"
+                    id="edit-location-name"
+                    value={editedActivity.location_name || ""}
+                    onChange={(e) =>
+                      setEditedActivity({
+                        ...editedActivity,
+                        location_name: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                
 
                 <div className="edit-form-group">
                   <label htmlFor="edit-description">Description</label>
