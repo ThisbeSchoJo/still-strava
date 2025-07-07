@@ -33,6 +33,31 @@ function ActivityForm() {
     setSelectedLocation(location);
   };
 
+  const handleGetCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log("Current location:", { latitude, longitude });
+
+          // Update the map center
+          setMapCenter({ lat: latitude, lng: longitude });
+
+          // Set as selected location
+          setLatitude(latitude);
+          setLongitude(longitude);
+
+        },
+        (error) => {
+            console.error("Error getting current location:", error);
+            alert("Unable to get your current location. Please select a location manually.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
