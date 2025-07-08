@@ -8,11 +8,15 @@ function MapPicker({ onLocationSelect }) {
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null); //map marker
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [locationStatus, setLocationStatus] = useState(
+    "Click to select location"
+  );
 
   // Function to get user's current location
   const getUserLocation = () => {
     if (navigator.geolocation) {
       setIsLoadingLocation(true);
+      setLocationStatus("Getting your location...");
 
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -25,13 +29,35 @@ function MapPicker({ onLocationSelect }) {
             mapInstanceRef.current.setZoom(15);
           }
 
+          setLocationStatus("Location found!");
           setIsLoadingLocation(false);
         },
         (error) => {
           console.error("Error getting location:", error);
+          let errorMessage = "Unable to get your location";
+
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage =
+                "Location access denied. Please allow location access.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = "Location information unavailable.";
+              break;
+            case error.TIMEOUT:
+              errorMessage = "Location request timed out.";
+              break;
+            default:
+              errorMessage = "An unknown error occurred.";
+              break;
+          }
+
+          setLocationStatus(errorMessage);
           setIsLoadingLocation(false);
         }
       );
+    } else {
+      setLocationStatus("Geolocation is not supported by this browser");
     }
   };
 
@@ -117,7 +143,7 @@ function MapPicker({ onLocationSelect }) {
         >
           {isLoadingLocation ? "Getting Location..." : "Use My Location"}
         </button>
-        <span className="map-picker-status">Click to select location</span>
+        <span className="map-picker-status">{locationStatus}</span>
       </div>
     </div>
   );
