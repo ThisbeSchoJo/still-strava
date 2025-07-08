@@ -37,15 +37,31 @@ function MapPicker({ onLocationSelect }) {
           map: map,
           animation: window.google.maps.Animation.DROP,
         });
+        // Get place name using reverse geocoding
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            if (status === "OK" && results[0]) {
+                const placeName = results[0].formatted_address;
+                console.log("Place name:", placeName);
 
-        // Call the parent component with the location (only if function exists)
-        if (onLocationSelect) {
-          onLocationSelect({
-            lat: lat,
-            lng: lng,
-            name: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-          });
-        }
+                if (onLocationSelect) {
+                    onLocationSelect({
+                        lat: lat,
+                        lng: lng,
+                        name: placeName,
+                    });
+                }
+            } else {
+                // Fallback to coordinates if geocoding fails
+                if (onLocationSelect) {
+                    onLocationSelect({
+                        lat: lat,
+                        lng: lng,
+                        name: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+                    });
+                }
+            }
+        });
       });
     }
   }, [onLocationSelect]);
