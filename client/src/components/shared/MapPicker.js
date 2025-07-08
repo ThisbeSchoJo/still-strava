@@ -25,8 +25,21 @@ function MapPicker({ onLocationSelect }) {
 
           // Center map on user's location
           if (mapInstanceRef.current) {
-            mapInstanceRef.current.setCenter({ lat: latitude, lng: longitude });
+            const userLocation = { lat: latitude, lng: longitude };
+            mapInstanceRef.current.setCenter(userLocation);
             mapInstanceRef.current.setZoom(15);
+
+            // Add marker at user's location
+            if (markerRef.current) {
+              markerRef.current.setMap(null);
+            }
+
+            markerRef.current = new window.google.maps.Marker({
+              position: userLocation,
+              map: mapInstanceRef.current,
+              animation: window.google.maps.Animation.DROP,
+              title: "Your Location",
+            });
           }
 
           setLocationStatus("Location found!");
