@@ -5,6 +5,7 @@ function MapPicker({ onLocationSelect }) {
   // initially points to null (STEP 1 - creates a "bookmark")
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const markerRef = useRef(null); //map marker
 
   // Initialize the map when the component mounts
   useEffect(() => {
@@ -24,6 +25,18 @@ function MapPicker({ onLocationSelect }) {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
         console.log("Map clicked at:", { lat, lng });
+
+        // Remove previous marker if it exists
+        if (markerRef.current) {
+          markerRef.current.setMap(null);
+        }
+
+        // Create new marker at clicked location
+        markerRef.current = new window.google.maps.Marker({
+          position: { lat, lng },
+          map: map,
+          animation: window.google.maps.Animation.DROP,
+        });
 
         // Call the parent component with the location (only if function exists)
         if (onLocationSelect) {
