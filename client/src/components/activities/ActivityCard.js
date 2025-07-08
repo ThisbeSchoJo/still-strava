@@ -137,10 +137,25 @@ function ActivityCard({ activity, activities, setActivities }) {
       {/* Map Thumbnail */}
       {activity.latitude && activity.longitude && (
         <div className="activity-card-map">
-          <img
-            src={`https://maps.googleapis.com/maps/api/staticmap?center=${activity.latitude},${activity.longitude}&zoom=13&size=300x150&markers=color:red%7C${activity.latitude},${activity.longitude}&key=YOUR_API_KEY`}
-            alt={`Map showing location of ${activity.title}`}
-          />
+          {console.log(
+            "Activity with location:",
+            activity.title,
+            "lat:",
+            activity.latitude,
+            "lng:",
+            activity.longitude
+          )}
+          <div className="map-placeholder">
+            <div className="map-placeholder-content">
+              <span className="map-placeholder-icon">📍</span>
+              <span className="map-placeholder-text">
+                {activity.location_name ||
+                  `${activity.latitude.toFixed(
+                    4
+                  )}, ${activity.longitude.toFixed(4)}`}
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
