@@ -22,15 +22,12 @@ function ActivityForm() {
   const navigate = useNavigate();
 
   const handleLocationSelect = (location) => {
-    console.log("Selected location:", location);
+    console.log("Location selected:", location);
 
-    // Update the form fields with the selected location
+    // Update form state
     setLatitude(location.lat);
     setLongitude(location.lng);
-    setLocationName(location.name || "");
-
-    // Store the full location object for the map
-    setSelectedLocation(location);
+    setLocationName(location.name);
   };
 
   const handleGetCurrentLocation = () => {
@@ -197,11 +194,7 @@ function ActivityForm() {
             >
               Use My Location
             </button>
-            <MapPicker
-              center={mapCenter}
-              selectedLocation={selectedLocation}
-              onLocationSelect={handleLocationSelect}
-            />
+            <MapPicker onLocationSelect={handleLocationSelect} />
           </div>
         </div>
 
