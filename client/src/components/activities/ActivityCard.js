@@ -24,6 +24,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   const { user } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
   const [editedActivity, setEditedActivity] = useState({
     title: activity.title,
     activity_type: activity.activity_type,
@@ -52,7 +53,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   const handleComment = () => {
-    console.log("Commenting on activity:", activity.id);
+    setIsCommenting(!isCommenting);
   };
 
   const handleEdit = () => {
@@ -302,8 +303,26 @@ function ActivityCard({ activity, activities, setActivities }) {
         <button className="comment-button" onClick={handleComment}>
           Comment
         </button>
-        {/* ADD FUNCTIONALITY TO COMMENT */}
       </div>
+
+      {/* Comment Form */}
+      {isCommenting && (
+        <div className="comment-form">
+          <textarea
+            placeholder="Write a comment..."
+            className="comment-input"
+          />
+          <div className="comment-form-actions">
+            <button className="comment-submit-btn">Post Comment</button>
+            <button
+              className="comment-cancel-btn"
+              onClick={() => setIsCommenting(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
       {/* Delete Button */}
       <div className="activity-card-actions">
         {/* Check if user is the owner of the activity */}
