@@ -137,7 +137,11 @@ function MapPicker({ onLocationSelect }) {
   }, [onLocationSelect]);
 
   return (
-    <div className="map-picker-container">
+    <div
+      className="map-picker-container"
+      role="region"
+      aria-label="Location picker"
+    >
       <div className="map-picker-header">
         <h3 className="map-picker-title">Select Location</h3>
         <p className="map-picker-instructions">
@@ -146,17 +150,26 @@ function MapPicker({ onLocationSelect }) {
       </div>
       {/* ref={mapRef} tells React to put this div element into mapRef.current (STEP 2 - put the "bookmark" on the div) */}
 
-      <div ref={mapRef} className="map-picker-map" />
+      <div
+        ref={mapRef}
+        className="map-picker-map"
+        role="application"
+        aria-label="Interactive map for selecting location"
+      />
 
       <div className="map-picker-controls">
         <button
           className="map-picker-btn"
           onClick={getUserLocation}
           disabled={isLoadingLocation}
+          aria-label="Get my current location"
+          aria-describedby="location-status"
         >
           {isLoadingLocation ? "Getting Location..." : "Use My Location"}
         </button>
-        <span className="map-picker-status">{locationStatus}</span>
+        <span id="location-status" className="map-picker-status">
+          {locationStatus}
+        </span>
       </div>
     </div>
   );
