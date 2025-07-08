@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import "../../styling/mappicker.css";
 
 function MapPicker({ onLocationSelect }) {
   // useRef creates a reference to the DOM element (the map container)
@@ -40,43 +41,48 @@ function MapPicker({ onLocationSelect }) {
         // Get place name using reverse geocoding
         const geocoder = new window.google.maps.Geocoder();
         geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-            if (status === "OK" && results[0]) {
-                const placeName = results[0].formatted_address;
-                console.log("Place name:", placeName);
+          if (status === "OK" && results[0]) {
+            const placeName = results[0].formatted_address;
+            console.log("Place name:", placeName);
 
-                if (onLocationSelect) {
-                    onLocationSelect({
-                        lat: lat,
-                        lng: lng,
-                        name: placeName,
-                    });
-                }
-            } else {
-                // Fallback to coordinates if geocoding fails
-                if (onLocationSelect) {
-                    onLocationSelect({
-                        lat: lat,
-                        lng: lng,
-                        name: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-                    });
-                }
+            if (onLocationSelect) {
+              onLocationSelect({
+                lat: lat,
+                lng: lng,
+                name: placeName,
+              });
             }
+          } else {
+            // Fallback to coordinates if geocoding fails
+            if (onLocationSelect) {
+              onLocationSelect({
+                lat: lat,
+                lng: lng,
+                name: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+              });
+            }
+          }
         });
       });
     }
   }, [onLocationSelect]);
 
   return (
-    <div
-      // ref={mapRef} tells React to put this div element into mapRef.current (STEP 2 - put the "bookmark" on the div)
-      ref={mapRef}
-      style={{
-        width: "100%",
-        height: "300px",
-        borderRadius: "8px",
-        border: "1px solid #e0e0e0",
-      }}
-    />
+    <div className="map-picker-container">
+      <div className="map-picker-header">
+        <h3 className="map-picker-title">Select Location</h3>
+        <p className="map-picker-instructions">
+          Click on the map to set your activity location
+        </p>
+      </div>
+      {/* ref={mapRef} tells React to put this div element into mapRef.current (STEP 2 - put the "bookmark" on the div) */}
+
+      <div ref={mapRef} className="map-picker-map" />
+
+      <div className="map-picker-controls">
+        <span className="map-picker-status">Click to select location</span>
+      </div>
+    </div>
   );
 }
 
