@@ -104,6 +104,9 @@ function MapPicker({ onLocationSelect }) {
       <div ref={mapRef} className="map-picker-map" />
 
       <div className="map-picker-controls">
+        <button className="map-picker-btn" onClick={getUserLocation}>
+          Use My Location
+        </button>
         <span className="map-picker-status">Click to select location</span>
       </div>
     </div>
