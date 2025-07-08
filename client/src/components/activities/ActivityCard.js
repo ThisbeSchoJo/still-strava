@@ -131,8 +131,16 @@ function ActivityCard({ activity, activities, setActivities }) {
 
       {/* Map Display */}
       {activity.location_name && (
-        <div className="activity-card-location">
-          {activity.location_name}
+        <div className="activity-card-location">{activity.location_name}</div>
+      )}
+
+      {/* Map Thumbnail */}
+      {activity.latitude && activity.longitude && (
+        <div className="activity-card-map">
+          <img
+            src={`https://maps.googleapis.com/maps/api/staticmap?center=${activity.latitude},${activity.longitude}&zoom=13&size=300x150&markers=color:red%7C${activity.latitude},${activity.longitude}&key=YOUR_API_KEY`}
+            alt={`Map showing location of ${activity.title}`}
+          />
         </div>
       )}
 
@@ -203,7 +211,6 @@ function ActivityCard({ activity, activities, setActivities }) {
                     }
                   />
                 </div>
-                
 
                 <div className="edit-form-group">
                   <label htmlFor="edit-description">Description</label>
