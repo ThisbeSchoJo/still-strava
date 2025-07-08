@@ -12,8 +12,6 @@ function ActivityForm() {
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [mapCenter, setMapCenter] = useState([37.7749, -122.4194]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,12 +35,10 @@ function ActivityForm() {
           const { latitude, longitude } = position.coords;
           console.log("Current location:", { latitude, longitude });
 
-          // Update the map center
-          setMapCenter({ lat: latitude, lng: longitude });
-
-          // Set as selected location
+          // Update form fields with current location
           setLatitude(latitude);
           setLongitude(longitude);
+          setLocationName("My Current Location");
         },
         (error) => {
           console.error("Error getting current location:", error);
@@ -223,6 +219,8 @@ function ActivityForm() {
           </button>
         </div>
       </form>
+
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 }
