@@ -8,6 +8,27 @@ function MapPicker({ onLocationSelect }) {
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null); //map marker
 
+  // Function to get user's current location
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log("User location:", { latitude, longitude });
+
+          // Center map on user's location
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.setCenter({ lat: latitude, lng: longitude });
+            mapInstanceRef.current.setZoom(15);
+          }
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    }
+  };
+
   // Initialize the map when the component mounts
   useEffect(() => {
     // Check if Google Maps is loaded
@@ -64,6 +85,9 @@ function MapPicker({ onLocationSelect }) {
           }
         });
       });
+
+      // Try to get user's location when map loads
+      getUserLocation();
     }
   }, [onLocationSelect]);
 
