@@ -28,30 +28,6 @@ function ActivityForm() {
     setLocationName(location.name);
   };
 
-  const handleGetCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          console.log("Current location:", { latitude, longitude });
-
-          // Update form fields with current location
-          setLatitude(latitude);
-          setLongitude(longitude);
-          setLocationName("My Current Location");
-        },
-        (error) => {
-          console.error("Error getting current location:", error);
-          alert(
-            "Unable to get your current location. Please select a location manually."
-          );
-        }
-      );
-    } else {
-      alert("Geolocation is not supported by your browser.");
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -183,13 +159,6 @@ function ActivityForm() {
         <div className="form-group">
           <label>Location</label>
           <div className="map-container">
-            <button
-              type="button"
-              onClick={handleGetCurrentLocation}
-              className="current-location-btn"
-            >
-              Use My Location
-            </button>
             <MapPicker onLocationSelect={handleLocationSelect} />
           </div>
         </div>
