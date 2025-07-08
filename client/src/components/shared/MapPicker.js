@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../styling/mappicker.css";
 
 function MapPicker({ onLocationSelect }) {
@@ -7,10 +7,13 @@ function MapPicker({ onLocationSelect }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null); //map marker
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   // Function to get user's current location
   const getUserLocation = () => {
     if (navigator.geolocation) {
+      setIsLoadingLocation(true);
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -21,9 +24,12 @@ function MapPicker({ onLocationSelect }) {
             mapInstanceRef.current.setCenter({ lat: latitude, lng: longitude });
             mapInstanceRef.current.setZoom(15);
           }
+
+          setIsLoadingLocation(false);
         },
         (error) => {
           console.error("Error getting location:", error);
+          setIsLoadingLocation(false);
         }
       );
     }
@@ -104,8 +110,12 @@ function MapPicker({ onLocationSelect }) {
       <div ref={mapRef} className="map-picker-map" />
 
       <div className="map-picker-controls">
-        <button className="map-picker-btn" onClick={getUserLocation}>
-          Use My Location
+        <button
+          className="map-picker-btn"
+          onClick={getUserLocation}
+          disabled={isLoadingLocation}
+        >
+          {isLoadingLocation ? "Getting Location..." : "Use My Location"}
         </button>
         <span className="map-picker-status">Click to select location</span>
       </div>
