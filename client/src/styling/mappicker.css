@@ -1,0 +1,124 @@
+/* MapPicker Component Styling */
+
+.map-picker-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  background-color: #fafafa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-picker-header {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.map-picker-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.map-picker-instructions {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.map-picker-map {
+  width: 100%;
+  height: 300px;
+  border-radius: 0 0 8px 8px;
+}
+
+.map-picker-controls {
+  padding: 0.75rem 1rem;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.map-picker-btn {
+  background-color: #fc4c02;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.map-picker-btn:hover {
+  background-color: #e34402;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.3);
+}
+
+.map-picker-btn:active {
+  transform: translateY(0);
+}
+
+.map-picker-btn.secondary {
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.map-picker-btn.secondary:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.map-picker-status {
+  font-size: 0.8rem;
+  color: #666;
+  margin-left: auto;
+}
+
+.map-picker-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fc4c02;
+  font-size: 0.8rem;
+}
+
+.map-picker-error {
+  background-color: #fff5f5;
+  border: 1px solid #fecaca;
+  color: #dc3545;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .map-picker-map {
+    height: 250px;
+  }
+
+  .map-picker-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .map-picker-status {
+    margin-left: 0;
+    text-align: center;
+  }
+}
