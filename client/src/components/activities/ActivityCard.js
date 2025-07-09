@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
+import { getActivityIcon } from "../../utils/activityIcons";
 
 /**
 
@@ -166,8 +167,13 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       </div>
 
-      {/* Activity Title */}
-      <h2 className="activity-card-title">{activity.title}</h2>
+      {/* Activity Title with Icon */}
+      <div className="activity-card-title-container">
+        <span className="activity-card-icon">
+          {getActivityIcon(activity.activity_type)}
+        </span>
+        <h2 className="activity-card-title">{activity.title}</h2>
+      </div>
 
       {/* Location Display - Shows location name if available */}
       {activity.location_name && (
