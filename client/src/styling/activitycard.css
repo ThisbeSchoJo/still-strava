@@ -87,59 +87,54 @@
 
 .like-button {
   background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
   color: #666;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
 .like-button:hover {
   background-color: #fff5f5;
-  border-color: #fc4c02;
   color: #fc4c02;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.2);
+  transform: scale(1.1);
 }
 
 .like-button.liked {
-  background-color: #fc4c02;
-  border-color: #fc4c02;
-  color: white;
+  color: #fc4c02;
 }
 
 .like-button.liked:hover {
-  background-color: #e34402;
-  border-color: #e34402;
+  color: #e34402;
 }
 
 .comment-button {
   background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
   color: #666;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
 .comment-button:hover {
-  background-color: #fff5f5;
-  border-color: #fc4c02;
-  color: #fc4c02;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.2);
+  background-color: #f8f9fa;
+  color: #333;
+  transform: scale(1.1);
 }
 
 .delete-button {
@@ -193,32 +188,6 @@
   color: #666;
   font-weight: 500;
   margin-left: 0.5rem;
-}
-
-/* Add emoji icons using pseudo-elements (not obvious to all devs) */
-.like-button::before {
-  content: "❤️";
-  font-size: 1rem;
-}
-
-.like-button.liked::before {
-  content: "❤️";
-  font-size: 1rem;
-}
-
-.comment-button::before {
-  content: "💬";
-  font-size: 1rem;
-}
-
-.edit-button::before {
-  content: "✏️";
-  font-size: 1rem;
-}
-
-.delete-button::before {
-  content: "🗑️";
-  font-size: 1rem;
 }
 
 /* Disabled state styling for all action buttons */

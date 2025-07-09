@@ -328,21 +328,24 @@ function ActivityCard({ activity, activities, setActivities }) {
 
       {/* Like Button and Count */}
       <div className="activity-card-actions">
-        <button className="like-button" onClick={handleLike}>
-          {isLiked ? "Unlike" : "Like"}
+        <button
+          className={`like-button ${isLiked ? "liked" : ""}`}
+          onClick={handleLike}
+          title={isLiked ? "Unlike" : "Like"}
+        >
+          👍
         </button>
-        <span className="like-count">
-          {/* If the like count is 0, show 0, otherwise show the like count */}
-          {likes || activity.like_count || 0}{" "}
-          {/* If the like count is 1, show "like", otherwise show "likes" */}
-          {(likes || activity.like_count || 0) === 1 ? "like" : "likes"}
-        </span>
+        <span className="like-count">{likes || activity.like_count || 0}</span>
       </div>
 
       {/* Comment Button */}
       <div className="activity-card-actions">
-        <button className="comment-button" onClick={handleComment}>
-          Comment
+        <button
+          className="comment-button"
+          onClick={handleComment}
+          title="Comment"
+        >
+          💬
         </button>
       </div>
 
