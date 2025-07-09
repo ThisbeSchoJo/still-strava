@@ -10,7 +10,7 @@
 
 .activity-card-title-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   margin: 1rem;
 }
@@ -23,11 +23,39 @@
   flex-shrink: 0;
 }
 
+.activity-card-title-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
 .activity-card-title {
   font-size: 1.5rem;
   color: #333;
   margin: 0;
   font-weight: 600;
+}
+
+.activity-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.activity-card-date {
+  font-weight: 500;
+}
+
+.activity-card-separator {
+  color: #999;
+}
+
+.activity-card-location {
+  color: #666;
+  font-weight: 500;
 }
 
 .activity-card-username {
@@ -403,15 +431,7 @@
   background-color: #e0e0e0;
 }
 
-.activity-card-location {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-weight: 500;
-}
+
 
 .activity-card-map {
   width: calc(100% - 2rem);
