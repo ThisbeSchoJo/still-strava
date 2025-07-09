@@ -326,7 +326,10 @@ function ActivityCard({ activity, activities, setActivities }) {
           {isLiked ? "Unlike" : "Like"}
         </button>
         <span className="like-count">
-          {likes} {likes === 1 ? "like" : "likes"}
+          {/* If the like count is 0, show 0, otherwise show the like count */}
+          {likes || activity.like_count || 0}{" "}
+          {/* If the like count is 1, show "like", otherwise show "likes" */}
+          {(likes || activity.like_count || 0) === 1 ? "like" : "likes"}
         </span>
       </div>
 
