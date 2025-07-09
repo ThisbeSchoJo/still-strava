@@ -11,11 +11,18 @@ import ActivityCard from "./ActivityCard";
 function ActivityList() {
   // state variables to store our activities data
   const [activities, setActivities] = useState([]);
+
+  // state variables to store loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // useNavigate to navigate to the new activity page
   const navigate = useNavigate();
+
+  // useContext to get the user from the UserContext
   const { user } = useContext(UserContext);
 
+  // handleAddActivity to navigate to the new activity page
   const handleAddActivity = () => {
     navigate("/activities/new");
   };
@@ -24,6 +31,7 @@ function ActivityList() {
   // makes a GET request to the server to fetch all activities
   useEffect(() => {
     // Build URL with user_id if user is logged in
+    // If user is not logged in, fetch all activities
     const url = user
       ? `http://localhost:5555/activities?user_id=${user.id}`
       : "http://localhost:5555/activities";
@@ -60,9 +68,13 @@ function ActivityList() {
         </button>
       </div>
       <div className="activity-list">
+        {/* If there are activities, map through them and return an ActivityCard component for each activity */}
         {activities && activities.length > 0 ? (
           activities.map((activity) => {
             return (
+              // Need to pass the activities array to the ActivityCard component
+              // so that the ActivityCard component can update the activities array
+              // when the user likes or unlikes an activity
               <ActivityCard
                 key={activity.id}
                 activity={activity}
