@@ -35,8 +35,7 @@ function ActivityForm() {
   /**
    * Handles location selection from the MapPicker component
    * Updates form state with selected location coordinates and name
-   *
-   * @param {Object} location - Location object with lat, lng, and name properties
+   * Location object with lat, lng, and name properties
    */
   const handleLocationSelect = (location) => {
     console.log("Location selected:", location);
@@ -88,7 +87,8 @@ function ActivityForm() {
       if (!response.ok) {
         throw new Error("Failed to create activity");
       }
-
+      
+      // Navigate to the activity feed page after creating the activity
       const data = await response.json();
       navigate("/activity-feed");
     } catch (error) {
