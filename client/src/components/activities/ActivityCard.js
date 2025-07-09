@@ -37,22 +37,26 @@ function ActivityCard({ activity, activities, setActivities }) {
 
   /**
    * Handles the like/unlike functionality
-   * Sends a PATCH request to update the activity's like count
+   * Uses the new like/unlike endpoints
    */
   const handleLike = () => {
-    const updatedLikes = isLiked ? likes - 1 : likes + 1;
+    if (!user) return; // Don't allow likes if not logged in
 
-    fetch(`http://localhost:5555/activities/${activity.id}`, {
-      method: "PATCH",
+    const endpoint = isLiked ? "unlike" : "like";
+    const method = isLiked ? "DELETE" : "POST";
+
+    fetch(`http://localhost:5555/activities/${activity.id}/${endpoint}`, {
+      method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ likes: updatedLikes }),
+      body: JSON.stringify({ user_id: user.id }),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to like activity");
+        if (!res.ok) throw new Error(`Failed to ${endpoint} activity`);
         return res.json();
       })
-      .then((updated) => {
-        setLikes(updated.likes);
+      .then(() => {
+        // Update local state
+        setLikes(isLiked ? likes - 1 : likes + 1);
         setIsLiked(!isLiked);
       })
       .catch((err) => console.error(err));
