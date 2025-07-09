@@ -14,32 +14,32 @@ with app.app_context():
     print("Seeding users...")
     users = [
         User(
-            username="trailblazer",
-            email="trail@example.com",
+            username="naturelover",
+            email="nature@example.com",
             image="https://randomuser.me/api/portraits/women/44.jpg",
-            bio="Always chasing the next summit.",
+            bio="Finding peace in the outdoors.",
             location="Boulder, CO"
         ),
         User(
-            username="urbanrunner",
-            email="run@example.com",
+            username="stargazer",
+            email="stars@example.com",
             image="https://randomuser.me/api/portraits/men/32.jpg",
-            bio="City streets, early mornings.",
-            location="Brooklyn, NY"
+            bio="Lost in the cosmos.",
+            location="Flagstaff, AZ"
         ),
         User(
-            username="flowstate",
-            email="yoga@example.com",
+            username="beachcomber",
+            email="beach@example.com",
             image="https://randomuser.me/api/portraits/women/65.jpg",
-            bio="Stretch, breathe, repeat.",
+            bio="Seashells and serenity.",
             location="Santa Barbara, CA"
         ),
         User(
-            username="coastalcruiser",
-            email="coast@example.com",
+            username="forestwalker",
+            email="forest@example.com",
             image="https://randomuser.me/api/portraits/men/77.jpg",
-            bio="Wheels + waves = peace.",
-            location="San Diego, CA"
+            bio="Among the trees and tranquility.",
+            location="Portland, OR"
         )
     ]
 
@@ -52,10 +52,10 @@ with app.app_context():
     print("Seeding activities...")
     activities = [
         Activity(
-            title="Sunrise Hike at Flatirons",
-            activity_type="Hiking",
-            description="Caught the first light hitting the peaks—magical morning.",
-            datetime=datetime(2025, 6, 20, 6, 30),
+            title="Sunset at Flatirons",
+            activity_type="Sunset Watching",
+            description="Caught the golden hour hitting the peaks—magical evening.",
+            datetime=datetime(2025, 6, 20, 18, 30),
             photos="https://th.bing.com/th/id/OIP.2G7wnXuBOqQAu7rH7Z17lQHaFj?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2",
             user_id=users[0].id,
             latitude=39.9867,
@@ -63,37 +63,37 @@ with app.app_context():
             location_name="Flatirons, Boulder"
         ),
         Activity(
-            title="5K Tempo Run",
-            activity_type="Running",
-            description="Fastest time yet on my loop through Prospect Park!",
-            datetime=datetime(2025, 6, 21, 7, 15),
-            photos="https://th.bing.com/th/id/OIP.jhheKYAobxpgo-vJ7vYAlQHaE8?r=0&rs=1&pid=ImgDetMain&cb=idpwebpc2",
+            title="Stargazing in the Desert",
+            activity_type="Stargazing",
+            description="Clear night sky, perfect for spotting constellations!",
+            datetime=datetime(2025, 6, 21, 21, 15),
+            photos="https://th.bing.com/th/id/R.ab9075c87e906424c41aba8dda35d880?rik=Bzt%2bwnY%2f3%2fasHw&pid=ImgRaw&r=0",
             user_id=users[1].id,
-            latitude=40.6602,
-            longitude=-73.9690,
-            location_name="Prospect Park, Brooklyn"
+            latitude=35.1983,
+            longitude=-111.6513,
+            location_name="Flagstaff, AZ"
         ),
         Activity(
-            title="Evening Flow",
-            activity_type="Yoga",
-            description="A calming 45-min vinyasa session. Just what I needed.",
-            datetime=datetime(2025, 6, 22, 18, 0),
-            photos="https://res.cloudinary.com/peloton-cycle/image/fetch/dpr_1.0,f_auto,q_auto:good,w_1800/https://s3.amazonaws.com/peloton-ride-images/96a0b61b8375711d23f73ad94a3c3bd6a94c2b78/img_1631227222_89d81453f6bb490ca8028947789b3671.png",
+            title="Seashell Collecting",
+            activity_type="Seashell Collecting",
+            description="Found some beautiful shells along the shore. Perfect morning.",
+            datetime=datetime(2025, 6, 22, 8, 0),
+            photos="https://th.bing.com/th/id/R.601975ca38b1f7ab5425333b29d9c625?rik=z85amv8wcNPyQA&riu=http%3a%2f%2fpublicdomainpictures.net%2fpictures%2f130000%2fvelka%2fcollecting-shells-on-the-beach.jpg&ehk=2zIUwbESkAhyJ0vFyJZ3N%2fsbYMGpg5jjFTFXB2RvCK4%3d&risl=&pid=ImgRaw&r=0",
             user_id=users[2].id,
             latitude=34.4208,
             longitude=-119.6982,
             location_name="Santa Barbara Beach"
         ),
         Activity(
-            title="Coastal Ride",
-            activity_type="Cycling",
-            description="Chilly wind, but the views made up for it!",
-            datetime=datetime(2025, 6, 23, 9, 45),
-            photos="https://th.bing.com/th/id/R.8215af7573f743fd39436cf4c1900118?rik=AfMS%2fBqXf8yFng&pid=ImgRaw&r=0",
+            title="Forest Foraging",
+            activity_type="Foraging",
+            description="Found some wild berries and mushrooms. Nature's bounty!",
+            datetime=datetime(2025, 6, 23, 10, 45),
+            photos="https://mytoastlife.com/wp-content/uploads/2022/01/AdobeStock_387297682.jpeg",
             user_id=users[3].id,
-            latitude=32.7157,
-            longitude=-117.1611,
-            location_name="Pacific Coast Highway, San Diego"
+            latitude=45.5152,
+            longitude=-122.6784,
+            location_name="Forest Park, Portland"
         )
     ]
 
@@ -103,19 +103,19 @@ with app.app_context():
     print("Seeding comments...")
     comments = [
         Comment(
-            content="That looks amazing!",
+            content="That sunset looks absolutely magical!",
             datetime=datetime.now(),
             activity_id=activities[0].id,
             user_id=users[1].id
         ),
         Comment(
-            content="Inspiring pace. Keep it up!",
+            content="The stars must have been incredible!",
             datetime=datetime.now(),
             activity_id=activities[1].id,
             user_id=users[0].id
         ),
         Comment(
-            content="I needed this reminder to slow down. Thank you.",
+            content="What beautiful shells! I love beachcombing too.",
             datetime=datetime.now(),
             activity_id=activities[2].id,
             user_id=users[3].id
