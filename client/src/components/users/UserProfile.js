@@ -88,7 +88,15 @@ function UserProfile({ user }) {
           <h2>Recent Activities</h2>
           {user.activities && user.activities.length > 0 ? (
             user.activities.map((activity) => (
-              <ActivityCard key={activity.id} activity={activity} />
+              <ActivityCard 
+                key={activity.id} 
+                activity={activity} 
+                activities={user.activities}
+                setActivities={(updatedActivities) => {
+                  // Update the user's activities in the parent component
+                  user.activities = updatedActivities;
+                }}
+              />
             ))
           ) : (
             <p>No activities yet</p>
