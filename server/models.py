@@ -24,6 +24,7 @@ class User(db.Model, SerializerMixin):
     # Relationships
     activities = db.relationship('Activity', back_populates='user')
     comments = db.relationship('Comment', back_populates='user')
+    likes = db.relationship('Like', back_populates='user')
 
     # Serialization rules to avoid circular references
     serialize_rules = ('-activities', '-comments', '-password_hash')
@@ -90,6 +91,7 @@ class Activity(db.Model, SerializerMixin):
     # Relationships
     comments = db.relationship('Comment', back_populates='activity')
     user = db.relationship('User', back_populates='activities')
+    likes = db.relationship('Like', back_populates='activity')
 
     # Serialization rules to avoid circular references
     serialize_rules = ('-comments','-user.activities', '-user.comments')
@@ -184,4 +186,38 @@ class Comment(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'<Comment {self.content}, Datetime: {self.datetime}, Activity: {self.activity_id}, User: {self.user_id}>'
+    
+
+class Like(db.Model, SerializerMixin):
+    __tablename__ = 'likes'
+
+    # Database columns
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activities.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    user = db.relationship('User', back_populates='likes')
+    activity = db.relationship('Activity', back_populates='likes')
+
+    # Serialization rules to avoid circular references
+    serialize_rules = ('-user.likes', '-user.activities', '-user.comments', 
+                      '-activity.likes', '-activity.comments', '-activity.user')
+
+    # Validation methods
+    @validates('user_id')
+    def validate_user_id(self, key, value):
+        if not isinstance(value, int):
+            raise TypeError("User ID must be an integer")
+        return value
+
+    @validates('activity_id')
+    def validate_activity_id(self, key, value):
+        if not isinstance(value, int):
+            raise TypeError("Activity ID must be an integer")
+        return value
+
+    def __repr__(self):
+        return f'<Like User: {self.user_id}, Activity: {self.activity_id}, Created: {self.created_at}>'
     

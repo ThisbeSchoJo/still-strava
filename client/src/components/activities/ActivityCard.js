@@ -3,28 +3,24 @@ import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
 
-// client/src/components/activities/ActivityCard.js
+/**
 
-/*
- * ActivityCard Component
  *
- * This component displays a single activity in a card format, similar to Strava's activity feed.
- * It receives an activity object as a prop and renders all the activity information in a structured layout.
+ * Displays a single activity in a card format, similar to Strava's activity feed.
+ * Handles user interactions like liking, commenting, editing, and deleting activities.
  *
- * - user: object with id, username, and image
- * - title: string for the activity title
- * - activity_type: string for the type of activity
- * - description: string for the activity description
- * - datetime: string for when the activity occurred
- * - photos: string URL for the activity image
- * - id: number for the unique activity identifier
+ * Props:
+ * - activity: object containing all activity data (title, description, location, etc.)
+ * - activities: array of all activities (used for updating the list)
+ * - setActivities: function to update the activities list
  */
 function ActivityCard({ activity, activities, setActivities }) {
+  // State for managing likes and user interactions
   const [likes, setLikes] = useState(activity.likes || 0);
-  const { user } = useContext(UserContext);
   const [isLiked, setIsLiked] = useState(false);
+
+  // State for managing edit mode and form data
   const [isEditing, setIsEditing] = useState(false);
-  const [isCommenting, setIsCommenting] = useState(false);
   const [editedActivity, setEditedActivity] = useState({
     title: activity.title,
     activity_type: activity.activity_type,
@@ -33,6 +29,16 @@ function ActivityCard({ activity, activities, setActivities }) {
     photos: activity.photos,
   });
 
+  // State for managing comment form visibility
+  const [isCommenting, setIsCommenting] = useState(false);
+
+  // Get current user from context
+  const { user } = useContext(UserContext);
+
+  /**
+   * Handles the like/unlike functionality
+   * Sends a PATCH request to update the activity's like count
+   */
   const handleLike = () => {
     const updatedLikes = isLiked ? likes - 1 : likes + 1;
 
@@ -52,10 +58,16 @@ function ActivityCard({ activity, activities, setActivities }) {
       .catch((err) => console.error(err));
   };
 
+  /**
+   * Toggles the comment form visibility
+   */
   const handleComment = () => {
     setIsCommenting(!isCommenting);
   };
 
+  /**
+   * Enters edit mode and initializes the edit form with current activity data
+   */
   const handleEdit = () => {
     setIsEditing(true);
     setEditedActivity({
@@ -67,10 +79,13 @@ function ActivityCard({ activity, activities, setActivities }) {
     });
   };
 
+  /**
+   * Saves the edited activity data to the backend
+   * Updates the activities list with the new data
+   */
   const handleSaveEdit = (e) => {
     e.preventDefault();
     fetch(`http://localhost:5555/activities/${activity.id}`, {
-      // update the activity with the new title, activity_type, description, and photos
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -95,6 +110,10 @@ function ActivityCard({ activity, activities, setActivities }) {
       .catch((err) => console.error(err));
   };
 
+  /**
+   * Deletes the activity after user confirmation
+   * Removes the activity from the activities list
+   */
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this activity?")) {
       fetch(`http://localhost:5555/activities/${activity.id}`, {
@@ -115,6 +134,7 @@ function ActivityCard({ activity, activities, setActivities }) {
 
   return (
     <div className="activity-card">
+      {/* Activity Header - User Info */}
       <div className="activity-card-header">
         <div className="activity-card-user">
           {activity.user && (
@@ -128,14 +148,15 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       </div>
 
+      {/* Activity Title */}
       <h2 className="activity-card-title">{activity.title}</h2>
 
-      {/* Map Display */}
+      {/* Location Display - Shows location name if available */}
       {activity.location_name && (
         <div className="activity-card-location">{activity.location_name}</div>
       )}
 
-      {/* Map Thumbnail */}
+      {/* Map Thumbnail - Shows location on map if coordinates are available */}
       {activity.latitude && activity.longitude && (
         <div className="activity-card-map">
           {console.log(
@@ -160,10 +181,12 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       )}
 
+      {/* Activity Image */}
       <div className="activity-card-image">
         <img src={activity.photos} alt={activity.title} />
       </div>
 
+      {/* Edit Modal - Appears when user clicks edit button */}
       {isEditing && (
         <div>
           <div className="edit-modal">
@@ -179,10 +202,10 @@ function ActivityCard({ activity, activities, setActivities }) {
               </button>
             </div>
 
-            {/* Modal Body */}
+            {/* Modal Body - Edit Form */}
             <div className="edit-modal-body">
               <form className="edit-form">
-                {/* Form Groups */}
+                {/* Title Field */}
                 <div className="edit-form-group">
                   <label htmlFor="edit-title">Title</label>
                   <input
@@ -198,6 +221,7 @@ function ActivityCard({ activity, activities, setActivities }) {
                   />
                 </div>
 
+                {/* Activity Type Field */}
                 <div className="edit-form-group">
                   <label htmlFor="edit-activity-type">Activity Type</label>
                   <input
@@ -213,6 +237,7 @@ function ActivityCard({ activity, activities, setActivities }) {
                   />
                 </div>
 
+                {/* Location Name Field */}
                 <div className="edit-form-group">
                   <label htmlFor="edit-location-name">Location Name</label>
                   <input
@@ -228,6 +253,7 @@ function ActivityCard({ activity, activities, setActivities }) {
                   />
                 </div>
 
+                {/* Description Field */}
                 <div className="edit-form-group">
                   <label htmlFor="edit-description">Description</label>
                   <textarea
@@ -242,6 +268,7 @@ function ActivityCard({ activity, activities, setActivities }) {
                   />
                 </div>
 
+                {/* Photo URL Field */}
                 <div className="edit-form-group">
                   <label htmlFor="edit-photos">Photo URL</label>
                   <input
@@ -259,7 +286,7 @@ function ActivityCard({ activity, activities, setActivities }) {
               </form>
             </div>
 
-            {/* Modal Footer */}
+            {/* Modal Footer - Action Buttons */}
             <div className="edit-modal-footer">
               <button
                 type="button"
@@ -280,6 +307,7 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       )}
 
+      {/* Activity Information */}
       <div className="activity-card-info">
         <div className="activity-card-stats">
           <span>Activity Type: {activity.activity_type}</span>
@@ -288,9 +316,8 @@ function ActivityCard({ activity, activities, setActivities }) {
         <p className="activity-card-description">{activity.description}</p>
       </div>
 
-      {/* Like Button */}
+      {/* Like Button and Count */}
       <div className="activity-card-actions">
-        {/* toggle between like and unlike   */}
         <button className="like-button" onClick={handleLike}>
           {isLiked ? "Unlike" : "Like"}
         </button>
@@ -298,6 +325,7 @@ function ActivityCard({ activity, activities, setActivities }) {
           {likes} {likes === 1 ? "like" : "likes"}
         </span>
       </div>
+
       {/* Comment Button */}
       <div className="activity-card-actions">
         <button className="comment-button" onClick={handleComment}>
@@ -305,7 +333,7 @@ function ActivityCard({ activity, activities, setActivities }) {
         </button>
       </div>
 
-      {/* Comment Form */}
+      {/* Comment Form - Appears when comment button is clicked */}
       {isCommenting && (
         <div className="comment-form">
           <textarea
@@ -323,9 +351,9 @@ function ActivityCard({ activity, activities, setActivities }) {
           </div>
         </div>
       )}
-      {/* Delete Button */}
+
+      {/* Delete and Edit Buttons - Only shown to activity owner */}
       <div className="activity-card-actions">
-        {/* Check if user is the owner of the activity */}
         {activity.user && user && activity.user.id === user.id && (
           <>
             <button className="delete-button" onClick={handleDelete}>
