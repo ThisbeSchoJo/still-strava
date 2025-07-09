@@ -130,6 +130,47 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   /**
+   * Formats the date in a Strava-like way (Today, Yesterday, X days ago, etc.)
+   */
+  const formatDate = (dateString) => {
+    const activityDate = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Reset time to compare just the date
+    const activityDateOnly = new Date(
+      activityDate.getFullYear(),
+      activityDate.getMonth(),
+      activityDate.getDate()
+    );
+    const todayOnly = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const yesterdayOnly = new Date(
+      yesterday.getFullYear(),
+      yesterday.getMonth(),
+      yesterday.getDate()
+    );
+
+    if (activityDateOnly.getTime() === todayOnly.getTime()) {
+      return "Today";
+    } else if (activityDateOnly.getTime() === yesterdayOnly.getTime()) {
+      return "Yesterday";
+    } else {
+      const diffTime = todayOnly.getTime() - activityDateOnly.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays <= 7) {
+        return `${diffDays} days ago`;
+      } else {
+        return activityDate.toLocaleDateString();
+      }
+    }
+  };
+
+  /**
    * Deletes the activity after user confirmation
    * Removes the activity from the activities list
    */
@@ -167,18 +208,28 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       </div>
 
-      {/* Activity Title with Icon */}
+      {/* Activity Title with Icon and Date/Location */}
       <div className="activity-card-title-container">
         <span className="activity-card-icon">
           {getActivityIcon(activity.activity_type)}
         </span>
-        <h2 className="activity-card-title">{activity.title}</h2>
+        <div className="activity-card-title-info">
+          <h2 className="activity-card-title">{activity.title}</h2>
+          <div className="activity-card-meta">
+            <span className="activity-card-date">
+              {formatDate(activity.datetime)}
+            </span>
+            {activity.location_name && (
+              <>
+                <span className="activity-card-separator"> - </span>
+                <span className="activity-card-location">
+                  {activity.location_name}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* Location Display - Shows location name if available */}
-      {activity.location_name && (
-        <div className="activity-card-location">{activity.location_name}</div>
-      )}
 
       {/* Map Thumbnail - Shows location on map if coordinates are available */}
       {activity.latitude && activity.longitude && (
@@ -327,7 +378,6 @@ function ActivityCard({ activity, activities, setActivities }) {
       <div className="activity-card-info">
         <div className="activity-card-stats">
           <span>Activity Type: {activity.activity_type}</span>
-          <span>Date: {new Date(activity.datetime).toLocaleDateString()}</span>
         </div>
         <p className="activity-card-description">{activity.description}</p>
       </div>
