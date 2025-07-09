@@ -135,11 +135,11 @@
 }
 
 .comment-button:hover {
-  background-color: #f8f9fa;
-  border-color: #007bff;
-  color: #007bff;
+  background-color: #fff5f5;
+  border-color: #fc4c02;
+  color: #fc4c02;
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.2);
 }
 
 .delete-button {
@@ -461,4 +461,123 @@
   font-weight: 500;
   max-width: 90%;
   word-wrap: break-word;
+}
+
+/* Comment Form Styles */
+.comment-form {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  margin-top: 0.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+.comment-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+  background-color: white;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #fc4c02;
+  box-shadow: 0 0 0 2px rgba(252, 76, 2, 0.1);
+}
+
+.comment-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.comment-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  justify-content: flex-end;
+}
+
+.comment-submit-btn {
+  background-color: #fc4c02;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.comment-submit-btn:hover {
+  background-color: #e04301;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.3);
+}
+
+.comment-submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.comment-cancel-btn {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.comment-cancel-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #999;
+  color: #333;
+  transform: translateY(-1px);
+}
+
+/* Comment form animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive comment form */
+@media (max-width: 768px) {
+  .comment-form {
+    padding: 0.75rem;
+  }
+
+  .comment-input {
+    min-height: 60px;
+    font-size: 0.85rem;
+  }
+
+  .comment-form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .comment-submit-btn,
+  .comment-cancel-btn {
+    width: 100%;
+    padding: 0.75rem;
+  }
 }
