@@ -163,14 +163,6 @@ function ActivityCard({ activity, activities, setActivities }) {
       {/* Map Thumbnail - Shows location on map if coordinates are available */}
       {activity.latitude && activity.longitude && (
         <div className="activity-card-map">
-          {console.log(
-            "Activity with location:",
-            activity.title,
-            "lat:",
-            activity.latitude,
-            "lng:",
-            activity.longitude
-          )}
           <div className="map-placeholder">
             <div className="map-placeholder-content">
               <span className="map-placeholder-icon">📍</span>
