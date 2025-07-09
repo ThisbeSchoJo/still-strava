@@ -16,8 +16,8 @@ import { UserContext } from "../../context/UserContext";
  */
 function ActivityCard({ activity, activities, setActivities }) {
   // State for managing likes and user interactions
-  const [likes, setLikes] = useState(activity.likes || 0);
-  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(activity.like_count || 0);
+  const [isLiked, setIsLiked] = useState(activity.user_liked || false);
 
   // State for managing edit mode and form data
   const [isEditing, setIsEditing] = useState(false);

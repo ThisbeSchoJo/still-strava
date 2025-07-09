@@ -416,7 +416,7 @@ class LikeActivity(Resource):
             new_like = Like(
                 user_id=user_id,
                 activity_id=activity_id,
-                created_at=datetime.now()
+                created_at=datetime.now(timezone.utc)
             )
             
             db.session.add(new_like)
