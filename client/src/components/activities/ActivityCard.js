@@ -348,7 +348,25 @@ function ActivityCard({ activity, activities, setActivities }) {
             </svg>
           </button>
         </div>
-        <span className="like-count">{likes || activity.like_count || 0}</span>
+        <div className="like-display">
+          {activity.like_users && activity.like_users.length > 0 && (
+            <div className="like-users">
+              {activity.like_users.map((likeUser, index) => (
+                <img
+                  key={likeUser.id}
+                  src={likeUser.image}
+                  alt={likeUser.username}
+                  className="like-user-avatar"
+                  title={likeUser.username}
+                  style={{ zIndex: activity.like_users.length - index }}
+                />
+              ))}
+            </div>
+          )}
+          <span className="like-count">
+            {likes || activity.like_count || 0} gave kudos
+          </span>
+        </div>
       </div>
 
       {/* Comment Form - Appears when comment button is clicked */}

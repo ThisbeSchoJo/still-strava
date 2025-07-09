@@ -23,9 +23,22 @@ def get_activity_with_likes(activity, current_user_id=None):
     """Get activity data including like count and user's like status"""
     activity_dict = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'user'))
     
-    # Get like count
-    like_count = Like.query.filter_by(activity_id=activity.id).count()
+    # Get likes with user information
+    likes = Like.query.filter_by(activity_id=activity.id).all()
+    like_count = len(likes)
     activity_dict['like_count'] = like_count
+    
+    # Get user information for likes (limit to 5 for display)
+    like_users = []
+    for like in likes[:5]:  # Limit to 5 users for display
+        user = User.query.get(like.user_id)
+        if user:
+            like_users.append({
+                'id': user.id,
+                'username': user.username,
+                'image': user.image
+            })
+    activity_dict['like_users'] = like_users
     
     # Check if current user has liked this activity
     if current_user_id:
