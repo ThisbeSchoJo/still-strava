@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
@@ -15,6 +15,9 @@ import { UserContext } from "../../context/UserContext";
  * - setActivities: function to update the activities list
  */
 function ActivityCard({ activity, activities, setActivities }) {
+  // Get current user from context
+  const { user } = useContext(UserContext);
+
   // State for managing likes and user interactions
   const [likes, setLikes] = useState(activity.like_count || 0);
   const [isLiked, setIsLiked] = useState(activity.user_liked || false);
@@ -32,8 +35,11 @@ function ActivityCard({ activity, activities, setActivities }) {
   // State for managing comment form visibility
   const [isCommenting, setIsCommenting] = useState(false);
 
-  // Get current user from context
-  const { user } = useContext(UserContext);
+  // Update like state when activity data changes
+  useEffect(() => {
+    setLikes(activity.like_count || 0);
+    setIsLiked(activity.user_liked || false);
+  }, [activity.like_count, activity.user_liked]);
 
   /**
    * Handles the like/unlike functionality
@@ -55,11 +61,19 @@ function ActivityCard({ activity, activities, setActivities }) {
         return res.json();
       })
       .then(() => {
-        // Update local state
-        setLikes(isLiked ? likes - 1 : likes + 1);
-        setIsLiked(!isLiked);
+        // Fetch updated activity data to get accurate like count and status
+        return fetch(
+          `http://localhost:5555/activities/${activity.id}?user_id=${user.id}`
+        );
       })
-      .catch((err) => console.error(err));
+      .then((res) => res.json())
+      .then((updatedActivity) => {
+        // Update the activity in the activities list
+        setActivities((prev) =>
+          prev.map((a) => (a.id === activity.id ? updatedActivity : a))
+        );
+      })
+      .catch((err) => console.error("Error in handleLike:", err));
   };
 
   /**
