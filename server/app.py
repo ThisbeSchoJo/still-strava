@@ -16,7 +16,28 @@ from sqlalchemy import select
 
 
 # Add your model imports
-from models import User, Activity, Comment
+from models import User, Activity, Comment, Like
+
+# Helper function to get activity data with like information
+def get_activity_with_likes(activity, current_user_id=None):
+    """Get activity data including like count and user's like status"""
+    activity_dict = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'user'))
+    
+    # Get like count
+    like_count = Like.query.filter_by(activity_id=activity.id).count()
+    activity_dict['like_count'] = like_count
+    
+    # Check if current user has liked this activity
+    if current_user_id:
+        user_liked = Like.query.filter_by(
+            user_id=current_user_id, 
+            activity_id=activity.id
+        ).first() is not None
+        activity_dict['user_liked'] = user_liked
+    else:
+        activity_dict['user_liked'] = False
+    
+    return activity_dict
 
 
 # Views go here!
@@ -209,7 +230,10 @@ class AllActivities(Resource):
         activities = result.scalars().all()
         print(f"Found {len(activities)} activities")
         
-        response_body = [activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'likes', 'user')) for activity in activities]
+        # Get current user ID from request if available
+        current_user_id = request.args.get('user_id', type=int)
+        
+        response_body = [get_activity_with_likes(activity, current_user_id) for activity in activities]
         
         return make_response(response_body, 200)
     
@@ -224,13 +248,18 @@ class AllActivities(Resource):
                 activity_type=request.json.get('activity_type'),
                 description=request.json.get('description'),
                 latitude=request.json.get('latitude'),
+                longitude=request.json.get('longitude'),
+                location_name=request.json.get('location_name'),
                 datetime=datetime_obj,
                 photos=request.json.get('photos'),
                 user_id=request.json.get('user_id')
             )
             db.session.add(new_activity)
             db.session.commit()
-            response_body = new_activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'likes', 'user'))
+            
+            # Get current user ID for like status
+            current_user_id = request.json.get('user_id')
+            response_body = get_activity_with_likes(new_activity, current_user_id)
             return make_response(response_body, 201)
         except Exception as e:
             response_body = {
@@ -244,7 +273,9 @@ class ActivityById(Resource):
     def get(self, id):
         activity = db.session.get(Activity, id)
         if activity:
-            response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'likes', 'user'))
+            # Get current user ID from request if available
+            current_user_id = request.args.get('user_id', type=int)
+            response_body = get_activity_with_likes(activity, current_user_id)
             return make_response(response_body, 200)
         else:
             return make_response({"error": "Activity not found"}, 404)
@@ -256,7 +287,10 @@ class ActivityById(Resource):
                 for attr in request.json:
                     setattr(activity, attr, request.json[attr])
                 db.session.commit()
-                response_body = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'likes', 'user'))
+                
+                # Get current user ID for like status
+                current_user_id = request.json.get('user_id')
+                response_body = get_activity_with_likes(activity, current_user_id)
                 return make_response(response_body, 200)
             except Exception as e:
                 response_body = {
@@ -356,7 +390,72 @@ class CommentById(Resource):
             }
             return make_response(response_body, 404)
         
-api.add_resource(CommentById, '/comments/<int:id>')              
+api.add_resource(CommentById, '/comments/<int:id>')
+
+# Like/Unlike functionality
+class LikeActivity(Resource):
+    def post(self, activity_id):
+        """Like an activity"""
+        try:
+            data = request.json
+            user_id = data.get('user_id')
+            
+            if not user_id:
+                return make_response({"error": "User ID is required"}, 400)
+            
+            # Check if user already liked this activity
+            existing_like = Like.query.filter_by(
+                user_id=user_id, 
+                activity_id=activity_id
+            ).first()
+            
+            if existing_like:
+                return make_response({"error": "User already liked this activity"}, 400)
+            
+            # Create new like
+            new_like = Like(
+                user_id=user_id,
+                activity_id=activity_id,
+                created_at=datetime.now()
+            )
+            
+            db.session.add(new_like)
+            db.session.commit()
+            
+            return make_response({"message": "Activity liked successfully"}, 201)
+            
+        except Exception as e:
+            return make_response({"error": str(e)}, 422)
+
+class UnlikeActivity(Resource):
+    def delete(self, activity_id):
+        """Unlike an activity"""
+        try:
+            data = request.json
+            user_id = data.get('user_id')
+            
+            if not user_id:
+                return make_response({"error": "User ID is required"}, 400)
+            
+            # Find and delete the like
+            like = Like.query.filter_by(
+                user_id=user_id, 
+                activity_id=activity_id
+            ).first()
+            
+            if not like:
+                return make_response({"error": "Like not found"}, 404)
+            
+            db.session.delete(like)
+            db.session.commit()
+            
+            return make_response({"message": "Activity unliked successfully"}, 200)
+            
+        except Exception as e:
+            return make_response({"error": str(e)}, 422)
+
+api.add_resource(LikeActivity, '/activities/<int:activity_id>/like')
+api.add_resource(UnlikeActivity, '/activities/<int:activity_id>/unlike')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
