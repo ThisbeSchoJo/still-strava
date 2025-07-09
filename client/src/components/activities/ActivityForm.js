@@ -4,7 +4,18 @@ import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import MapPicker from "../shared/MapPicker";
 
+/**
+ * Provides a form for creating new activities with location selection via MapPicker.
+ * Handles form validation, data submission, and integration with the backend API.
+ *
+ * Features:
+ * - Activity details input (title, type, description, photos)
+ * - Location selection using MapPicker component
+ * - Form validation and error handling
+ * - Navigation back to activity feed after submission
+ */
 function ActivityForm() {
+  // Form state for all activity fields
   const [title, setTitle] = useState("");
   const [activityType, setActivityType] = useState("");
   const [latitude, setLatitude] = useState("");
@@ -12,32 +23,47 @@ function ActivityForm() {
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState("");
+
+  // UI state for loading and error handling
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Get current user from context and navigation hook
   const { user } = useContext(UserContext);
-
   const navigate = useNavigate();
 
+  /**
+   * Handles location selection from the MapPicker component
+   * Updates form state with selected location coordinates and name
+   *
+   * @param {Object} location - Location object with lat, lng, and name properties
+   */
   const handleLocationSelect = (location) => {
     console.log("Location selected:", location);
 
-    // Update form state
+    // Update form state with location data
     setLatitude(location.lat);
     setLongitude(location.lng);
     setLocationName(location.name);
   };
 
+  /**
+   * Handles form submission
+   * Validates user authentication, prepares data, and sends to backend
+   * Navigates to activity feed on success or shows error on failure
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
+    // Check if user is logged in
     if (!user) {
       navigate("/login");
       return;
     }
 
+    // Prepare activity data for submission
     const activityData = {
       title: title,
       activity_type: activityType,
@@ -50,6 +76,7 @@ function ActivityForm() {
     };
 
     try {
+      // Send POST request to create new activity
       const response = await fetch("http://localhost:5555/activities", {
         method: "POST",
         headers: {
@@ -71,18 +98,25 @@ function ActivityForm() {
     }
   };
 
+  /**
+   * Handles form cancellation
+   * Navigates back to the activity feed without saving
+   */
   const handleCancel = () => {
     navigate("/activity-feed");
   };
 
   return (
     <div className="activity-form-container">
+      {/* Form Header */}
       <div className="activity-form-header">
         <h1>Create New Activity</h1>
         <p>Share your outdoor adventure with the community</p>
       </div>
 
+      {/* Main Form */}
       <form className="activity-form" onSubmit={handleSubmit}>
+        {/* Activity Title Field */}
         <div className="form-group">
           <label htmlFor="title">Title</label>
           <input
@@ -95,6 +129,7 @@ function ActivityForm() {
           />
         </div>
 
+        {/* Activity Type Selection */}
         <div className="form-group">
           <label htmlFor="activity_type">Activity Type</label>
           <select
@@ -133,6 +168,7 @@ function ActivityForm() {
           </select>
         </div>
 
+        {/* Location Name Field */}
         <div className="form-group">
           <label htmlFor="location_name">Location Name</label>
           <input
@@ -145,6 +181,7 @@ function ActivityForm() {
           />
         </div>
 
+        {/* Activity Description */}
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
@@ -156,6 +193,7 @@ function ActivityForm() {
           />
         </div>
 
+        {/* Location Selection with MapPicker */}
         <div className="form-group">
           <label>Location</label>
           <div className="map-container">
@@ -163,6 +201,7 @@ function ActivityForm() {
           </div>
         </div>
 
+        {/* Photo URL Field */}
         <div className="form-group">
           <label htmlFor="photos">Photo URL</label>
           <input
@@ -175,6 +214,7 @@ function ActivityForm() {
           />
         </div>
 
+        {/* Form Action Buttons */}
         <div className="activity-form-buttons">
           <button type="submit" className="submit-button">
             Create Activity
@@ -189,6 +229,7 @@ function ActivityForm() {
         </div>
       </form>
 
+      {/* Error Display */}
       {error && <div className="error-message">{error}</div>}
     </div>
   );
