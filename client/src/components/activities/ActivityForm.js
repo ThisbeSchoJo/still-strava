@@ -22,7 +22,6 @@ function ActivityForm() {
   const [longitude, setLongitude] = useState("");
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
-// Changed from a single string to an array so I can store multiple photo URLs
   const [photos, setPhotos] = useState([""]);
 
   // UI state for loading and error handling
@@ -71,7 +70,6 @@ function ActivityForm() {
       longitude: longitude || null,
       location_name: locationName || null,
       description: description,
-      // Changed from a single string to an array so I can store multiple photo URLs
       photos: photos.filter((url) => url.trim()).join(","),
       user_id: user.id,
     };
