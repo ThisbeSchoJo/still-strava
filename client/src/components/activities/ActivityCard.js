@@ -85,6 +85,36 @@ function ActivityCard({ activity, activities, setActivities }) {
     setIsCommenting(!isCommenting);
   };
 
+  // Handle comment submission
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!user || !commentContent.trim()) return;
+    const commentData = {
+      content: commentContent,
+      datetime: new Date().toISOString(),
+      activity_id: activity.id,
+      user_id: user.id
+    }
+    try {
+      const response = await fetch("http://localhost:5555/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commentData),
+      });
+      if (response.ok) {
+        setCommentContent("");
+        setIsCommenting(false);
+        setActivities((prev) =>
+          prev.map((a) => (a.id === activity.id ? response.json() : a))
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
+  }
+
   /**
    * Enters edit mode and initializes the edit form with current activity data
    */
@@ -432,9 +462,11 @@ function ActivityCard({ activity, activities, setActivities }) {
           <textarea
             placeholder="Write a comment..."
             className="comment-input"
+            value={commentContent}
+            onChange={(e) => setCommentContent(e.target.value)}
           />
           <div className="comment-form-actions">
-            <button className="comment-submit-btn">Post Comment</button>
+            <button className="comment-submit-btn" onClick={handleCommentSubmit}>Post Comment</button>
             <button
               className="comment-cancel-btn"
               onClick={() => setIsCommenting(false)}
