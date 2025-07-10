@@ -190,6 +190,54 @@
   margin-top: 0.25rem;
 }
 
+/* Photo input styling */
+.form-help-text {
+  color: #666;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.photo-input-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.photo-input {
+  flex: 1;
+}
+
+.add-photo-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-photo-btn:hover {
+  background-color: #218838;
+}
+
+.remove-photo-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.remove-photo-btn:hover {
+  background-color: #c82333;
+}
+
 /* Mobile responsive design */
 @media (max-width: 768px) {
   .activity-form-container {
