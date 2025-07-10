@@ -355,60 +355,16 @@ function ActivityCard({ activity, activities, setActivities }) {
         {/* Photo Gallery */}
         <div className="activity-card-image">
           {photoArray.length > 0 ? (
-            <>
-              {/* Main Photo Display */}
-              <div className="main-photo-container">
-                <img
-                  src={photoArray[currentPhotoIndex]}
-                  alt={`${activity.title} - Photo ${currentPhotoIndex + 1}`}
-                />
-
-                {/* Navigation Arrows */}
-                {photoArray.length > 1 && (
-                  <>
-                    <button
-                      className="photo-nav-btn photo-nav-prev"
-                      onClick={handlePrevPhoto}
-                      aria-label="Previous photo"
-                    >
-                      ‹
-                    </button>
-                    <button
-                      className="photo-nav-btn photo-nav-next"
-                      onClick={handleNextPhoto}
-                      aria-label="Next photo"
-                    >
-                      ›
-                    </button>
-                  </>
-                )}
-
-                {/* Photo Counter */}
-                {photoArray.length > 1 && (
-                  <div className="photo-counter">
-                    {currentPhotoIndex + 1} / {photoArray.length}
-                  </div>
-                )}
-              </div>
-
-              {/* Photo Thumbnails */}
-              {photoArray.length > 1 && (
-                <div className="photo-thumbnails">
-                  {photoArray.map((photo, index) => (
-                    <button
-                      key={index}
-                      className={`photo-thumbnail ${
-                        index === currentPhotoIndex ? "active" : ""
-                      }`}
-                      onClick={() => handlePhotoSelect(index)}
-                      aria-label={`Go to photo ${index + 1}`}
-                    >
-                      <img src={photo} alt={`Thumbnail ${index + 1}`} />
-                    </button>
-                  ))}
+            <div className="photo-grid" data-photo-count={photoArray.length}>
+              {photoArray.map((photo, index) => (
+                <div key={index} className="photo-grid-item">
+                  <img
+                    src={photo}
+                    alt={`${activity.title} - Photo ${index + 1}`}
+                  />
                 </div>
-              )}
-            </>
+              ))}
+            </div>
           ) : (
             <div className="no-photo-placeholder">
               <span>📸</span>
