@@ -39,7 +39,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
 
-  // State for photo gallery
+  // State for photo gallery (keeping for potential future use)
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   // Parse photos from comma-separated string
@@ -244,7 +244,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   /**
-   * Navigate to next photo in gallery
+   * Navigate to next photo in gallery (unused - keeping for future carousel)
    */
   const handleNextPhoto = () => {
     setCurrentPhotoIndex((prev) =>
@@ -253,7 +253,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   /**
-   * Navigate to previous photo in gallery
+   * Navigate to previous photo in gallery (unused - keeping for future carousel)
    */
   const handlePrevPhoto = () => {
     setCurrentPhotoIndex((prev) =>
@@ -262,7 +262,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   /**
-   * Navigate to specific photo in gallery
+   * Navigate to specific photo in gallery (unused - keeping for future carousel)
    */
   const handlePhotoSelect = (index) => {
     setCurrentPhotoIndex(index);
