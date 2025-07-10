@@ -1,0 +1,9 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Orange square background -->
+  <rect x="1" y="1" width="30" height="30" fill="#fc4c02" rx="2"/>
+  
+  <!-- White triangle -->
+  <polygon points="16,10 22,22 10,22" fill="white"/>
+  <!-- Tiny orange triangle inside white triangle -->
+  <polygon points="16,16 18,22 14,22" fill="#fc4c02"/>
+</svg> 
