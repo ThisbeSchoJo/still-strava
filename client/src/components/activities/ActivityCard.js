@@ -36,12 +36,32 @@ function ActivityCard({ activity, activities, setActivities }) {
 
   // State for managing comment form visibility
   const [isCommenting, setIsCommenting] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
 
   // Update like state when activity data changes
   useEffect(() => {
     setLikes(activity.like_count || 0);
     setIsLiked(activity.user_liked || false);
   }, [activity.like_count, activity.user_liked]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5555/comments?activity_id=${activity.id}`
+        );
+        if (response.ok) {
+          const commentsData = await response.json();
+          setComments(commentsData);
+        }
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    fetchComments();
+  }, [activity.id]);
 
   /**
    * Handles the like/unlike functionality
@@ -89,31 +109,38 @@ function ActivityCard({ activity, activities, setActivities }) {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!user || !commentContent.trim()) return;
+
     const commentData = {
       content: commentContent,
       datetime: new Date().toISOString(),
       activity_id: activity.id,
-      user_id: user.id
-    }
+      user_id: user.id,
+    };
+
     try {
       const response = await fetch("http://localhost:5555/comments", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(commentData),
       });
+
       if (response.ok) {
         setCommentContent("");
         setIsCommenting(false);
-        setActivities((prev) =>
-          prev.map((a) => (a.id === activity.id ? response.json() : a))
+
+        // Fetch updated comments
+        const commentsResponse = await fetch(
+          `http://localhost:5555/comments?activity_id=${activity.id}`
         );
+        if (commentsResponse.ok) {
+          const updatedComments = await commentsResponse.json();
+          setComments(updatedComments);
+        }
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
     }
-  }
+  };
 
   /**
    * Enters edit mode and initializes the edit form with current activity data
@@ -466,7 +493,12 @@ function ActivityCard({ activity, activities, setActivities }) {
             onChange={(e) => setCommentContent(e.target.value)}
           />
           <div className="comment-form-actions">
-            <button className="comment-submit-btn" onClick={handleCommentSubmit}>Post Comment</button>
+            <button
+              className="comment-submit-btn"
+              onClick={handleCommentSubmit}
+            >
+              Post Comment
+            </button>
             <button
               className="comment-cancel-btn"
               onClick={() => setIsCommenting(false)}
@@ -474,6 +506,44 @@ function ActivityCard({ activity, activities, setActivities }) {
               Cancel
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Comments Display */}
+      {comments.length > 0 && (
+        <div className="comments-section">
+          <div className="comments-header">
+            <h4>Comments ({comments.length})</h4>
+            <button
+              className="toggle-comments-btn"
+              onClick={() => setShowComments(!showComments)}
+            >
+              {showComments ? "Hide" : "Show"} Comments
+            </button>
+          </div>
+
+          {showComments && (
+            <div className="comments-list">
+              {comments.map((comment) => (
+                <div key={comment.id} className="comment-item">
+                  <div className="comment-header">
+                    <img
+                      src={comment.user?.image || "default-avatar.jpg"}
+                      alt={comment.user?.username || "User"}
+                      className="comment-user-avatar"
+                    />
+                    <span className="comment-username">
+                      {comment.user?.username || "Unknown User"}
+                    </span>
+                    <span className="comment-date">
+                      {formatDate(comment.datetime)}
+                    </span>
+                  </div>
+                  <p className="comment-content">{comment.content}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
