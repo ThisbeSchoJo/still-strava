@@ -22,7 +22,8 @@ function ActivityForm() {
   const [longitude, setLongitude] = useState("");
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
-  const [photos, setPhotos] = useState("");
+// Changed from a single string to an array so I can store multiple photo URLs
+  const [photos, setPhotos] = useState([""]);
 
   // UI state for loading and error handling
   const [error, setError] = useState(null);
@@ -70,7 +71,8 @@ function ActivityForm() {
       longitude: longitude || null,
       location_name: locationName || null,
       description: description,
-      photos: photos,
+      // Changed from a single string to an array so I can store multiple photo URLs
+      photos: photos.filter((url) => url.trim()).join(","),
       user_id: user.id,
     };
 
@@ -87,7 +89,7 @@ function ActivityForm() {
       if (!response.ok) {
         throw new Error("Failed to create activity");
       }
-      
+
       // Navigate to the activity feed page after creating the activity
       const data = await response.json();
       navigate("/activity-feed");
@@ -201,17 +203,50 @@ function ActivityForm() {
           </div>
         </div>
 
-        {/* Photo URL Field */}
+        {/* Multiple Photo URLs */}
+        {/* photos.map() creates an input field for each photo URL, onChange updates the specific photo URL at that index, and placeholder shows "Photo 1 URL", "Photo 2 URL", etc. */}
         <div className="form-group">
-          <label htmlFor="photos">Photo URL</label>
-          <input
-            type="text"
-            id="photos"
-            name="photos"
-            value={photos}
-            onChange={(e) => setPhotos(e.target.value)}
-            placeholder="Add a photo URL (optional)"
-          />
+          <label>Photos</label>
+          <p className="form-help-text">Add photo URLs (optional)</p>
+          {photos.map((url, index) => (
+            <div key={index} className="photo-input-container">
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => {
+                  const newUrls = [...photos];
+                  newUrls[index] = e.target.value;
+                  setPhotos(newUrls);
+                }}
+                placeholder={`Photo ${index + 1} URL`}
+                className="photo-input"
+              />
+              {/* If the current index is the last one, show the "Add Another Photo" button */}
+              {index === photos.length - 1 && (
+                <button
+                  type="button"
+                  onClick={() => setPhotos([...photos, ""])}
+                  className="add-photo-btn"
+                >
+                  + Add Another Photo
+                </button>
+              )}
+              {/* If the current index is not the last one, show the "Remove" button */}
+              {photos.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newUrls = photos.filter((_, i) => i !== index);
+                    setPhotos(newUrls);
+                  }}
+                  className="remove-photo-btn"
+                >
+                  {/* Remove the photo URL at the current index */}
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Form Action Buttons */}
