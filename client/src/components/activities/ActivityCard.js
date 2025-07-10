@@ -296,26 +296,29 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       </div>
 
-      {/* Map Thumbnail - Shows location on map if coordinates are available */}
-      {activity.latitude && activity.longitude && (
-        <div className="activity-card-map">
-          <div className="map-placeholder">
-            <div className="map-placeholder-content">
-              <span className="map-placeholder-icon">📍</span>
-              <span className="map-placeholder-text">
-                {activity.location_name ||
-                  `${activity.latitude.toFixed(
-                    4
-                  )}, ${activity.longitude.toFixed(4)}`}
-              </span>
+      {/* Map and Photos Container */}
+      <div className="activity-card-media-container">
+        {/* Map Thumbnail */}
+        {activity.latitude && activity.longitude && (
+          <div className="activity-card-map">
+            <div className="map-placeholder">
+              <div className="map-placeholder-content">
+                <span className="map-placeholder-icon">📍</span>
+                <span className="map-placeholder-text">
+                  {activity.location_name ||
+                    `${activity.latitude.toFixed(
+                      4
+                    )}, ${activity.longitude.toFixed(4)}`}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Activity Image */}
-      <div className="activity-card-image">
-        <img src={activity.photos} alt={activity.title} />
+        {/* Activity Image */}
+        <div className="activity-card-image">
+          <img src={activity.photos} alt={activity.title} />
+        </div>
       </div>
 
       {/* Edit Modal - Appears when user clicks edit button */}
