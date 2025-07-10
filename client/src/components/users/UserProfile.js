@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import EditProfileForm from "./EditProfileForm"; // New component
 import ActivityCard from "../activities/ActivityCard";
+import UserStats from "./UserStats";
 
 import "../../styling/userprofile.css";
 
@@ -37,6 +38,7 @@ function UserProfile({ user }) {
       ) : (
         <>
           <div className="user-profile-info">
+            <UserStats />
           <div className="user-profile-details">
             {user.bio && <p className="user-profile-bio">{user.bio}</p>}
             {/* {user.location && (
