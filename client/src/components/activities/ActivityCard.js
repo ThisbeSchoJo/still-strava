@@ -22,6 +22,7 @@ function ActivityCard({ activity, activities, setActivities }) {
   // State for managing likes and user interactions
   const [likes, setLikes] = useState(activity.like_count || 0);
   const [isLiked, setIsLiked] = useState(activity.user_liked || false);
+  const [commentContent, setCommentContent] = useState("");
 
   // State for managing edit mode and form data
   const [isEditing, setIsEditing] = useState(false);
