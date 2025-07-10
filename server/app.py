@@ -333,23 +333,47 @@ api.add_resource(ActivityById, '/activities/<int:id>')
 # CRUD for comments
 class AllComments(Resource):
     def get(self):
-        stmt = select(Comment)
-        result = db.session.execute(stmt)
-        comments = result.scalars().all()
-        response_body = [comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id')) for comment in comments]
+        activity_id = request.args.get('activity_id', type=int)
+        if activity_id:
+            comments = Comment.query.filter_by(activity_id=activity_id).all()
+        else:
+            stmt = select(Comment)
+            result = db.session.execute(stmt)
+            comments = result.scalars().all()
+        
+        # Include user information in the response
+        response_body = []
+        for comment in comments:
+            comment_dict = comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id'))
+            if comment.user:
+                comment_dict['user'] = comment.user.to_dict(only=('id', 'username', 'image'))
+            response_body.append(comment_dict)
+        
         return make_response(response_body, 200)
     
     def post(self):
         try:
+            # Parse datetime string to datetime object
+            datetime_str = request.json.get('datetime')
+            if datetime_str:
+                comment_datetime = datetime.fromisoformat(datetime_str.replace('Z', '+00:00'))
+            else:
+                comment_datetime = datetime.now(timezone.utc)
+            
             new_comment = Comment(
                 content=request.json.get('content'),
-                datetime=request.json.get('datetime'),
+                datetime=comment_datetime,
                 activity_id=request.json.get('activity_id'),
                 user_id=request.json.get('user_id')
             )
             db.session.add(new_comment)
             db.session.commit()
+            
+            # Return comment with user information
             response_body = new_comment.to_dict(only=('id', 'content', 'datetime', 'activity_id', 'user_id'))
+            if new_comment.user:
+                response_body['user'] = new_comment.user.to_dict(only=('id', 'username', 'image'))
+            
             return make_response(response_body, 201)
         except Exception as e:
             response_body = {

@@ -117,6 +117,8 @@ function ActivityCard({ activity, activities, setActivities }) {
       user_id: user.id,
     };
 
+    console.log("Submitting comment:", commentData);
+
     try {
       const response = await fetch("http://localhost:5555/comments", {
         method: "POST",
@@ -124,7 +126,12 @@ function ActivityCard({ activity, activities, setActivities }) {
         body: JSON.stringify(commentData),
       });
 
+      console.log("Comment response status:", response.status);
+
       if (response.ok) {
+        const newComment = await response.json();
+        console.log("New comment created:", newComment);
+
         setCommentContent("");
         setIsCommenting(false);
 
@@ -134,8 +141,12 @@ function ActivityCard({ activity, activities, setActivities }) {
         );
         if (commentsResponse.ok) {
           const updatedComments = await commentsResponse.json();
+          console.log("Updated comments:", updatedComments);
           setComments(updatedComments);
         }
+      } else {
+        const errorData = await response.json();
+        console.error("Comment submission failed:", errorData);
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
