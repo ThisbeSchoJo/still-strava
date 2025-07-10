@@ -297,7 +297,11 @@ function ActivityCard({ activity, activities, setActivities }) {
       </div>
 
       {/* Map and Photos Container */}
-      <div className="activity-card-media-container">
+      <div
+        className={`activity-card-media-container ${
+          !activity.latitude || !activity.longitude ? "no-map" : ""
+        }`}
+      >
         {/* Map Thumbnail */}
         {activity.latitude && activity.longitude && (
           <div className="activity-card-map">
