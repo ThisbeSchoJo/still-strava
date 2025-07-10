@@ -1,8 +1,8 @@
-import userstats from "../styling/userstats.css";
+import "../../styling/userstats.css";
 
 function UserStats() {
     return (
-        <h1>User Stats</h1>
+        <h1>User Stats Chart/Graph will go here</h1>
     )
 }
 
