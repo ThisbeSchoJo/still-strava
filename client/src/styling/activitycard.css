@@ -65,10 +65,29 @@
   font-weight: 500;
 }
 
+/* Media container for map and photos side by side */
+.activity-card-media-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.activity-card-map {
+  flex: 0 0 30%;
+  min-height: 200px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e9ecef;
+}
+
 .activity-card-image {
-  width: 100%;
+  flex: 1;
   height: 200px;
   overflow: hidden;
+  border-radius: 8px;
 }
 
 .activity-card-image img {
@@ -274,6 +293,17 @@
 
   .activity-card-title {
     font-size: 1.3rem;
+  }
+
+  .activity-card-media-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .activity-card-map {
+    flex: none;
+    width: 100%;
+    min-height: 120px;
   }
 
   .activity-card-image {
