@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <header>
-        <h1>Still Strava</h1>
+        <h1>Still StrΛvΛ</h1>
       </header>
       <NavBar />
       <Outlet />
