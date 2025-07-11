@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
 import { getActivityIcon } from "../../utils/activityIcons";
+import MapDisplay from "../shared/MapDisplay";
 
 /**
 
@@ -338,17 +339,11 @@ function ActivityCard({ activity, activities, setActivities }) {
         {/* Map Thumbnail */}
         {activity.latitude && activity.longitude && (
           <div className="activity-card-map">
-            <div className="map-placeholder">
-              <div className="map-placeholder-content">
-                <span className="map-placeholder-icon">📍</span>
-                <span className="map-placeholder-text">
-                  {activity.location_name ||
-                    `${activity.latitude.toFixed(
-                      4
-                    )}, ${activity.longitude.toFixed(4)}`}
-                </span>
-              </div>
-            </div>
+            <MapDisplay
+              latitude={activity.latitude}
+              longitude={activity.longitude}
+              locationName={activity.location_name}
+            />
           </div>
         )}
 
