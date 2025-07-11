@@ -59,25 +59,30 @@ function UserStats({ userActivities }) {
   // Calculate weekly activities for the past 4 weeks
   const weeklyActivities = {};
   const today = new Date();
-  const fourWeeksAgo = new Date(today.getTime() - 4 * 7 * 24 * 60 * 60 * 1000);
+  const fourWeeksAgo = new Date(today.getTime() - 3 * 7 * 24 * 60 * 60 * 1000);
 
-  // Initialize all 4 weeks with 0
+  // Initialize all 4 weeks with 0 using the same week calculation
   for (let i = 0; i < 4; i++) {
-    const weekStart = new Date(
+    const weekDate = new Date(
       fourWeeksAgo.getTime() + i * 7 * 24 * 60 * 60 * 1000
     );
+    const dayOfWeek = weekDate.getDay();
+    const weekStart = new Date(
+      weekDate.getTime() - dayOfWeek * 24 * 60 * 60 * 1000
+    );
+    weekStart.setHours(0, 0, 0, 0);
     const weekKey = weekStart.toISOString().split("T")[0];
     weeklyActivities[weekKey] = 0;
   }
 
-  // Count activities in each week
+  // Count activities in each week using the same calculation
   userActivities.forEach((activity) => {
     const date = new Date(activity.datetime);
+    const dayOfWeek = date.getDay();
     const weekStart = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() - date.getDay()
+      date.getTime() - dayOfWeek * 24 * 60 * 60 * 1000
     );
+    weekStart.setHours(0, 0, 0, 0);
     const weekKey = weekStart.toISOString().split("T")[0];
     if (weeklyActivities.hasOwnProperty(weekKey)) {
       weeklyActivities[weekKey]++;
