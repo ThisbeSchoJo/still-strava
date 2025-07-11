@@ -56,12 +56,41 @@ function UserStats({ userActivities }) {
     ],
   };
 
+  // Calculate weekly activities for the past 4 weeks
+  const weeklyActivities = {};
+  const today = new Date();
+  const fourWeeksAgo = new Date(today.getTime() - 4 * 7 * 24 * 60 * 60 * 1000);
+
+  // Initialize all 4 weeks with 0
+  for (let i = 0; i < 4; i++) {
+    const weekStart = new Date(
+      fourWeeksAgo.getTime() + i * 7 * 24 * 60 * 60 * 1000
+    );
+    const weekKey = weekStart.toISOString().split("T")[0];
+    weeklyActivities[weekKey] = 0;
+  }
+
+  // Count activities in each week
+  userActivities.forEach((activity) => {
+    const date = new Date(activity.datetime);
+    const weekStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() - date.getDay()
+    );
+    const weekKey = weekStart.toISOString().split("T")[0];
+    if (weeklyActivities.hasOwnProperty(weekKey)) {
+      weeklyActivities[weekKey]++;
+    }
+  });
+  console.log("Weekly activities:", weeklyActivities);
+
   const data = {
-    labels: ["Total Activities"],
+    labels: Object.keys(weeklyActivities).slice(-4), // Last 4 weeks
     datasets: [
       {
         label: "Activities",
-        data: [totalActivities],
+        data: Object.values(weeklyActivities).slice(-4), // Last 4 weeks
         backgroundColor: "#fc4c02",
       },
     ],
@@ -82,20 +111,6 @@ function UserStats({ userActivities }) {
       },
     },
   };
-
-  // Add this after your activityTypes calculation
-  const weeklyActivities = {};
-  userActivities.forEach((activity) => {
-    const date = new Date(activity.datetime);
-    const weekStart = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() - date.getDay()
-    );
-    const weekKey = weekStart.toISOString().split("T")[0];
-    weeklyActivities[weekKey] = (weeklyActivities[weekKey] || 0) + 1;
-  });
-  console.log("Weekly activities:", weeklyActivities);
 
   return (
     <div className="user-stats-container">
