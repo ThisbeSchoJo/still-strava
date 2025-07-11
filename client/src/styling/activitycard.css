@@ -124,10 +124,6 @@
   aspect-ratio: 3/4;
 }
 
-.photo-grid-item:hover img {
-  transform: scale(1.05);
-}
-
 /* Grid layouts for different photo counts */
 .photo-grid[data-photo-count="1"] {
   grid-template-columns: 1fr;
