@@ -38,7 +38,7 @@ function UserProfile({ user }) {
       ) : (
         <>
           <div className="user-profile-info">
-            <UserStats />
+            <UserStats userActivities={user.activities} />
           <div className="user-profile-details">
             {user.bio && <p className="user-profile-bio">{user.bio}</p>}
             {/* {user.location && (
