@@ -52,7 +52,7 @@ function UserStats() {
   };
   return (
     <div className="user-stats-container">
-      <h1>User Stats Chart/Graph will go here</h1>
+      <h3 className="user-stats-title">Activities This Month</h3>
       <Bar data={data} options={options} />
     </div>
   );
