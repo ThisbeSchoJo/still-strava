@@ -34,10 +34,26 @@ function UserStats() {
       },
     ],
   };
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false, // Hide the legend
+      },
+      title: {
+        display: false, // Hide the title
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true, // Start y-axis at 0
+      },
+    },
+  };
   return (
     <div className="user-stats-container">
       <h1>User Stats Chart/Graph will go here</h1>
-      <Bar data={data} />
+      <Bar data={data} options={options} />
     </div>
   );
 }
