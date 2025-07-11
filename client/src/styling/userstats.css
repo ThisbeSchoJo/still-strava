@@ -17,3 +17,13 @@
   color: #666;
   margin-top: 2rem;
 }
+
+.user-stats-charts {
+  display: flex;
+  gap: 1rem;
+}
+
+.user-stats-chart {
+  width: 50%;
+  height: 200px;
+}

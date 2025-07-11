@@ -82,10 +82,32 @@ function UserStats({ userActivities }) {
       },
     },
   };
+
+  // Add this after your activityTypes calculation
+  const weeklyActivities = {};
+  userActivities.forEach((activity) => {
+    const date = new Date(activity.datetime);
+    const weekStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() - date.getDay()
+    );
+    const weekKey = weekStart.toISOString().split("T")[0];
+    weeklyActivities[weekKey] = (weeklyActivities[weekKey] || 0) + 1;
+  });
+  console.log("Weekly activities:", weeklyActivities);
+
   return (
     <div className="user-stats-container">
-      <h3 className="user-stats-title">Activities This Month</h3>
-      <Bar data={data} options={options} />
+      <h3 className="user-stats-title">Activity Stats</h3>
+      <div className="user-stats-charts">
+        <div className="user-stats-chart">
+          <Bar data={data} options={options} />
+        </div>
+        <div className="user-stats-chart">
+          <Pie data={pieData} />
+        </div>
+      </div>
     </div>
   );
 }
