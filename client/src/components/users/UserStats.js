@@ -24,13 +24,30 @@ ChartJS.register(
 );
 
 function UserStats({ userActivities }) {
+  console.log("User activities:", userActivities);
+
+  // Simple count function
+  const totalActivities = userActivities ? userActivities.length : 0;
+  console.log("Total activities:", totalActivities);
+
+  if (!userActivities || userActivities.length === 0) {
+    return (
+      <div className="user-stats-container">
+        <h3 className="user-stats-title">Activities This Month</h3>
+        <p style={{ textAlign: "center", color: "#666", marginTop: "2rem" }}>
+          No activities logged yet
+        </p>
+      </div>
+    );
+  }
+
   const data = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+    labels: ["Total Activities"],
     datasets: [
       {
         label: "Activities",
-        data: [3, 5, 2, 7],
-        backgroundColor: "#fc4c02", // Strava orange
+        data: [totalActivities],
+        backgroundColor: "#fc4c02",
       },
     ],
   };
