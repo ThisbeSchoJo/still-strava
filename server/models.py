@@ -80,6 +80,7 @@ class Activity(db.Model, SerializerMixin):
     title = db.Column(db.String, nullable=False)
     activity_type = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
+    song = db.Column(db.String)
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
     location_name = db.Column(db.String)
