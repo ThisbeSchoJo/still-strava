@@ -204,9 +204,11 @@ class UserById(Resource):
         user = db.session.get(User, id)
         if user:
             try:
+                print("Received data:", request.json)  # Add this line
                 for attr in request.json:
                     setattr(user, attr, request.json[attr])
                 db.session.commit()
+                print("Updated user:", user.to_dict(only=USER_PROFILE_FIELDS))  # Add this line
                 response_body = user.to_dict(only=USER_PROFILE_FIELDS)
                 return make_response(response_body, 200)
             except Exception as e:

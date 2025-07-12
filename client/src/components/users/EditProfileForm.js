@@ -3,7 +3,6 @@ import { UserContext } from "../../context/UserContext";
 
 import "../../styling/editprofileform.css";
 
-
 function EditProfileForm({ user, onClose }) {
   const { setUser } = useContext(UserContext);
 
@@ -15,7 +14,7 @@ function EditProfileForm({ user, onClose }) {
     location: user.location || "",
     website: user.website || "",
     twitter: user.twitter || "",
-    instagram: user.instagram || ""
+    instagram: user.instagram || "",
   });
 
   const [error, setError] = useState(null);
@@ -31,16 +30,18 @@ function EditProfileForm({ user, onClose }) {
 
     fetch(`http://localhost:5555/users/${user.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to update profile");
         return res.json();
       })
       .then((updatedUser) => {
-        setUser(updatedUser);        // update context
-        onClose();                   // close form
+        setUser(updatedUser);
+        onClose();
       })
       .catch((err) => {
         console.error("Profile update failed:", err);
@@ -54,12 +55,22 @@ function EditProfileForm({ user, onClose }) {
 
       <label>
         Username:
-        <input type="text" name="username" value={formData.username} onChange={handleChange} />
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+        />
       </label>
 
       <label>
         Email:
-        <input type="email" name="email" value={formData.email} onChange={handleChange} />
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
       </label>
 
       <label>
@@ -74,27 +85,45 @@ function EditProfileForm({ user, onClose }) {
 
       <label>
         Location:
-        <input name="location" value={formData.location} onChange={handleChange} />
+        <input
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+        />
       </label>
 
       <label>
         Website:
-        <input name="website" value={formData.website} onChange={handleChange} />
+        <input
+          name="website"
+          value={formData.website}
+          onChange={handleChange}
+        />
       </label>
 
       <label>
         Twitter:
-        <input name="twitter" value={formData.twitter} onChange={handleChange} />
+        <input
+          name="twitter"
+          value={formData.twitter}
+          onChange={handleChange}
+        />
       </label>
 
       <label>
         Instagram:
-        <input name="instagram" value={formData.instagram} onChange={handleChange} />
+        <input
+          name="instagram"
+          value={formData.instagram}
+          onChange={handleChange}
+        />
       </label>
 
       <div className="form-buttons">
         <button type="submit">Save Changes</button>
-        <button type="button" onClick={onClose}>Cancel</button>
+        <button type="button" onClick={onClose}>
+          Cancel
+        </button>
       </div>
     </form>
   );
