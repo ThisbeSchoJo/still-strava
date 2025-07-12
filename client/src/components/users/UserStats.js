@@ -117,15 +117,34 @@ function UserStats({ userActivities }) {
     },
   };
 
+  const pieOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          padding: 10,
+          usePointStyle: true,
+        },
+      },
+    },
+  };
+
   return (
     <div className="user-stats-container">
       <h3 className="user-stats-title">Activity Stats</h3>
-      <div className="user-stats-charts">
-        <div className="user-stats-chart">
-          <Bar data={data} options={options} />
+      <div className="user-stats-content">
+        <div className="user-stats-total">
+          <span className="user-stats-number">{totalActivities}</span>
+          <span className="user-stats-label">activities this month</span>
         </div>
-        <div className="user-stats-chart">
-          <Pie data={pieData} />
+        <div className="user-stats-charts">
+          <div className="user-stats-chart">
+            <Bar data={data} options={options} />
+          </div>
+          <div className="user-stats-chart">
+            <Pie data={pieData} options={pieOptions} />
+          </div>
         </div>
       </div>
     </div>

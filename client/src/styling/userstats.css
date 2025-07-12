@@ -26,4 +26,30 @@
 .user-stats-chart {
   width: 50%;
   height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-stats-total {
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.user-stats-number {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #fc4c02;
+  display: block;
+}
+
+.user-stats-label {
+  font-size: 1rem;
+  color: #666;
+}
+
+.user-stats-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
