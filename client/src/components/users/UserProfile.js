@@ -39,7 +39,6 @@ function UserProfile({ user }) {
       ) : (
         <>
           <div className="user-profile-info">
-            <UserStats userActivities={user.activities} />
             <div className="user-profile-details">
               {user.bio && <p className="user-profile-bio">{user.bio}</p>}
               {/* {user.location && (
@@ -70,6 +69,7 @@ function UserProfile({ user }) {
                 </a>
               )}
             </div>
+            <UserStats userActivities={user.activities} />
           </div>
 
           <div className="user-profile-stats">

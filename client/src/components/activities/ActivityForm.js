@@ -22,6 +22,7 @@ function ActivityForm() {
   const [longitude, setLongitude] = useState("");
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
+  const [song, setSong] = useState("");
   const [photos, setPhotos] = useState([""]);
 
   // UI state for loading and error handling
@@ -70,6 +71,7 @@ function ActivityForm() {
       longitude: longitude || null,
       location_name: locationName || null,
       description: description,
+      song: song || null,
       photos: photos.filter((url) => url.trim()).join(","),
       user_id: user.id,
     };
@@ -190,6 +192,19 @@ function ActivityForm() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Tell us about your adventure..."
+          />
+        </div>
+
+        {/* Song Field */}
+        <div className="form-group">
+          <label htmlFor="song">Song (Optional)</label>
+          <input
+            type="text"
+            id="song"
+            name="song"
+            value={song}
+            onChange={(e) => setSong(e.target.value)}
+            placeholder="e.g., 'Bohemian Rhapsody' by Queen"
           />
         </div>
 
