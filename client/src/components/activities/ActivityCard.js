@@ -31,6 +31,7 @@ function ActivityCard({ activity, activities, setActivities }) {
     title: activity.title,
     activity_type: activity.activity_type,
     description: activity.description,
+    song: activity.song,
     location_name: activity.location_name,
     photos: activity.photos,
   });
@@ -185,6 +186,7 @@ function ActivityCard({ activity, activities, setActivities }) {
         title: editedActivity.title,
         activity_type: editedActivity.activity_type,
         description: editedActivity.description,
+        song: editedActivity.song,
         location_name: editedActivity.location_name,
         photos: editedActivity.photos,
       }),
@@ -453,6 +455,23 @@ function ActivityCard({ activity, activities, setActivities }) {
                   />
                 </div>
 
+                {/* Song Field */}
+                <div className="edit-form-group">
+                  <label htmlFor="edit-song">Song (Optional)</label>
+                  <input
+                    type="text"
+                    id="edit-song"
+                    value={editedActivity.song || ""}
+                    onChange={(e) =>
+                      setEditedActivity({
+                        ...editedActivity,
+                        song: e.target.value,
+                      })
+                    }
+                    placeholder="e.g., 'Bohemian Rhapsody' by Queen"
+                  />
+                </div>
+
                 {/* Photo URL Field */}
                 <div className="edit-form-group">
                   <label htmlFor="edit-photos">Photo URL</label>
@@ -498,6 +517,9 @@ function ActivityCard({ activity, activities, setActivities }) {
           <span>Activity Type: {activity.activity_type}</span>
         </div>
         <p className="activity-card-description">{activity.description}</p>
+        {activity.song && (
+          <p className="activity-card-song">🎵 {activity.song}</p>
+        )}
       </div>
 
       {/* Like and Comment Buttons */}

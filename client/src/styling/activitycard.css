@@ -200,6 +200,17 @@
   font-style: italic;
 }
 
+.activity-card-song {
+  color: #fc4c02 !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #fff0e6;
+  border-radius: 4px;
+  display: inline-block;
+}
+
 .activity-card-actions {
   display: flex;
   align-items: center;
