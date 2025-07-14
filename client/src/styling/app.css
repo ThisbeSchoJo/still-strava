@@ -31,6 +31,23 @@ body {
   
   /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+  /* Prevent horizontal scroll on mobile */
+  .activity-card,
+  .activity-form-container,
+  .login-container,
+  .signup-container {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Better spacing for mobile */
+  .activity-card {
+    margin: 0.5 rem;
+  }
+  
   button, a, input, select {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
