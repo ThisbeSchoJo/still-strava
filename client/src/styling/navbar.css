@@ -82,3 +82,11 @@ nav a.active {
     font-size: var(--font-size-lg); /* Smaller brand size on mobile */
   }
 }
+
+/* touch Target Sizing for Mobile */
+@media (max-width: 768px) {
+  button, a, input, select {
+    min-height: 44px; /* Apple's recommended touch target size */
+    min-width: 44px;
+  }
+}
