@@ -83,6 +83,24 @@ button {
   font-weight: 600; /* Semi-bold weight for buttons */
 }
 
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #fc4c02;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1001;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
   button,
