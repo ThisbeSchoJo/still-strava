@@ -186,3 +186,11 @@
   font-size: 1.2rem;
   font-weight: bold;
 }
+
+/* touch Target Sizing for Mobile */
+@media (max-width: 768px) {
+  button, a, input, select {
+    min-height: 44px; /* Apple's recommended touch target size */
+    min-width: 44px;
+  }
+}

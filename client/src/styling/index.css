@@ -77,3 +77,11 @@ button {
   font-family: "Lato", sans-serif; /* Consistent font for all buttons */
   font-weight: 600; /* Semi-bold weight for buttons */
 }
+
+/* touch Target Sizing for Mobile */
+@media (max-width: 768px) {
+  button, a, input, select {
+    min-height: 44px; /* Apple's recommended touch target size */
+    min-width: 44px;
+  }
+}
