@@ -264,7 +264,13 @@ function ActivityForm() {
 
         {/* Form Action Buttons */}
         <div className="activity-form-buttons">
-          <button type="submit" className="submit-button" disabled={isLoading}>
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isLoading}
+            aria-busy={isLoading}
+            aria-live="polite"
+          >
             {isLoading ? "Creating Activity..." : "Create Activity"}
           </button>
           <button
@@ -279,7 +285,11 @@ function ActivityForm() {
       </form>
 
       {/* Error Display */}
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="error-message" role="alert" aria-live="polite">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
