@@ -50,7 +50,12 @@ body {
 /* 
  * Heading styles - all headings use Lato font with bold weight
  */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Lato", sans-serif; /* Ensure headings use Lato */
   font-weight: 700; /* Bold weight for headings */
   line-height: 1.2; /* Tighter line height for headings */
@@ -80,7 +85,14 @@ button {
 
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
-  button, a, input, select, .like-button, .comment-button, .edit-button, .delete-button {
+  button,
+  a,
+  input,
+  select,
+  .like-button,
+  .comment-button,
+  .edit-button,
+  .delete-button {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
   }
