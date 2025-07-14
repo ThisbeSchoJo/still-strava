@@ -606,12 +606,26 @@ function ActivityCard({ activity, activities, setActivities }) {
             <button
               className="comment-submit-btn"
               onClick={handleCommentSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleCommentSubmit(e);
+                }
+              }}
+              aria-label="Post your comment"
             >
               Post Comment
             </button>
             <button
               className="comment-cancel-btn"
               onClick={() => setIsCommenting(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setIsCommenting(false);
+                }
+              }}
+              aria-label="Cancel commenting"
             >
               Cancel
             </button>
