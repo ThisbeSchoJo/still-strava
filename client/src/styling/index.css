@@ -101,6 +101,33 @@ button {
   top: 6px;
 }
 
+/* Focus indicators for keyboard navigation */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+a:focus {
+  outline: 2px solid #fc4c02;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus outline and add custom one */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #fc4c02, 0 0 0 4px rgba(252, 76, 2, 0.2);
+}
+
+/* Focus indicator for links */
+a:focus {
+  outline: 2px solid #fc4c02;
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
   button,
