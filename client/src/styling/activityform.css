@@ -159,6 +159,15 @@
 .submit-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.cancel-button:disabled {
+  background-color: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+  border-color: #eee;
 }
 
 .cancel-button {
@@ -298,7 +307,10 @@
 
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
-  button, a, input, select {
+  button,
+  a,
+  input,
+  select {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
   }
