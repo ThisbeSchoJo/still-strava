@@ -2,13 +2,14 @@ import "../../styling/signup.css";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { getApiUrl } from "../../utils/api";
 
 function SignUp() {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
-  const [email, setEmail]     = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(""); // default to blank or ask user
@@ -23,7 +24,7 @@ function SignUp() {
       return;
     }
 
-    fetch("http://localhost:5555/signup", {
+    fetch(getApiUrl("/signup"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password, image }),
@@ -55,46 +56,56 @@ function SignUp() {
 
         <div className="form-group">
           <label htmlFor="username">Username</label>
-          <input 
-            type="text" id="username" value={username}
+          <input
+            type="text"
+            id="username"
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Choose a username" 
+            placeholder="Choose a username"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input 
-            type="email" id="email" value={email}
+          <input
+            type="email"
+            id="email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email" 
+            placeholder="Enter your email"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="password">Password</label>
-          <input 
-            type="password" id="password" value={password}
+          <input
+            type="password"
+            id="password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Create a password" 
+            placeholder="Create a password"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirm Password</label>
-          <input 
-            type="password" id="confirmPassword" value={confirmPassword}
+          <input
+            type="password"
+            id="confirmPassword"
+            value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm your password" 
+            placeholder="Confirm your password"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="image">Profile Image URL</label>
-          <input 
-            type="text" id="image" value={image}
+          <input
+            type="text"
+            id="image"
+            value={image}
             onChange={(e) => setImage(e.target.value)}
-            placeholder="Optional image URL" 
+            placeholder="Optional image URL"
           />
         </div>
 

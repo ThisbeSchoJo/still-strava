@@ -2,6 +2,7 @@ import "../../styling/login.css";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { getApiUrl } from "../../utils/api";
 
 function Login() {
   const { setUser } = useContext(UserContext); // grab setUser from context
@@ -14,7 +15,7 @@ function Login() {
     e.preventDefault(); // prevent form reload
     setError(null);
 
-    fetch("http://localhost:5555/login", {
+    fetch(getApiUrl("/login"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,27 +49,29 @@ function Login() {
 
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
-            id="email" 
+          <input
+            type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email" 
+            placeholder="Enter your email"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="password">Password</label>
-          <input 
-            type="password" 
-            id="password" 
+          <input
+            type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password" 
+            placeholder="Enter your password"
           />
         </div>
 
-        <button type="submit" className="login-button">Sign In</button>
+        <button type="submit" className="login-button">
+          Sign In
+        </button>
       </form>
 
       <div className="login-footer">
