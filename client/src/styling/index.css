@@ -80,8 +80,19 @@ button {
 
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
-  button, a, input, select {
+  button, a, input, select, .like-button, .comment-button, .edit-button, .delete-button {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
+  }
+
+  /* Touch targets for small elements */
+  .like-user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .comment-user-avatar {
+    width: 36px;
+    height: 36px;
   }
 }
