@@ -8,10 +8,16 @@
   /* Strava's official color palette - these are the exact colors used by Strava */
   --strava-orange: #fc4c02; /* Primary brand color - used for buttons, links, highlights */
   --strava-orange-hover: #e34402; /* Darker orange for hover states */
-  --strava-gray: #666666; /* Secondary text color */
+  --strava-gray: #4a4a4a; /* Improved contrast - darker gray for better readability */
   --strava-light-gray: #f7f7f7; /* Background color for cards and sections */
   --strava-dark: #333333; /* Primary text color */
   --strava-white: #ffffff; /* White for backgrounds and text on dark elements */
+
+  /* Accessibility-focused colors */
+  --error-color: #d32f2f; /* High contrast red for errors */
+  --success-color: #2e7d32; /* High contrast green for success */
+  --warning-color: #ed6c02; /* High contrast orange for warnings */
+  --focus-color: #1976d2; /* High contrast blue for focus indicators */
 
   /* Typography scale - consistent font sizes throughout the app */
   --font-size-xs: 0.75rem; /* 12px - for small labels and captions */
@@ -107,7 +113,7 @@ input:focus,
 select:focus,
 textarea:focus,
 a:focus {
-  outline: 2px solid #fc4c02;
+  outline: 2px solid var(--focus-color);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -118,12 +124,12 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #fc4c02, 0 0 0 4px rgba(252, 76, 2, 0.2);
+  box-shadow: 0 0 0 2px var(--focus-color), 0 0 0 4px rgba(25, 118, 210, 0.2);
 }
 
 /* Focus indicator for links */
 a:focus {
-  outline: 2px solid #fc4c02;
+  outline: 2px solid var(--focus-color);
   outline-offset: 2px;
   text-decoration: underline;
 }
