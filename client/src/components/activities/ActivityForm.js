@@ -264,13 +264,14 @@ function ActivityForm() {
 
         {/* Form Action Buttons */}
         <div className="activity-form-buttons">
-          <button type="submit" className="submit-button">
-            Create Activity
+          <button type="submit" className="submit-button" disabled={isLoading}>
+            {isLoading ? "Creating Activity..." : "Create Activity"}
           </button>
           <button
             type="button"
             className="cancel-button"
             onClick={handleCancel}
+            disabled={isLoading}
           >
             Cancel
           </button>
