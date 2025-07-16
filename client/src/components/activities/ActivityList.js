@@ -39,7 +39,6 @@ function ActivityList() {
 
     fetch(url)
       .then((response) => {
-        console.log("Response status:", response.status);
         if (!response.ok) {
           throw new Error("Failed to fetch activities");
         }
