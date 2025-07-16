@@ -5,6 +5,7 @@ import "../../styling/activitylist.css";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { getApiUrl } from "../../utils/api";
 
 import ActivityCard from "./ActivityCard";
 
@@ -33,8 +34,8 @@ function ActivityList() {
     // Build URL with user_id if user is logged in
     // If user is not logged in, fetch all activities
     const url = user
-      ? `http://localhost:5555/activities?user_id=${user.id}`
-      : "http://localhost:5555/activities";
+      ? getApiUrl(`/activities?user_id=${user.id}`)
+      : getApiUrl("/activities");
 
     fetch(url)
       .then((response) => {

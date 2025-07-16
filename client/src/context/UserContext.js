@@ -10,7 +10,7 @@ export function UserProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch("http://localhost:5555/me", {
+      fetch(getApiUrl("/me"), {
         headers: {
           Authorization: `Bearer ${token}`,
         },

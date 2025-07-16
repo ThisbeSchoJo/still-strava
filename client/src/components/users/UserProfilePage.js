@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import UserProfile from "./UserProfile";
+import { getApiUrl } from "../../utils/api";
 
 function UserProfilePage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams(); // This gets the user ID from the URL
-  console.log("User ID from URL:", id)
+  console.log("User ID from URL:", id);
 
   useEffect(() => {
-    fetch(`http://localhost:5555/users/${id}`)
+    fetch(getApiUrl(`/users/${id}`))
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch user data");

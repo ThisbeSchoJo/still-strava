@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import { getApiUrl } from "../../utils/api";
 
 import "../../styling/editprofileform.css";
 
@@ -28,7 +29,7 @@ function EditProfileForm({ user, onClose }) {
     e.preventDefault();
     setError(null);
 
-    fetch(`http://localhost:5555/users/${user.id}`, {
+    fetch(getApiUrl(`/users/${user.id}`), {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
