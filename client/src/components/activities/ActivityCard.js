@@ -278,7 +278,7 @@ function ActivityCard({ activity, activities, setActivities }) {
    */
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this activity?")) {
-      fetch(`http://localhost:5555/activities/${activity.id}`, {
+      fetch(getApiUrl(`/activities/${activity.id}`), {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

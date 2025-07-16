@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import MapPicker from "../shared/MapPicker";
+import { getApiUrl } from "../../utils/api";
 
 /**
  * Provides a form for creating new activities with location selection via MapPicker.
@@ -78,7 +79,7 @@ function ActivityForm() {
 
     try {
       // Send POST request to create new activity
-      const response = await fetch("http://localhost:5555/activities", {
+      const response = await fetch(getApiUrl("/activities"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
