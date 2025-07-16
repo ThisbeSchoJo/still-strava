@@ -22,8 +22,10 @@ function ActivityCard({ activity, activities, setActivities }) {
   const { user } = useContext(UserContext);
 
   // State for managing likes and user interactions
-  const [likes, setLikes] = useState(activity.like_count || 0);
-  const [isLiked, setIsLiked] = useState(activity.user_liked || false);
+  const [likeState, setLikeState] = useState({
+    count: activity.like_count || 0,
+    isLiked: activity.user_liked || false,
+  });
   const [commentContent, setCommentContent] = useState("");
 
   // State for managing edit mode and form data
@@ -52,8 +54,10 @@ function ActivityCard({ activity, activities, setActivities }) {
 
   // Update like state when activity data changes
   useEffect(() => {
-    setLikes(activity.like_count || 0);
-    setIsLiked(activity.user_liked || false);
+    setLikeState({
+      count: activity.like_count || 0,
+      isLiked: activity.user_liked || false,
+    });
   }, [activity.like_count, activity.user_liked]);
 
   useEffect(() => {
@@ -84,8 +88,8 @@ function ActivityCard({ activity, activities, setActivities }) {
       return;
     }
 
-    const endpoint = isLiked ? "unlike" : "like";
-    const method = isLiked ? "DELETE" : "POST";
+    const endpoint = likeState.isLiked ? "unlike" : "like";
+    const method = likeState.isLiked ? "DELETE" : "POST";
 
     fetch(getApiUrl(`/activities/${activity.id}/${endpoint}`), {
       method: method,
@@ -527,7 +531,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       <div className="activity-card-actions">
         <div className="action-buttons">
           <button
-            className={`like-button ${isLiked ? "liked" : ""}`}
+            className={`like-button ${likeState.isLiked ? "liked" : ""}`}
             onClick={handleLike}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -535,9 +539,11 @@ function ActivityCard({ activity, activities, setActivities }) {
                 handleLike();
               }
             }}
-            title={isLiked ? "Unlike" : "Like"}
-            aria-label={isLiked ? "Unlike this activity" : "Like this activity"}
-            aria-pressed={isLiked}
+            title={likeState.isLiked ? "Unlike" : "Like"}
+            aria-label={
+              likeState.isLiked ? "Unlike this activity" : "Like this activity"
+            }
+            aria-pressed={likeState.isLiked}
           >
             <svg
               width="20"
@@ -589,7 +595,7 @@ function ActivityCard({ activity, activities, setActivities }) {
             </div>
           )}
           <span className="like-count">
-            {likes || activity.like_count || 0} gave kudos
+            {likeState.count || activity.like_count || 0} gave kudos
           </span>
         </div>
       </div>
