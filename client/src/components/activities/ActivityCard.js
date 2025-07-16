@@ -4,6 +4,7 @@ import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
 import { getActivityIcon } from "../../utils/activityIcons";
 import MapDisplay from "../shared/MapDisplay";
+import { getApiUrl } from "../../utils/api";
 
 /**
 
@@ -59,7 +60,7 @@ function ActivityCard({ activity, activities, setActivities }) {
     const fetchComments = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5555/comments?activity_id=${activity.id}`
+          getApiUrl(`/comments?activity_id=${activity.id}`)
         );
         if (response.ok) {
           const commentsData = await response.json();
@@ -86,7 +87,7 @@ function ActivityCard({ activity, activities, setActivities }) {
     const endpoint = isLiked ? "unlike" : "like";
     const method = isLiked ? "DELETE" : "POST";
 
-    fetch(`http://localhost:5555/activities/${activity.id}/${endpoint}`, {
+    fetch(getApiUrl(`/activities/${activity.id}/${endpoint}`), {
       method: method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: user.id }),
@@ -98,7 +99,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       .then(() => {
         // Fetch updated activity data to get accurate like count and status
         return fetch(
-          `http://localhost:5555/activities/${activity.id}?user_id=${user.id}`
+          getApiUrl(`/activities/${activity.id}?user_id=${user.id}`)
         );
       })
       .then((res) => res.json())
@@ -135,7 +136,7 @@ function ActivityCard({ activity, activities, setActivities }) {
     };
 
     try {
-      const response = await fetch("http://localhost:5555/comments", {
+      const response = await fetch(getApiUrl("/comments"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(commentData),
@@ -147,7 +148,7 @@ function ActivityCard({ activity, activities, setActivities }) {
 
         // Fetch updated comments
         const commentsResponse = await fetch(
-          `http://localhost:5555/comments?activity_id=${activity.id}`
+          getApiUrl(`/comments?activity_id=${activity.id}`)
         );
         if (commentsResponse.ok) {
           const updatedComments = await commentsResponse.json();
@@ -179,7 +180,7 @@ function ActivityCard({ activity, activities, setActivities }) {
    */
   const handleSaveEdit = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:5555/activities/${activity.id}`, {
+    fetch(getApiUrl(`/activities/${activity.id}`), {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
