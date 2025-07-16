@@ -3,6 +3,7 @@
 A full-stack social fitness application inspired by Strava, built with React and Flask. Still Strava focuses on slow, mindful outdoor activities like hammocking, stargazing, and nature walks - encouraging users to connect with nature and share peaceful moments.
 
 ## 🚀 Live Demo
+
 (Coming soon...)
 
 ## ✨ Features
@@ -97,7 +98,7 @@ still-strava/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/still-strava.git
+   git clone https://github.com/ThisbeSchoJo/still-strava.git
    cd still-strava
    ```
 
