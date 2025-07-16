@@ -8,7 +8,6 @@ function UserProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams(); // This gets the user ID from the URL
-  console.log("User ID from URL:", id);
 
   useEffect(() => {
     fetch(getApiUrl(`/users/${id}`))
@@ -19,7 +18,6 @@ function UserProfilePage() {
         return response.json();
       })
       .then((data) => {
-        console.log("User data:", data);
         setUser(data);
       })
       .catch((error) => {

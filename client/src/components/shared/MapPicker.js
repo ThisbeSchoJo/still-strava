@@ -41,7 +41,6 @@ function MapPicker({ onLocationSelect }) {
         // Success callback - user location obtained
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log("User location:", { latitude, longitude });
 
           // Center map on user's location
           if (mapInstanceRef.current) {
@@ -120,7 +119,6 @@ function MapPicker({ onLocationSelect }) {
       map.addListener("click", (event) => {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
-        console.log("Map clicked at:", { lat, lng });
 
         // Remove previous marker if it exists
         if (markerRef.current) {
@@ -139,7 +137,7 @@ function MapPicker({ onLocationSelect }) {
         geocoder.geocode({ location: { lat, lng } }, (results, status) => {
           if (status === "OK" && results[0]) {
             const placeName = results[0].formatted_address;
-            console.log("Place name:", placeName);
+
             setLocationStatus(`Location set: ${placeName}`);
 
             // Call parent component callback with location data

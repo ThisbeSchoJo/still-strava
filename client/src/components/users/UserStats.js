@@ -44,7 +44,6 @@ function UserStats({ userActivities }) {
     const type = activity.activity_type || "Unknown";
     activityTypes[type] = (activityTypes[type] || 0) + 1;
   });
-  console.log("Activity types:", activityTypes);
 
   const pieData = {
     labels: Object.keys(activityTypes),
@@ -88,7 +87,6 @@ function UserStats({ userActivities }) {
       weeklyActivities[weekKey]++;
     }
   });
-  console.log("Weekly activities:", weeklyActivities);
 
   const data = {
     labels: Object.keys(weeklyActivities).slice(-4), // Last 4 weeks

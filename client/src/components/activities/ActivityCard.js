@@ -201,7 +201,6 @@ function ActivityCard({ activity, activities, setActivities }) {
         return res.json();
       })
       .then((updated) => {
-        console.log("Edited activity:", updated);
         setActivities((prev) =>
           prev.map((a) => (a.id === activity.id ? updated : a))
         );

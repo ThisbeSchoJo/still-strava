@@ -40,8 +40,6 @@ function ActivityForm() {
    * Location object with lat, lng, and name properties
    */
   const handleLocationSelect = (location) => {
-    console.log("Location selected:", location);
-
     // Update form state with location data
     setLatitude(location.lat);
     setLongitude(location.lng);
