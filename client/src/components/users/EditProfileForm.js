@@ -19,6 +19,7 @@ function EditProfileForm({ user, onClose }) {
   });
 
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +43,10 @@ function EditProfileForm({ user, onClose }) {
       })
       .then((updatedUser) => {
         setUser(updatedUser);
-        onClose();
+        setSuccess("Profile updated successfully!");
+        setTimeout(() => {
+          onClose();
+        }, 1500);
       })
       .catch((err) => {
         console.error("Profile update failed:", err);
@@ -53,6 +57,7 @@ function EditProfileForm({ user, onClose }) {
   return (
     <form className="edit-profile-form" onSubmit={handleSubmit}>
       {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
 
       <label>
         Username:
