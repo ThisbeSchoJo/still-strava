@@ -43,7 +43,15 @@ class User(db.Model, SerializerMixin):
     )
 
     # Serialization rules to avoid circular references
-    serialize_rules = ('-activities', '-comments', '-password_hash')
+    serialize_rules = (
+        '-activities',
+        '-comments',
+        '-password_hash',
+        '-following',
+        '-followers',
+        '-following_assoc',
+        '-followers_assoc'
+    )
 
     # Password methods
     def set_password(self, password):
@@ -254,8 +262,12 @@ class Follow(db.Model, SerializerMixin):
     )
 
     # Serialization rules to avoid circular references
-    serialize_rules = ('-follower.follows', '-follower.activities', '-follower.comments',
-                      '-followed.followers', '-followed.activities', '-followed.comments')
+    serialize_rules = (
+        '-follower',
+        '-followed',
+        '-follower_user',
+        '-followed_user'
+    )
     
     # Validation methods
     @validates('follower_id', 'followed_id')
