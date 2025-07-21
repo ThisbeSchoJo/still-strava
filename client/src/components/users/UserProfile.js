@@ -1,16 +1,50 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
 import EditProfileForm from "./EditProfileForm"; // New component
 import ActivityCard from "../activities/ActivityCard";
 import UserStats from "./UserStats";
+import { getApiUrl } from "../../utils/api";
 
 import "../../styling/userprofile.css";
 
 function UserProfile({ user }) {
   const { user: currentUser, setUser } = useContext(UserContext);
   const [editing, setEditing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(true);
 
   const isCurrentUser = currentUser?.id === user.id;
+
+  useEffect(() => {
+    if (!currentUser || !user?.id || currentUser.id === user.id) {
+      setFollowLoading(false);
+      return;
+    }
+    fetch(getApiUrl(`/users/${currentUser.id}/following`))
+      .then((res) => res.json())
+      .then((followingList) => {
+        setIsFollowing(followingList.some((u) => u.id === user.id));
+        setFollowLoading(false);
+      });
+  }, [currentUser, user]);
+
+  const handleFollow = () => {
+    fetch(getApiUrl(`/users/${user.id}/follow`), {
+      method: "POST",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
+      .then((res) => res.json())
+      .then(() => setIsFollowing(true));
+  };
+
+  const handleUnfollow = () => {
+    fetch(getApiUrl(`/users/${user.id}/unfollow`), {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
+      .then((res) => res.json())
+      .then(() => setIsFollowing(false));
+  };
 
   return (
     <div className="user-profile">
@@ -32,6 +66,18 @@ function UserProfile({ user }) {
               {editing ? "Cancel" : "Edit Profile"}
             </button>
           )}
+          {!isCurrentUser &&
+            !followLoading &&
+            currentUser &&
+            (isFollowing ? (
+              <button className="unfollow-btn" onClick={handleUnfollow}>
+                Unfollow
+              </button>
+            ) : (
+              <button className="follow-btn" onClick={handleFollow}>
+                Follow
+              </button>
+            ))}
         </div>
       </div>
       {editing ? (
