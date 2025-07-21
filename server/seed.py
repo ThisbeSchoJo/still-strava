@@ -1,10 +1,11 @@
 from app import app
-from models import db, User, Activity, Comment, Like
+from models import db, User, Activity, Comment, Like, Follow
 from datetime import datetime
 import random
 
 with app.app_context():
     print("Clearing db...")
+    Follow.query.delete()
     User.query.delete()
     Activity.query.delete()
     Comment.query.delete()
@@ -145,5 +146,16 @@ with app.app_context():
                 )
     
     db.session.add_all(likes)
+    db.session.commit()
+
+    print("Seeding follows...")
+    follows = [
+        Follow(follower_id=users[0].id, followed_id=users[1].id),  # naturelover follows stargazer
+        Follow(follower_id=users[0].id, followed_id=users[2].id),  # naturelover follows beachcomber
+        Follow(follower_id=users[1].id, followed_id=users[0].id),  # stargazer follows naturelover
+        Follow(follower_id=users[2].id, followed_id=users[3].id),  # beachcomber follows forestwalker
+        Follow(follower_id=users[3].id, followed_id=users[0].id),  # forestwalker follows naturelover
+    ]
+    db.session.add_all(follows)
     db.session.commit()
     print("✅ Done seeding!")
