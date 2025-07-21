@@ -78,12 +78,12 @@ function UserProfile({ user }) {
               <span className="stat-label">Activities</span>
             </div>
             <div className="stat">
-              <span className="stat-value">{user.comments?.length || 0}</span>
-              <span className="stat-label">Comments</span>
-            </div>
-            <div className="stat">
               <span className="stat-value">{user.followers?.length || 0}</span>
               <span className="stat-label">Followers</span>
+            </div>
+            <div className="stat">
+              <span className="stat-value">{user.following?.length || 0}</span>
+              <span className="stat-label">Following</span>
             </div>
           </div>
 
