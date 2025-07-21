@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 # Remote library imports
 from flask import request, make_response, current_app
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import jwt
 # from resources.signup import Signup
@@ -16,7 +17,7 @@ from sqlalchemy import select
 
 
 # Add your model imports
-from models import User, Activity, Comment, Like
+from models import User, Activity, Comment, Like, Follow
 
 # Helper function to get activity data with like information
 def get_activity_with_likes(activity, current_user_id=None):
@@ -235,6 +236,39 @@ class UserById(Resource):
             return make_response(response_body, 404)
         
 api.add_resource(UserById, '/users/<int:id>')
+
+# CRUD for follows
+class FollowUser(Resource):
+    # ensure user is authenticated
+    @jwt_required()
+    def post(self, user_id):
+        current_user_id = get_jwt_identity()
+        if current_user_id == user_id:
+            return make_response({"error": "You cannot follow yourself."}, 400)
+        # Prevent duplicate follows
+        existing = Follow.query.filter_by(follower_id=current_user_id, followed_id=user_id).first()
+        if existing:
+            return make_response({"error": "Already following."}, 400)
+        follow = Follow(follower_id=current_user_id, followed_id=user_id)
+        db.session.add(follow)
+        db.session.commit()
+        return make_response({"message": "Followed successfully."}, 201)
+
+api.add_resource(FollowUser, '/users/<int:user_id>/follow')
+
+class UnfollowUser(Resource):
+    # ensure user is authenticated
+    @jwt_required()
+    def delete(self, user_id):
+        current_user_id = get_jwt_identity()
+        follow = Follow.query.filter_by(follower_id=current_user_id, followed_id=user_id).first()
+        if not follow:
+            return make_response({"error": "Not following."}, 400)
+        db.session.delete(follow)
+        db.session.commit()
+        return make_response({"message": "Unfollowed successfully."}, 200)
+
+api.add_resource(UnfollowUser, '/users/<int:user_id>/unfollow')
 
 # CRUD for activities
 class AllActivities(Resource):
