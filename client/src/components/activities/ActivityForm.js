@@ -26,8 +26,9 @@ function ActivityForm() {
   const [song, setSong] = useState("");
   const [photos, setPhotos] = useState([""]);
 
-  // UI state for loading and error handling
+  // UI state for loading, error handling, and success
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Get current user from context and navigation hook
@@ -89,9 +90,11 @@ function ActivityForm() {
         throw new Error("Failed to create activity");
       }
 
-      // Navigate to the activity feed page after creating the activity
-      const data = await response.json();
-      navigate("/activity-feed");
+      // Show success message and navigate after a brief delay
+      setSuccess("Activity created successfully!");
+      setTimeout(() => {
+        navigate("/activity-feed");
+      }, 1500);
     } catch (error) {
       setError("Failed to create activity. Please try again.");
     } finally {
@@ -287,6 +290,13 @@ function ActivityForm() {
       {error && (
         <div className="error-message" role="alert" aria-live="polite">
           {error}
+        </div>
+      )}
+
+      {/* Success Display */}
+      {success && (
+        <div className="success-message" role="alert" aria-live="polite">
+          {success}
         </div>
       )}
     </div>
