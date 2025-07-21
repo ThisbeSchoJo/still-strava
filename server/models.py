@@ -26,6 +26,22 @@ class User(db.Model, SerializerMixin):
     comments = db.relationship('Comment', back_populates='user')
     likes = db.relationship('Like', back_populates='user')
 
+    # Relationships for following/followers
+    following = db.relationship(
+        'Follow',
+        foreign_keys='Follow.follower_id',
+        backref='follower_user',
+        cascade='all, delete-orphan'
+    )
+
+    # Users who follow this user
+    followers = db.relationship(
+        'Follow',
+        foreign_keys='Follow.followed_id',
+        backref='followed_user',
+        cascade='all, delete-orphan'
+    )
+
     # Serialization rules to avoid circular references
     serialize_rules = ('-activities', '-comments', '-password_hash')
 
