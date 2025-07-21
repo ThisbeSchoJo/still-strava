@@ -222,3 +222,29 @@ class Like(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Like User: {self.user_id}, Activity: {self.activity_id}, Created: {self.created_at}>'
     
+
+class Follow(db.Model, SerializerMixin):
+    __tablename__ = 'follows'
+
+    id = db.Column(db.Integer, primary_key=True)
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+
+    # Relationships
+    follower = db.relationship('User', foreign_keys=[follower_id])
+    followed = db.relationship('User', foreign_keys=[followed_id])
+
+    # Serialization rules to avoid circular references
+    serialize_rules = ('-follower.follows', '-follower.activities', '-follower.comments',
+                      '-followed.followers', '-followed.activities', '-followed.comments')
+    
+    # Validation methods
+    @validates('follower_id', 'followed_id')
+    def validate_follower_id(self, key, value):
+        if not isinstance(value, int):
+            raise TypeError("Follower ID and Followed ID must be an integer")
+        return value
+    
+    def __repr__(self):
+        return f'<Follower: {self.follower_id}, Followed: {self.followed_id}>'
+    
