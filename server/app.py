@@ -270,6 +270,26 @@ class UnfollowUser(Resource):
 
 api.add_resource(UnfollowUser, '/users/<int:user_id>/unfollow')
 
+class AllFollowers(Resource):
+    def get(self, user_id):
+        user = db.session.get(User, user_id)
+        if not user:
+            return make_response({"error": "User not found"}, 404)
+        followers = user.followers
+        return make_response([f.follower.to_dict() for f in followers], 200)
+    
+api.add_resource(AllFollowers, '/users/<int:user_id>/followers')
+
+class AllFollowing(Resource):
+    def get(self, user_id):
+        user = db.session.get(User, user_id)
+        if not user:
+            return make_response({"error": "User not found"}, 404)
+        following = user.following
+        return make_response([f.followed.to_dict() for f in following], 200)
+    
+api.add_resource(AllFollowing, '/users/<int:user_id>/following')
+
 # CRUD for activities
 class AllActivities(Resource):
     def get(self):
