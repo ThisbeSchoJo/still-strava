@@ -241,14 +241,17 @@ class Like(db.Model, SerializerMixin):
 
 class Follow(db.Model, SerializerMixin):
     __tablename__ = 'follows'
-
     id = db.Column(db.Integer, primary_key=True)
-    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
-    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # Relationships
-    follower = db.relationship('User', foreign_keys=[follower_id])
-    followed = db.relationship('User', foreign_keys=[followed_id])
+    follower = db.relationship('User', foreign_keys=[follower_id], backref='following_assoc')
+    followed = db.relationship('User', foreign_keys=[followed_id], backref='followers_assoc')
+
+    __table_args__ = (
+        db.UniqueConstraint('follower_id', 'followed_id', name='unique_follow'),
+    )
 
     # Serialization rules to avoid circular references
     serialize_rules = ('-follower.follows', '-follower.activities', '-follower.comments',
