@@ -4,6 +4,7 @@ import EditProfileForm from "./EditProfileForm";
 import ActivityCard from "../activities/ActivityCard";
 import UserStats from "./UserStats";
 import FollowersList from "./FollowersList";
+import FollowingList from "./FollowingList";
 import { getApiUrl } from "../../utils/api";
 
 import "../../styling/userprofile.css";
@@ -18,6 +19,7 @@ function UserProfile({ user: initialUser }) {
   const [followLoading, setFollowLoading] = useState(true); // Loading state for follow status check
   const [user, setUserData] = useState(initialUser); // Local state for user data (allows updates)
   const [showFollowers, setShowFollowers] = useState(false); // Controls followers modal visibility
+  const [showFollowing, setShowFollowing] = useState(false); // Controls following modal visibility
 
   // Check if the profile being viewed belongs to the current logged-in user
   const isCurrentUser = currentUser?.id === user.id;
@@ -208,7 +210,13 @@ function UserProfile({ user: initialUser }) {
               <span className="stat-label">Followers</span>
             </div>
             <div className="stat">
-              <span className="stat-value">{user.following?.length || 0}</span>
+              <span
+                className="stat-value clickable"
+                onClick={() => setShowFollowing(true)}
+                style={{ cursor: "pointer" }}
+              >
+                {user.following?.length || 0}
+              </span>
               <span className="stat-label">Following</span>
             </div>
           </div>
@@ -244,6 +252,14 @@ function UserProfile({ user: initialUser }) {
         <FollowersList
           userId={user.id}
           onClose={() => setShowFollowers(false)}
+        />
+      )}
+
+      {/* Following Modal */}
+      {showFollowing && (
+        <FollowingList
+          userId={user.id}
+          onClose={() => setShowFollowing(false)}
         />
       )}
     </div>
