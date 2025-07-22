@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../context/UserContext";
-import EditProfileForm from "./EditProfileForm"; // New component
+import EditProfileForm from "./EditProfileForm";
 import ActivityCard from "../activities/ActivityCard";
 import UserStats from "./UserStats";
 import { getApiUrl } from "../../utils/api";
@@ -9,7 +9,7 @@ import "../../styling/userprofile.css";
 
 function UserProfile({ user: initialUser }) {
   // Get current user from context (the logged-in user)
-  const { user: currentUser, setUser } = useContext(UserContext);
+  const { user: currentUser } = useContext(UserContext);
 
   // Local state for component functionality
   const [editing, setEditing] = useState(false); // Controls edit mode toggle
@@ -63,10 +63,19 @@ function UserProfile({ user: initialUser }) {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(() => {
         setIsFollowing(true); // Update local state to show "Unfollow" button
         refreshUserData(); // Refresh user data to update follower/following counts
+      })
+      .catch((error) => {
+        console.error("Error following user:", error);
+        // Optionally show user feedback here
       });
   };
 
@@ -79,10 +88,19 @@ function UserProfile({ user: initialUser }) {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(() => {
         setIsFollowing(false); // Update local state to show "Follow" button
         refreshUserData(); // Refresh user data to update follower/following counts
+      })
+      .catch((error) => {
+        console.error("Error unfollowing user:", error);
+        // Optionally show user feedback here
       });
   };
 
@@ -198,8 +216,11 @@ function UserProfile({ user: initialUser }) {
                   activity={activity}
                   activities={user.activities}
                   setActivities={(updatedActivities) => {
-                    // Update the user's activities in the parent component
-                    user.activities = updatedActivities;
+                    // Update the user's activities using the state setter
+                    setUserData((prevUser) => ({
+                      ...prevUser,
+                      activities: updatedActivities,
+                    }));
                   }}
                 />
               ))
