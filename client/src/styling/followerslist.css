@@ -1,1 +1,162 @@
+/* Modal overlay */
+.followers-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+/* Modal content */
+.followers-content {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Modal header */
+.followers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  background: linear-gradient(to right, #fc4c02, #e34402);
+  color: white;
+}
+
+.followers-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Close button */
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Modal body */
+.followers-body {
+  padding: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Followers list */
+.followers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Individual follower item */
+.follower-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.follower-item:hover {
+  background-color: #f9f9f9;
+}
+
+/* Follower avatar */
+.follower-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fc4c02;
+}
+
+/* Follower info */
+.follower-info {
+  flex: 1;
+}
+
+.follower-username {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.follower-email {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Loading and error states */
+.followers-body p {
+  text-align: center;
+  color: #666;
+  margin: 2rem 0;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.no-followers {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin: 2rem 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .followers-content {
+    width: 95%;
+    margin: 1rem;
+  }
+
+  .followers-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .followers-body {
+    padding: 1rem;
+  }
+
+  .follower-item {
+    padding: 0.75rem;
+  }
+
+  .follower-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
