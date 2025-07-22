@@ -56,8 +56,11 @@
 
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
-    button, a, input, select {
-      min-height: 44px; /* Apple's recommended touch target size */
-      min-width: 44px;
-    }
+  button,
+  a,
+  input,
+  select {
+    min-height: 44px; /* Apple's recommended touch target size */
+    min-width: 44px;
   }
+}
