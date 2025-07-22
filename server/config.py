@@ -20,6 +20,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'super-secret-key'  # Change this in production!
 app.config["JWT_SECRET_KEY"] = "your-secret-key"  # Strong, random value in production!
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False  # Tokens never expire (for development)
 app.json.compact = False
 
 # Define metadata, instantiate db

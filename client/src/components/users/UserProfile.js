@@ -7,13 +7,26 @@ import { getApiUrl } from "../../utils/api";
 
 import "../../styling/userprofile.css";
 
-function UserProfile({ user }) {
+function UserProfile({ user: initialUser }) {
   const { user: currentUser, setUser } = useContext(UserContext);
   const [editing, setEditing] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(true);
+  const [user, setUserData] = useState(initialUser);
 
   const isCurrentUser = currentUser?.id === user.id;
+
+  // Function to refresh user data
+  const refreshUserData = () => {
+    fetch(getApiUrl(`/users/${user.id}`))
+      .then((res) => res.json())
+      .then((updatedUser) => {
+        setUserData(updatedUser);
+      })
+      .catch((error) => {
+        console.error("Error refreshing user data:", error);
+      });
+  };
 
   useEffect(() => {
     if (!currentUser || !user?.id || currentUser.id === user.id) {
@@ -37,7 +50,10 @@ function UserProfile({ user }) {
       },
     })
       .then((res) => res.json())
-      .then(() => setIsFollowing(true));
+      .then(() => {
+        setIsFollowing(true);
+        refreshUserData(); // Refresh user data to update counts
+      });
   };
 
   const handleUnfollow = () => {
@@ -49,7 +65,10 @@ function UserProfile({ user }) {
       },
     })
       .then((res) => res.json())
-      .then(() => setIsFollowing(false));
+      .then(() => {
+        setIsFollowing(false);
+        refreshUserData(); // Refresh user data to update counts
+      });
   };
 
   return (
