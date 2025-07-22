@@ -70,6 +70,47 @@
   background-color: #ffe1d6;
 }
 
+/* FOLLOW/UNFOLLOW BUTTONS */
+.follow-btn,
+.unfollow-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 1px solid;
+  font-size: 0.9rem;
+}
+
+.follow-btn {
+  background-color: #fc4c02;
+  color: white;
+  border-color: #fc4c02;
+}
+
+.follow-btn:hover {
+  background-color: #e34402;
+  border-color: #e34402;
+}
+
+.unfollow-btn {
+  background-color: white;
+  color: #fc4c02;
+  border-color: #fc4c02;
+}
+
+.unfollow-btn:hover {
+  background-color: #fff0e6;
+}
+
+/* Loading state for follow buttons */
+.follow-btn:disabled,
+.unfollow-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* STATS */
 .user-profile-stats {
   display: flex;
@@ -163,7 +204,10 @@
 
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
-  button, a, input, select {
+  button,
+  a,
+  input,
+  select {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
   }
