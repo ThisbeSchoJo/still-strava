@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getApiUrl } from "../../utils/api";
-import "../../styling/followinglist.css";
+// import "../../styling/followinglist.css";
 
 function FollowingList({ userId, onClose }) {
   const [following, setFollowing] = useState([]);
