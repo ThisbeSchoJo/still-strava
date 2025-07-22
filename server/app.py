@@ -5,10 +5,9 @@ from datetime import datetime, timedelta, timezone
 
 # Remote library imports
 from flask import request, make_response, current_app
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from flask_restful import Resource
-import jwt
-# from resources.signup import Signup
+from flask_jwt_extended.exceptions import JWTExtendedException
 
 
 # Local imports
@@ -77,11 +76,7 @@ class Login(Resource):
             return {'error': 'Invalid email or password'}, 401
     
         # Generate JWT token
-        payload = {
-            'user_id': user.id,
-            'exp': datetime.now(timezone.utc) + timedelta(hours=24)
-        }
-        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+        token = create_access_token(identity=user.id)
     
         return  {
             'token': token,
@@ -110,14 +105,9 @@ class Signup(Resource):
             db.session.add(user)
             db.session.commit()
         except Exception as e:
-            print("Error during user creation:", e)  # <-- ADD THIS
             return {'error': str(e)}, 400
 
-        payload = {
-            'user_id': user.id,
-            'exp': datetime.now(timezone.utc)+timedelta(hours=24)
-        }
-        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+        token = create_access_token(identity=user.id)
 
         return {
             'token': token,
@@ -127,22 +117,13 @@ class Signup(Resource):
 api.add_resource(Signup, '/signup')
 
 class Me(Resource):
+    @jwt_required()
     def get(self):
-        auth_header = request.headers.get('Authorization')
-        if not auth_header:
-            return {'error': 'Authorization header missing'}, 401
-
-        token = auth_header.split(" ")[1]  # Expecting "Bearer <token>"
-        try:
-            payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
-            user = db.session.get(User, payload['user_id'])
-            if not user:
-                return {'error': 'User not found'}, 404
-            return user.to_dict(only=('id', 'username', 'email', 'image'))
-        except jwt.ExpiredSignatureError:
-            return {'error': 'Token expired'}, 401
-        except jwt.InvalidTokenError:
-            return {'error': 'Invalid token'}, 401
+        current_user_id = get_jwt_identity()
+        user = db.session.get(User, current_user_id)
+        if not user:
+            return {'error': 'User not found'}, 404
+        return user.to_dict(only=('id', 'username', 'email', 'image'))
 
 api.add_resource(Me, '/me')
 
@@ -205,11 +186,9 @@ class UserById(Resource):
         user = db.session.get(User, id)
         if user:
             try:
-                print("Received data:", request.json)  # Add this line
                 for attr in request.json:
                     setattr(user, attr, request.json[attr])
                 db.session.commit()
-                print("Updated user:", user.to_dict(only=USER_PROFILE_FIELDS))  # Add this line
                 response_body = user.to_dict(only=USER_PROFILE_FIELDS)
                 return make_response(response_body, 200)
             except Exception as e:
@@ -242,17 +221,28 @@ class FollowUser(Resource):
     # ensure user is authenticated
     @jwt_required()
     def post(self, user_id):
-        current_user_id = get_jwt_identity()
-        if current_user_id == user_id:
-            return make_response({"error": "You cannot follow yourself."}, 400)
-        # Prevent duplicate follows
-        existing = Follow.query.filter_by(follower_id=current_user_id, followed_id=user_id).first()
-        if existing:
-            return make_response({"error": "Already following."}, 400)
-        follow = Follow(follower_id=current_user_id, followed_id=user_id)
-        db.session.add(follow)
-        db.session.commit()
-        return make_response({"message": "Followed successfully."}, 201)
+        try:
+            current_user_id = get_jwt_identity()
+            
+            # Check if user exists
+            user = db.session.get(User, user_id)
+            if not user:
+                return make_response({"error": "User not found."}, 404)
+            
+            if current_user_id == user_id:
+                return make_response({"error": "You cannot follow yourself."}, 400)
+            
+            # Prevent duplicate follows
+            existing = Follow.query.filter_by(follower_id=current_user_id, followed_id=user_id).first()
+            if existing:
+                return make_response({"error": "Already following."}, 400)
+            
+            follow = Follow(follower_id=current_user_id, followed_id=user_id)
+            db.session.add(follow)
+            db.session.commit()
+            return make_response({"message": "Followed successfully."}, 201)
+        except Exception as e:
+            return make_response({"error": str(e)}, 422)
 
 api.add_resource(FollowUser, '/users/<int:user_id>/follow')
 
@@ -293,11 +283,9 @@ api.add_resource(AllFollowing, '/users/<int:user_id>/following')
 # CRUD for activities
 class AllActivities(Resource):
     def get(self):
-        print("Fetching all activities...")
         stmt = select(Activity)
         result = db.session.execute(stmt)
         activities = result.scalars().all()
-        print(f"Found {len(activities)} activities")
         
         # Get current user ID from request if available
         current_user_id = request.args.get('user_id', type=int)
@@ -549,6 +537,18 @@ class UnlikeActivity(Resource):
 
 api.add_resource(LikeActivity, '/activities/<int:activity_id>/like')
 api.add_resource(UnlikeActivity, '/activities/<int:activity_id>/unlike')
+
+@app.errorhandler(422)
+def handle_unprocessable_entity(err):
+    return make_response({"error": str(err)}, 422)
+
+@app.errorhandler(JWTExtendedException)
+def handle_jwt_error(e):
+    return make_response({"error": str(e)}, 401)
+
+@app.errorhandler(Exception)
+def handle_general_error(e):
+    return make_response({"error": str(e)}, 500)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

@@ -7,14 +7,19 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
+from flask_jwt_extended import JWTManager
 
 # Local imports
 
 # Instantiate app, set attributes
 app = Flask(__name__)
+
+# Set ALL config before initializing extensions
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'super-secret-key'  # Change this in production!
+app.config["JWT_SECRET_KEY"] = "your-secret-key"  # Strong, random value in production!
+app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.json.compact = False
 
 # Define metadata, instantiate db
@@ -30,4 +35,7 @@ api = Api(app)
 
 # Instantiate CORS
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+
+# Instantiate JWT Manager
+jwt = JWTManager(app)
 
