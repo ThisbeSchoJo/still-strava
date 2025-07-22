@@ -86,7 +86,6 @@ function FollowingList({ userId, onClose }) {
                   />
                   <div className="following-info">
                     <h3 className="following-username">{user.username}</h3>
-                    <p className="following-email">{user.email}</p>
                   </div>
                 </div>
               ))}
