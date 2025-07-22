@@ -8,39 +8,53 @@ import { getApiUrl } from "../../utils/api";
 import "../../styling/userprofile.css";
 
 function UserProfile({ user: initialUser }) {
+  // Get current user from context (the logged-in user)
   const { user: currentUser, setUser } = useContext(UserContext);
-  const [editing, setEditing] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followLoading, setFollowLoading] = useState(true);
-  const [user, setUserData] = useState(initialUser);
 
+  // Local state for component functionality
+  const [editing, setEditing] = useState(false); // Controls edit mode toggle
+  const [isFollowing, setIsFollowing] = useState(false); // Tracks if current user is following this profile user
+  const [followLoading, setFollowLoading] = useState(true); // Loading state for follow status check
+  const [user, setUserData] = useState(initialUser); // Local state for user data (allows updates)
+
+  // Check if the profile being viewed belongs to the current logged-in user
   const isCurrentUser = currentUser?.id === user.id;
 
-  // Function to refresh user data
+  // Function to refresh user data from the server
+  // This is called after follow/unfollow actions to update the displayed counts
   const refreshUserData = () => {
     fetch(getApiUrl(`/users/${user.id}`))
       .then((res) => res.json())
       .then((updatedUser) => {
-        setUserData(updatedUser);
+        setUserData(updatedUser); // Update local state with fresh data
       })
       .catch((error) => {
         console.error("Error refreshing user data:", error);
       });
   };
 
+  // Effect to check if current user is following this profile user
   useEffect(() => {
+    // Skip the check if:
+    // - No current user (not logged in)
+    // - No profile user ID
+    // - Current user is viewing their own profile
     if (!currentUser || !user?.id || currentUser.id === user.id) {
       setFollowLoading(false);
       return;
     }
+
+    // Fetch the current user's following list to check if they're following this profile
     fetch(getApiUrl(`/users/${currentUser.id}/following`))
       .then((res) => res.json())
       .then((followingList) => {
+        // Check if this profile user is in the current user's following list
         setIsFollowing(followingList.some((u) => u.id === user.id));
         setFollowLoading(false);
       });
   }, [currentUser, user]);
 
+  // Handle follow action
   const handleFollow = () => {
     fetch(getApiUrl(`/users/${user.id}/follow`), {
       method: "POST",
@@ -51,11 +65,12 @@ function UserProfile({ user: initialUser }) {
     })
       .then((res) => res.json())
       .then(() => {
-        setIsFollowing(true);
-        refreshUserData(); // Refresh user data to update counts
+        setIsFollowing(true); // Update local state to show "Unfollow" button
+        refreshUserData(); // Refresh user data to update follower/following counts
       });
   };
 
+  // Handle unfollow action
   const handleUnfollow = () => {
     fetch(getApiUrl(`/users/${user.id}/unfollow`), {
       method: "DELETE",
@@ -66,23 +81,29 @@ function UserProfile({ user: initialUser }) {
     })
       .then((res) => res.json())
       .then(() => {
-        setIsFollowing(false);
-        refreshUserData(); // Refresh user data to update counts
+        setIsFollowing(false); // Update local state to show "Follow" button
+        refreshUserData(); // Refresh user data to update follower/following counts
       });
   };
 
   return (
     <div className="user-profile">
+      {/* Profile Header Section */}
       <div className="user-profile-header">
+        {/* Profile Image */}
         <div className="user-profile-image">
           <img src={user.image} alt={user.username} />
         </div>
+
+        {/* Profile Details */}
         <div className="user-profile-header-details">
           <h1 className="user-profile-username">{user.username}</h1>
           <p className="user-profile-email">{user.email}</p>
           {user.location && (
             <p className="user-profile-location">{user.location}</p>
           )}
+
+          {/* Edit Profile Button - Only show for own profile */}
           {isCurrentUser && (
             <button
               className="edit-profile-button"
@@ -91,6 +112,8 @@ function UserProfile({ user: initialUser }) {
               {editing ? "Cancel" : "Edit Profile"}
             </button>
           )}
+
+          {/* Follow/Unfollow Button - Only show for other users' profiles */}
           {!isCurrentUser &&
             !followLoading &&
             currentUser &&
@@ -105,18 +128,21 @@ function UserProfile({ user: initialUser }) {
             ))}
         </div>
       </div>
+
+      {/* Conditional Rendering: Edit Form or Profile Content */}
       {editing ? (
+        // Show edit form when in editing mode
         <EditProfileForm user={user} onClose={() => setEditing(false)} />
       ) : (
+        // Show regular profile content when not editing
         <>
+          {/* Profile Information Section */}
           <div className="user-profile-info">
             <div className="user-profile-details">
               {user.bio && <p className="user-profile-bio">{user.bio}</p>}
-              {/* {user.location && (
-              <p className="user-profile-location">{user.location}</p>
-            )} */}
             </div>
 
+            {/* Social Media Links */}
             <div className="user-profile-social">
               {user.website && (
                 <a href={user.website} className="user-profile-website">
@@ -140,9 +166,12 @@ function UserProfile({ user: initialUser }) {
                 </a>
               )}
             </div>
+
+            {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
           </div>
 
+          {/* Profile Statistics Section */}
           <div className="user-profile-stats">
             <div className="stat">
               <span className="stat-value">{user.activities?.length || 0}</span>
@@ -158,9 +187,11 @@ function UserProfile({ user: initialUser }) {
             </div>
           </div>
 
+          {/* Recent Activities Section */}
           <div className="user-profile-activities">
             <h2>Recent Activities</h2>
             {user.activities && user.activities.length > 0 ? (
+              // Map through activities and render ActivityCard for each
               user.activities.map((activity) => (
                 <ActivityCard
                   key={activity.id}
