@@ -31,7 +31,7 @@ def get_activity_with_likes(activity, current_user_id=None):
     # Get user information for likes (limit to 5 for display)
     like_users = []
     for like in likes[:5]:  # Limit to 5 users for display
-        user = User.query.get(like.user_id)
+        user = db.session.get(User, like.user_id)
         if user:
             like_users.append({
                 'id': user.id,
@@ -168,7 +168,7 @@ class UserById(Resource):
             response_body = user.to_dict(only=(
                 'id', 'username', 'email', 'image',
                 'bio', 'location', 'website', 'twitter', 'instagram',
-                'activities', 'comments'
+                'activities', 'comments', 'followers', 'following'
             ))
             return make_response(response_body, 200)
         else:
