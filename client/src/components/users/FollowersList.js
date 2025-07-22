@@ -86,7 +86,6 @@ function FollowersList({ userId, onClose }) {
                   />
                   <div className="follower-info">
                     <h3 className="follower-username">{follower.username}</h3>
-                    <p className="follower-email">{follower.email}</p>
                   </div>
                 </div>
               ))}

@@ -97,24 +97,21 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #fc4c02;
+  flex-shrink: 0;
 }
 
 /* Follower info */
 .follower-info {
   flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .follower-username {
-  margin: 0 0 0.25rem 0;
+  margin: 0;
   font-size: 1rem;
   font-weight: bold;
   color: #333;
-}
-
-.follower-email {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #666;
 }
 
 /* Loading and error states */
