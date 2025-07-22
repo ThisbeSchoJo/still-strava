@@ -109,6 +109,7 @@ class Activity(db.Model, SerializerMixin):
     latitude = db.Column(db.Float)
     location_name = db.Column(db.String)
     datetime = db.Column(db.DateTime)
+    elapsed_time = db.Column(db.Integer)  # Duration in seconds
     photos = db.Column(db.String)
     likes = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

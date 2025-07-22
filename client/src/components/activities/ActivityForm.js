@@ -24,6 +24,8 @@ function ActivityForm() {
   const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
   const [song, setSong] = useState("");
+  const [elapsedHours, setElapsedHours] = useState("");
+  const [elapsedMinutes, setElapsedMinutes] = useState("");
   const [photos, setPhotos] = useState([""]);
 
   // UI state for loading, error handling, and success
@@ -72,6 +74,11 @@ function ActivityForm() {
       location_name: locationName || null,
       description: description,
       song: song || null,
+      elapsed_time:
+        elapsedHours || elapsedMinutes
+          ? parseInt(elapsedHours || 0) * 3600 +
+            parseInt(elapsedMinutes || 0) * 60
+          : null,
       photos: photos.filter((url) => url.trim()).join(","),
       user_id: user.id,
     };
@@ -208,6 +215,42 @@ function ActivityForm() {
             onChange={(e) => setSong(e.target.value)}
             placeholder="e.g., 'Bohemian Rhapsody' by Queen"
           />
+        </div>
+
+        {/* Elapsed Time Field */}
+        <div className="form-group">
+          <label htmlFor="elapsed_time">Duration (Optional)</label>
+          <div className="duration-inputs">
+            <div className="duration-input">
+              <input
+                type="number"
+                id="elapsed_hours"
+                name="elapsed_hours"
+                value={elapsedHours}
+                onChange={(e) => setElapsedHours(e.target.value)}
+                placeholder="0"
+                min="0"
+                max="24"
+              />
+              <label htmlFor="elapsed_hours">Hours</label>
+            </div>
+            <div className="duration-input">
+              <input
+                type="number"
+                id="elapsed_minutes"
+                name="elapsed_minutes"
+                value={elapsedMinutes}
+                onChange={(e) => setElapsedMinutes(e.target.value)}
+                placeholder="0"
+                min="0"
+                max="59"
+              />
+              <label htmlFor="elapsed_minutes">Minutes</label>
+            </div>
+          </div>
+          <p className="form-help-text">
+            How long did you spend on this activity?
+          </p>
         </div>
 
         {/* Location Selection with MapPicker */}
