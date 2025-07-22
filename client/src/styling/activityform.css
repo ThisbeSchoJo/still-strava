@@ -329,14 +329,15 @@
 /* Duration inputs styling */
 .duration-inputs {
   display: flex;
-  gap: 1rem;
-  align-items: flex-end;
+  gap: 0.1rem;
+  align-items: center;
 }
 
 .duration-input {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
   flex: 1;
 }
 
@@ -348,6 +349,8 @@
   font-family: "Lato", sans-serif;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   text-align: center;
+  width: 80px;
+  flex-shrink: 0;
 }
 
 .duration-input input:focus {
@@ -357,12 +360,12 @@
 }
 
 .duration-input label {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #666;
-  text-align: center;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -378,11 +381,11 @@
   }
 
   .duration-input input {
-    flex: 1;
+    width: 60px;
   }
 
   .duration-input label {
     flex-shrink: 0;
-    min-width: 60px;
+    min-width: 50px;
   }
 }
