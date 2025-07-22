@@ -31,7 +31,8 @@ class User(db.Model, SerializerMixin):
         'Follow',
         foreign_keys='Follow.follower_id',
         backref='follower_user',
-        cascade='all, delete-orphan'
+        cascade='all, delete-orphan',
+        overlaps="following_assoc"
     )
 
     # Users who follow this user
@@ -39,7 +40,8 @@ class User(db.Model, SerializerMixin):
         'Follow',
         foreign_keys='Follow.followed_id',
         backref='followed_user',
-        cascade='all, delete-orphan'
+        cascade='all, delete-orphan',
+        overlaps="followers_assoc"
     )
 
     # Serialization rules to avoid circular references
@@ -254,8 +256,8 @@ class Follow(db.Model, SerializerMixin):
     followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # Relationships
-    follower = db.relationship('User', foreign_keys=[follower_id], backref='following_assoc')
-    followed = db.relationship('User', foreign_keys=[followed_id], backref='followers_assoc')
+    follower = db.relationship('User', foreign_keys=[follower_id], backref='following_assoc', overlaps="follower_user")
+    followed = db.relationship('User', foreign_keys=[followed_id], backref='followers_assoc', overlaps="followed_user")
 
     __table_args__ = (
         db.UniqueConstraint('follower_id', 'followed_id', name='unique_follow'),

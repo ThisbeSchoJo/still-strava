@@ -31,7 +31,10 @@ function UserProfile({ user }) {
   const handleFollow = () => {
     fetch(getApiUrl(`/users/${user.id}/follow`), {
       method: "POST",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then(() => setIsFollowing(true));
@@ -40,7 +43,10 @@ function UserProfile({ user }) {
   const handleUnfollow = () => {
     fetch(getApiUrl(`/users/${user.id}/unfollow`), {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then(() => setIsFollowing(false));
