@@ -212,10 +212,19 @@ function UserStats({ userActivities }) {
     responsive: true,
     plugins: {
       legend: {
-        position: "bottom",
-        labels: {
-          padding: 10,
-          usePointStyle: true,
+        display: false, // Hide the default legend
+      },
+      tooltip: {
+        callbacks: {
+          title: function () {
+            return null; // Remove the title
+          },
+          label: function (context) {
+            return context.label;
+          },
+          afterLabel: function () {
+            return null; // Remove any additional text
+          },
         },
       },
     },
@@ -234,7 +243,10 @@ function UserStats({ userActivities }) {
             <Bar data={data} options={options} />
           </div>
           <div className="user-stats-chart">
-            <Pie data={pieData} options={pieOptions} />
+            <h4>Activity Types</h4>
+            <div className="pie-chart-container">
+              <Pie data={pieData} options={pieOptions} />
+            </div>
           </div>
           <div className="user-stats-chart">
             <ActivityCalendar userActivities={userActivities} />
