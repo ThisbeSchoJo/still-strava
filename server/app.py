@@ -21,7 +21,7 @@ from models import User, Activity, Comment, Like, Follow
 # Helper function to get activity data with like information
 def get_activity_with_likes(activity, current_user_id=None):
     """Get activity data including like count and user's like status"""
-    activity_dict = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'photos', 'user'))
+    activity_dict = activity.to_dict(only=('id', 'title', 'activity_type', 'description', 'latitude', 'longitude', 'location_name', 'datetime', 'elapsed_time', 'photos', 'user'))
     
     # Get likes with user information
     likes = Like.query.filter_by(activity_id=activity.id).all()
@@ -308,6 +308,7 @@ class AllActivities(Resource):
                 longitude=request.json.get('longitude'),
                 location_name=request.json.get('location_name'),
                 datetime=datetime_obj,
+                elapsed_time=request.json.get('elapsed_time'),
                 photos=request.json.get('photos'),
                 user_id=request.json.get('user_id')
             )
