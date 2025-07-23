@@ -4,14 +4,15 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
   ArcElement, // Add this
 } from "chart.js";
 
-// Import the Scatter and Pie components from react-chartjs-2
-import { Scatter, Pie } from "react-chartjs-2";
+// Import the Line and Pie components from react-chartjs-2
+import { Line, Pie } from "react-chartjs-2";
 import "../../styling/userstats.css";
 
 // Register the ChartJS components
@@ -19,6 +20,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
@@ -181,18 +183,28 @@ function UserStats({ userActivities }) {
     }
   });
 
-  // Convert weekly data to scatter plot format
+  // Convert weekly data to line chart format
   const weeklyData = Object.entries(weeklyActivities).slice(-4); // Last 4 weeks
-  const scatterData = {
+  const lineData = {
+    labels: weeklyData.map(([week]) => {
+      const date = new Date(week);
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+    }),
     datasets: [
       {
         label: "Activities",
-        data: weeklyData.map(([week, count], index) => ({
-          x: index + 1, // Week number (1, 2, 3, 4)
-          y: count, // Activity count
-        })),
-        backgroundColor: "#fc4c02",
-        pointRadius: 8,
+        data: weeklyData.map(([week, count]) => count),
+        borderColor: "#fc4c02",
+        backgroundColor: "rgba(252, 76, 2, 0.1)",
+        pointBackgroundColor: "#fc4c02",
+        pointBorderColor: "#fc4c02",
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        tension: 0.4,
+        fill: true,
       },
     ],
   };
@@ -212,23 +224,6 @@ function UserStats({ userActivities }) {
     },
     scales: {
       x: {
-        type: "linear",
-        position: "bottom",
-        min: 0.5,
-        max: 4.5,
-        ticks: {
-          stepSize: 1,
-          callback: function (value, index) {
-            const weekLabels = weeklyData.map(([week]) => {
-              const date = new Date(week);
-              return date.toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              });
-            });
-            return weekLabels[index] || "";
-          },
-        },
         grid: {
           display: false,
         },
@@ -237,6 +232,9 @@ function UserStats({ userActivities }) {
         beginAtZero: true, // Start y-axis at 0
         ticks: {
           stepSize: 1,
+        },
+        grid: {
+          color: "rgba(0, 0, 0, 0.1)",
         },
       },
     },
@@ -274,7 +272,7 @@ function UserStats({ userActivities }) {
         </div>
         <div className="user-stats-charts">
           <div className="user-stats-chart">
-            <Scatter data={scatterData} options={options} />
+            <Line data={lineData} options={options} />
           </div>
           <div className="user-stats-chart">
             <h4>Activity Types</h4>
