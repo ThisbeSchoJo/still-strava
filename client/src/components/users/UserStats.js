@@ -3,22 +3,22 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
   ArcElement, // Add this
 } from "chart.js";
 
-// Import the Bar component from react-chartjs-2
-import { Bar, Pie } from "react-chartjs-2";
+// Import the Scatter and Pie components from react-chartjs-2
+import { Scatter, Pie } from "react-chartjs-2";
 import "../../styling/userstats.css";
 
 // Register the ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
@@ -181,16 +181,22 @@ function UserStats({ userActivities }) {
     }
   });
 
-  const data = {
-    labels: Object.keys(weeklyActivities).slice(-4), // Last 4 weeks
+  // Convert weekly data to scatter plot format
+  const weeklyData = Object.entries(weeklyActivities).slice(-4); // Last 4 weeks
+  const scatterData = {
     datasets: [
       {
         label: "Activities",
-        data: Object.values(weeklyActivities).slice(-4), // Last 4 weeks
+        data: weeklyData.map(([week, count], index) => ({
+          x: index + 1, // Week number (1, 2, 3, 4)
+          y: count, // Activity count
+        })),
         backgroundColor: "#fc4c02",
+        pointRadius: 8,
       },
     ],
   };
+
   const options = {
     responsive: true,
     plugins: {
@@ -200,10 +206,38 @@ function UserStats({ userActivities }) {
       title: {
         display: false, // Hide the title
       },
+      tooltip: {
+        enabled: false, // Disable tooltips
+      },
     },
     scales: {
+      x: {
+        type: "linear",
+        position: "bottom",
+        min: 0.5,
+        max: 4.5,
+        ticks: {
+          stepSize: 1,
+          callback: function (value, index) {
+            const weekLabels = weeklyData.map(([week]) => {
+              const date = new Date(week);
+              return date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+            });
+            return weekLabels[index] || "";
+          },
+        },
+        grid: {
+          display: false,
+        },
+      },
       y: {
         beginAtZero: true, // Start y-axis at 0
+        ticks: {
+          stepSize: 1,
+        },
       },
     },
   };
@@ -240,7 +274,7 @@ function UserStats({ userActivities }) {
         </div>
         <div className="user-stats-charts">
           <div className="user-stats-chart">
-            <Bar data={data} options={options} />
+            <Scatter data={scatterData} options={options} />
           </div>
           <div className="user-stats-chart">
             <h4>Activity Types</h4>
