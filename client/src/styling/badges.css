@@ -1,0 +1,143 @@
+/* Badges Component Styling */
+
+.badges-container {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.badges-container h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.no-badges {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.badge.earned {
+  border-color: #fc4c02;
+  background: linear-gradient(135deg, #fff 0%, #fff5f2 100%);
+}
+
+.badge.unearned {
+  opacity: 0.6;
+  filter: grayscale(1);
+}
+
+.badge-icon {
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.badge.earned .badge-icon {
+  background: linear-gradient(135deg, #fc4c02 0%, #ff6b35 100%);
+  color: white;
+  animation: badgeGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes badgeGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(252, 76, 2, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(252, 76, 2, 0.6);
+  }
+}
+
+.badge-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge-name {
+  margin: 0 0 0.25rem 0;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.badge-description {
+  margin: 0 0 0.5rem 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.badge-date {
+  margin: 0;
+  color: #fc4c02;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .badges-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .badge {
+    padding: 0.75rem;
+  }
+
+  .badge-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+
+  .badge-name {
+    font-size: 0.95rem;
+  }
+
+  .badge-description {
+    font-size: 0.85rem;
+  }
+}
+
+/* Touch Target Sizing for Mobile */
+@media (max-width: 768px) {
+  .badge {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
