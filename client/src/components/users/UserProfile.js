@@ -225,21 +225,23 @@ function UserProfile({ user: initialUser }) {
           <div className="user-profile-activities">
             <h2>Recent Activities</h2>
             {user.activities && user.activities.length > 0 ? (
-              // Map through activities and render ActivityCard for each
-              user.activities.map((activity) => (
-                <ActivityCard
-                  key={activity.id}
-                  activity={activity}
-                  activities={user.activities}
-                  setActivities={(updatedActivities) => {
-                    // Update the user's activities using the state setter
-                    setUserData((prevUser) => ({
-                      ...prevUser,
-                      activities: updatedActivities,
-                    }));
-                  }}
-                />
-              ))
+              // Sort activities by datetime (most recent first) and render ActivityCard for each
+              user.activities
+                .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
+                .map((activity) => (
+                  <ActivityCard
+                    key={activity.id}
+                    activity={activity}
+                    activities={user.activities}
+                    setActivities={(updatedActivities) => {
+                      // Update the user's activities using the state setter
+                      setUserData((prevUser) => ({
+                        ...prevUser,
+                        activities: updatedActivities,
+                      }));
+                    }}
+                  />
+                ))
             ) : (
               <p>No activities yet</p>
             )}
