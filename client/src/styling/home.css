@@ -5,10 +5,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
   padding: 2rem;
   background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 100%);
+}
+
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  width: 100%;
 }
 
 .hero-icon {
@@ -100,6 +108,10 @@
     min-height: 60vh;
   }
 
+  .hero-section {
+    min-height: 50vh;
+  }
+
   .hero-icon {
     font-size: 3rem;
   }
@@ -126,12 +138,149 @@
     width: 100%;
     max-width: 250px;
   }
+
+  .features-section {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .features-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+  }
+
+  .inspiration-section {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .inspiration-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .inspiration-content {
+    padding: 1.5rem;
+  }
+
+  .inspiration-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
 }
 
+/* Features Section */
+.features-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.features-section h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.feature-card h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Inspiration Section */
+.inspiration-section {
+  width: 100%;
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.inspiration-section h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.inspiration-content {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.inspiration-content p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.inspiration-content p:last-child {
+  margin-bottom: 0;
+}
 
 /* touch Target Sizing for Mobile */
 @media (max-width: 768px) {
-  button, a, input, select {
+  button,
+  a,
+  input,
+  select {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
   }
