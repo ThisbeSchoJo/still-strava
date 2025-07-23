@@ -37,15 +37,17 @@ function ActivityCalendar({ userActivities }) {
   const daysInMonth = lastDay.getDate();
   const firstDayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
 
-  // Create array of activity dates for quick lookup
-  const activityDates = new Set();
+  // Create map of activity dates with total duration for each day
+  const activityDates = new Map();
   userActivities.forEach((activity) => {
     const activityDate = new Date(activity.datetime);
     if (
       activityDate.getMonth() === currentMonth &&
       activityDate.getFullYear() === currentYear
     ) {
-      activityDates.add(activityDate.getDate());
+      const day = activityDate.getDate();
+      const duration = activity.elapsed_time || 0; // Duration in seconds
+      activityDates.set(day, (activityDates.get(day) || 0) + duration);
     }
   });
 
@@ -87,14 +89,24 @@ function ActivityCalendar({ userActivities }) {
               <div key={dayIndex} className="calendar-day">
                 {day && (
                   <div
-                    className={`day-cell ${
-                      activityDates.has(day) ? "has-activity" : ""
-                    }`}
+                    className="day-cell"
+                    style={{
+                      backgroundColor: activityDates.has(day)
+                        ? (() => {
+                            const hours = activityDates.get(day) / 3600;
+
+                            // If no duration data, show light orange for any activity
+                            if (hours === 0) return "rgba(252, 76, 2, 0.25)";
+                            if (hours < 0.5) return "rgba(252, 76, 2, 0.15)"; // <30 min: lightest
+                            if (hours < 1) return "rgba(252, 76, 2, 0.35)"; // 30 min - 1 hour: medium light
+                            if (hours < 2) return "rgba(252, 76, 2, 0.55)"; // 1-2 hours: medium
+                            if (hours < 3) return "rgba(252, 76, 2, 0.75)"; // 2-3 hours: medium dark
+                            return "rgba(252, 76, 2, 0.95)"; // 3+ hours: darkest
+                          })()
+                        : "transparent",
+                    }}
                   >
                     <span className="day-number">{day}</span>
-                    {activityDates.has(day) && (
-                      <div className="activity-dot"></div>
-                    )}
                   </div>
                 )}
               </div>

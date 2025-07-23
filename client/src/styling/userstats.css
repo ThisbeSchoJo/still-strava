@@ -154,31 +154,14 @@
 }
 
 .day-cell:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(252, 76, 2, 0.2);
 }
 
 .day-number {
   font-size: 0.8rem;
   color: #333;
   font-weight: 500;
-}
-
-.activity-dot {
-  width: 6px;
-  height: 6px;
-  background-color: #fc4c02;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-}
-
-.has-activity {
-  background-color: rgba(252, 76, 2, 0.1);
-}
-
-.has-activity .day-number {
-  font-weight: 600;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
