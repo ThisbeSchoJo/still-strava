@@ -10,17 +10,18 @@ A full-stack social fitness application inspired by Strava, built with React and
 
 ### Core Functionality
 
-- **User Authentication**: Sign up, login, and profile management
-- **Activity Tracking**: Log outdoor activities with photos, location, and descriptions
-- **Social Features**: Like activities, leave comments, and follow other users (follow feature WIP)
-- **Interactive Maps**: Google Maps integration for activity locations
+- **User Authentication**: Sign up, login, and profile management with JWT tokens
+- **Activity Tracking**: Log outdoor activities with photos, location, duration, and descriptions
+- **Social Features**: Like activities, leave comments, and follow other users
+- **Interactive Maps**: Google Maps integration for activity locations (requires API key setup)
 - **Photo Galleries**: Upload and display multiple photos per activity
-- **User Profiles**: Detailed profiles with activity statistics and bio
+- **User Profiles**: Detailed profiles with activity statistics, bio, and social links
 
 ### Advanced Features
 
-- **Activity Statistics**: Charts showing weekly activity trends and activity type breakdown
+- **Activity Statistics**: Interactive charts showing weekly activity trends, activity type breakdown, and calendar heatmap
 - **Real-time Updates**: Dynamic activity feeds with live like/comment updates
+- **Follow System**: Follow/unfollow users with followers/following lists
 - **Mobile Responsive**: Optimized for mobile and desktop use
 - **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
 - **Error Handling**: Graceful error handling with user-friendly messages
@@ -38,10 +39,11 @@ A full-stack social fitness application inspired by Strava, built with React and
 ### Frontend
 
 - **React 18** - Modern React with hooks and functional components
-- **React Router** - Client-side routing
-- **Chart.js** - Interactive charts and statistics
+- **React Router v6** - Client-side routing
+- **Chart.js v4** - Interactive charts and statistics
 - **Google Maps API** - Location services and mapping
 - **CSS3** - Custom styling with responsive design
+- **React Icons** - Icon library for UI elements
 
 ### Backend
 
@@ -49,7 +51,8 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **SQLAlchemy** - ORM for database management
 - **Flask-Migrate** - Database migration management
 - **Flask-CORS** - Cross-origin resource sharing
-- **JWT** - JSON Web Token authentication
+- **Flask-JWT-Extended** - JWT authentication
+- **bcrypt** - Password hashing
 - **SQLite** - Lightweight database (development)
 
 ### Deployment
@@ -66,15 +69,40 @@ still-strava/
 │   ├── src/
 │   │   ├── components/     # React components
 │   │   │   ├── activities/ # Activity-related components
+│   │   │   │   ├── ActivityCard.js      # Individual activity display
+│   │   │   │   ├── ActivityForm.js      # Create/edit activities
+│   │   │   │   ├── ActivityList.js      # Activity feed
+│   │   │   │   └── ActivitiyDetail.js   # Activity detail view
 │   │   │   ├── auth/       # Authentication components
+│   │   │   │   ├── Login.js             # User login
+│   │   │   │   ├── SignUp.js            # User registration
+│   │   │   │   └── Logout.js            # User logout
 │   │   │   ├── comments/   # Comment functionality
+│   │   │   │   ├── CommentForm.js       # Comment creation
+│   │   │   │   └── CommentList.js       # Comment display
 │   │   │   ├── friends/    # Social features
+│   │   │   │   ├── FriendList.js        # Friends list
+│   │   │   │   └── FriendProfile.js     # Friend profiles
 │   │   │   ├── shared/     # Shared components
+│   │   │   │   ├── MapPicker.js         # Location selection
+│   │   │   │   ├── MapDisplay.js        # Location display
+│   │   │   │   ├── NavBar.js            # Navigation
+│   │   │   │   └── ErrorPage.js         # Error handling
 │   │   │   └── users/      # User profile components
+│   │   │       ├── UserProfile.js       # User profile display
+│   │   │       ├── UserProfilePage.js   # Profile page wrapper
+│   │   │       ├── UserStats.js         # Activity statistics
+│   │   │       ├── EditProfileForm.js   # Profile editing
+│   │   │       ├── FollowersList.js     # Followers modal
+│   │   │       ├── FollowingList.js     # Following modal
+│   │   │       └── UserList.js          # User discovery
 │   │   ├── context/        # React context providers
+│   │   │   └── UserContext.js           # User authentication state
 │   │   ├── routes.js       # Application routing
 │   │   ├── styling/        # CSS files
 │   │   └── utils/          # Utility functions
+│   │       ├── api.js      # API configuration
+│   │       └── activityIcons.js # Activity type icons
 │   └── package.json
 ├── server/                 # Flask backend
 │   ├── app.py             # Main Flask application
@@ -109,6 +137,7 @@ still-strava/
    pipenv install
    pipenv shell
    flask db upgrade head
+   python seed.py
    python app.py
    ```
 
@@ -150,6 +179,7 @@ still-strava/
 - `photos` (Comma-separated URLs)
 - `song` (Associated music)
 - `datetime`, `created_at`, `updated_at`
+- `elapsed_time` (Duration in seconds)
 - `user_id` (Foreign Key)
 
 ### Comments
@@ -165,13 +195,21 @@ still-strava/
 - `id` (Primary Key)
 - `user_id` (Foreign Key)
 - `activity_id` (Foreign Key)
+- `created_at`
+
+### Follows
+
+- `id` (Primary Key)
+- `follower_id` (Foreign Key to Users)
+- `followed_id` (Foreign Key to Users)
+- Unique constraint on follower_id + followed_id
 
 ## 🔧 API Endpoints
 
 ### Authentication
 
-- `POST /signup` - User registration
 - `POST /login` - User login
+- `POST /signup` - User registration
 - `GET /me` - Get current user info
 
 ### Activities
@@ -186,13 +224,25 @@ still-strava/
 
 ### Users
 
+- `GET /users` - Get all users
 - `GET /users/:id` - Get user profile
 - `PATCH /users/:id` - Update user profile
+- `DELETE /users/:id` - Delete user
 
 ### Comments
 
 - `GET /comments` - Get comments for activity
 - `POST /comments` - Create new comment
+- `GET /comments/:id` - Get specific comment
+- `PATCH /comments/:id` - Update comment
+- `DELETE /comments/:id` - Delete comment
+
+### Social Features
+
+- `POST /users/:id/follow` - Follow user
+- `DELETE /users/:id/unfollow` - Unfollow user
+- `GET /users/:id/followers` - Get user's followers
+- `GET /users/:id/following` - Get users being followed
 
 ## 🎨 Key Components
 
@@ -202,11 +252,19 @@ Displays individual activities with photos, maps, likes, and comments. Handles u
 
 ### UserStats
 
-Interactive charts showing activity statistics including weekly trends and activity type breakdown using Chart.js.
+Interactive charts showing activity statistics including:
+
+- **Weekly Activity Line Chart**: Shows activity trends over time
+- **Activity Types Pie Chart**: Breakdown of activity types
+- **Activity Calendar Heatmap**: Visual calendar showing activity days with intensity based on duration
 
 ### MapPicker
 
 Google Maps integration for selecting activity locations with geocoding and reverse geocoding.
+
+### FollowersList/FollowingList
+
+Modal components for displaying user followers and following lists with follow/unfollow functionality.
 
 ## 🔒 Security Features
 
@@ -219,7 +277,7 @@ Google Maps integration for selecting activity locations with geocoding and reve
 ## 📱 Mobile Optimization
 
 - **Responsive Design**: Mobile-first CSS approach
-- **Touch Targets**: Properly sized interactive elements
+- **Touch Targets**: Properly sized interactive elements (44px minimum)
 - **Mobile Navigation**: Optimized navigation for mobile devices
 - **Image Optimization**: Responsive images and lazy loading
 
@@ -230,6 +288,28 @@ Google Maps integration for selecting activity locations with geocoding and reve
 - **Focus Management**: Proper focus indicators
 - **Semantic HTML**: Proper HTML structure
 - **Color Contrast**: WCAG compliant color schemes
+
+## 🌟 Recent Updates
+
+### Enhanced User Experience
+
+- **Activity Duration Tracking**: Hours and minutes input with validation
+- **Improved Comments**: Better spacing and visual hierarchy
+- **Enhanced Home Page**: Added inspiration section explaining the app's story
+- **Better Activity Sorting**: Activities now display from most recent to least recent
+
+### Visual Improvements
+
+- **Consistent Chart Styling**: All chart titles now match the "Activity Calendar" styling
+- **Line Chart**: Replaced scatter plot with line chart for better trend visualization
+- **Responsive Stats**: Charts stack vertically on mobile devices
+- **Clean Tooltips**: Simplified pie chart tooltips to show only activity type names
+
+### Social Features
+
+- **Follow System**: Complete follow/unfollow functionality with modal displays
+- **Followers/Following Lists**: Modal components for viewing social connections
+- **Enhanced User Profiles**: Better activity statistics and social information
 
 ## 🙏 Acknowledgments
 
