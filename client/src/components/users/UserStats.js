@@ -25,6 +25,87 @@ ChartJS.register(
   ArcElement // Add this
 );
 
+// Calendar component to show activity dots
+function ActivityCalendar({ userActivities }) {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+
+  // Get the first day of the month and number of days
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const daysInMonth = lastDay.getDate();
+  const firstDayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+  // Create array of activity dates for quick lookup
+  const activityDates = new Set();
+  userActivities.forEach((activity) => {
+    const activityDate = new Date(activity.datetime);
+    if (
+      activityDate.getMonth() === currentMonth &&
+      activityDate.getFullYear() === currentYear
+    ) {
+      activityDates.add(activityDate.getDate());
+    }
+  });
+
+  // Generate calendar grid
+  const calendarDays = [];
+
+  // Add empty cells for days before the first day of the month
+  for (let i = 0; i < firstDayOfWeek; i++) {
+    calendarDays.push(null);
+  }
+
+  // Add days of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    calendarDays.push(day);
+  }
+
+  // Group days into weeks
+  const weeks = [];
+  for (let i = 0; i < calendarDays.length; i += 7) {
+    weeks.push(calendarDays.slice(i, i + 7));
+  }
+
+  return (
+    <div className="activity-calendar">
+      <h4>Activity Calendar</h4>
+      <div className="calendar-grid">
+        <div className="calendar-header">
+          <span>Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+        </div>
+        {weeks.map((week, weekIndex) => (
+          <div key={weekIndex} className="calendar-week">
+            {week.map((day, dayIndex) => (
+              <div key={dayIndex} className="calendar-day">
+                {day && (
+                  <div
+                    className={`day-cell ${
+                      activityDates.has(day) ? "has-activity" : ""
+                    }`}
+                  >
+                    <span className="day-number">{day}</span>
+                    {activityDates.has(day) && (
+                      <div className="activity-dot"></div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function UserStats({ userActivities }) {
   // Simple count function for total activities
   const totalActivities = userActivities ? userActivities.length : 0;
@@ -142,6 +223,9 @@ function UserStats({ userActivities }) {
           </div>
           <div className="user-stats-chart">
             <Pie data={pieData} options={pieOptions} />
+          </div>
+          <div className="user-stats-chart">
+            <ActivityCalendar userActivities={userActivities} />
           </div>
         </div>
       </div>
