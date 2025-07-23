@@ -45,7 +45,11 @@ function ActivityList() {
         return response.json();
       })
       .then((data) => {
-        setActivities(data);
+        // Sort activities by datetime (most recent first)
+        const sortedActivities = data.sort((a, b) => {
+          return new Date(b.datetime) - new Date(a.datetime);
+        });
+        setActivities(sortedActivities);
       })
       .catch((error) => {
         console.error("Error fetching activities:", error);
