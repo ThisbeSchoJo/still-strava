@@ -211,6 +211,7 @@ function UserStats({ userActivities }) {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false, // Hide the legend
@@ -220,6 +221,11 @@ function UserStats({ userActivities }) {
       },
       tooltip: {
         enabled: false, // Disable tooltips
+      },
+    },
+    layout: {
+      padding: {
+        bottom: 20, // Add padding for x-axis labels
       },
     },
     scales: {
@@ -272,6 +278,7 @@ function UserStats({ userActivities }) {
         </div>
         <div className="user-stats-charts">
           <div className="user-stats-chart">
+            <h4>Weekly Activity</h4>
             <Line data={lineData} options={options} />
           </div>
           <div className="user-stats-chart">
