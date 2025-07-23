@@ -1,10 +1,10 @@
 .user-stats-container {
-  height: 300px;
   margin: 1rem 0;
   padding: 1rem;
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #e9ecef;
+  min-height: 300px;
 }
 
 .user-stats-title {
@@ -19,14 +19,19 @@
 }
 
 .user-stats-charts {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 }
 
 .user-stats-chart {
-  width: 50%;
-  height: 200px;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  height: 250px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -55,13 +60,31 @@
 }
 
 /* touch Target Sizing for Mobile */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   button,
   a,
   input,
   select {
     min-height: 44px; /* Apple's recommended touch target size */
     min-width: 44px;
+  }
+
+  .user-stats-charts {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .user-stats-chart {
+    height: 200px;
+  }
+
+  .user-stats-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .user-stats-total {
+    text-align: center;
   }
 }
 
