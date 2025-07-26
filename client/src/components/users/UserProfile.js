@@ -110,6 +110,13 @@ function UserProfile({ user: initialUser }) {
       });
   };
 
+  const earnedBadgeCount =
+    user.activities && user.activities.length >= 5
+      ? 2
+      : user.activities && user.activities.length >= 1
+      ? 1
+      : 0;
+
   return (
     <div className="user-profile">
       {/* Profile Header Section */}
@@ -200,7 +207,7 @@ function UserProfile({ user: initialUser }) {
                 color: "#666",
               }}
             >
-              Badges: 2 earned / {BADGES.length} total
+              Badges: {earnedBadgeCount} earned / {BADGES.length} total
             </div>
             <Badges
               badges={BADGES.slice(0, 3).map((badge) => ({
