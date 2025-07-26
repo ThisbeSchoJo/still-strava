@@ -7,6 +7,7 @@ import FollowersList from "./FollowersList";
 import FollowingList from "./FollowingList";
 import { getApiUrl } from "../../utils/api";
 import Badges from "../shared/Badges";
+import { BADGES } from "../../utils/badges";
 
 import "../../styling/userprofile.css";
 
@@ -193,32 +194,15 @@ function UserProfile({ user: initialUser }) {
             {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
             <Badges
-              badges={[
-                {
-                  id: "first_activity",
-                  name: "First Steps",
-                  description: "Log your first outdoor activity",
-                  icon: "🌱",
-                  earned: true,
-                  earnedDate: "2024-01-15T10:30:00Z",
-                },
-                {
-                  id: "explorer",
-                  name: "Explorer",
-                  description: "Log 5 outdoor activities",
-                  icon: "🧗‍♂️",
-                  earned: true,
-                  earnedDate: "2024-01-20T14:15:00Z",
-                },
-                {
-                  id: "stargazer",
-                  name: "Stargazer",
-                  description: "Log 3 stargazing activities",
-                  icon: "⭐",
-                  earned: false,
-                  earnedDate: null,
-                },
-              ]}
+              badges={BADGES.slice(0, 3).map((badge) => ({
+                ...badge,
+                earned:
+                  badge.id === "first_activity" || badge.id === "explorer",
+                earnedDate:
+                  badge.id === "first_activity" || badge.id === "explorer"
+                    ? "2024-01-15T10:30:00Z"
+                    : null,
+              }))}
               showUnearned={true}
             />
           </div>
