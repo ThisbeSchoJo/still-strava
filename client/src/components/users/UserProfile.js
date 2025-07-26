@@ -193,6 +193,15 @@ function UserProfile({ user: initialUser }) {
 
             {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
+            <div
+              style={{
+                marginBottom: "0.5rem",
+                fontSize: "0.9rem",
+                color: "#666",
+              }}
+            >
+              Badges: 2 earned / {BADGES.length} total
+            </div>
             <Badges
               badges={BADGES.slice(0, 3).map((badge) => ({
                 ...badge,
