@@ -6,6 +6,7 @@ import UserStats from "./UserStats";
 import FollowersList from "./FollowersList";
 import FollowingList from "./FollowingList";
 import { getApiUrl } from "../../utils/api";
+import Badges from "../shared/Badges";
 
 import "../../styling/userprofile.css";
 
@@ -191,6 +192,7 @@ function UserProfile({ user: initialUser }) {
 
             {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
+            <Badges badges={[]} showUnearned={false} />
           </div>
 
           {/* Profile Statistics Section */}
