@@ -192,7 +192,27 @@ function UserProfile({ user: initialUser }) {
 
             {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
-            <Badges badges={[]} showUnearned={false} />
+            <Badges
+              badges={[
+                {
+                  id: "first_activity",
+                  name: "First Steps",
+                  description: "Log your first outdoor activity",
+                  icon: "🌱",
+                  earned: true,
+                  earnedDate: "2024-01-15T10:30:00Z",
+                },
+                {
+                  id: "explorer",
+                  name: "Explorer",
+                  description: "Log 5 outdoor activities",
+                  icon: "🧗‍♂️",
+                  earned: true,
+                  earnedDate: "2024-01-20T14:15:00Z",
+                },
+              ]}
+              showUnearned={false}
+            />
           </div>
 
           {/* Profile Statistics Section */}
