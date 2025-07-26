@@ -210,8 +210,16 @@ function UserProfile({ user: initialUser }) {
                   earned: true,
                   earnedDate: "2024-01-20T14:15:00Z",
                 },
+                {
+                  id: "stargazer",
+                  name: "Stargazer",
+                  description: "Log 3 stargazing activities",
+                  icon: "⭐",
+                  earned: false,
+                  earnedDate: null,
+                },
               ]}
-              showUnearned={false}
+              showUnearned={true}
             />
           </div>
 
