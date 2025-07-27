@@ -118,6 +118,11 @@ function UserProfile({ user: initialUser }) {
       ? 1
       : 0;
 
+  console.log(
+    "getUserBadges test:",
+    getUserBadges({ totalActivities: user.activities?.length || 0 }, [])
+  );
+
   return (
     <div className="user-profile">
       {/* Profile Header Section */}
@@ -211,15 +216,10 @@ function UserProfile({ user: initialUser }) {
               Badges: {earnedBadgeCount} earned / {BADGES.length} total
             </div>
             <Badges
-              badges={BADGES.slice(0, 3).map((badge) => ({
-                ...badge,
-                earned:
-                  badge.id === "first_activity" || badge.id === "explorer",
-                earnedDate:
-                  badge.id === "first_activity" || badge.id === "explorer"
-                    ? "2024-01-15T10:30:00Z"
-                    : null,
-              }))}
+              badges={getUserBadges(
+                { totalActivities: user.activities?.length || 0 },
+                []
+              )}
               showUnearned={true}
             />
           </div>
