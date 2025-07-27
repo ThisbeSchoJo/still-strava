@@ -139,20 +139,32 @@ function UserProfile({ user: initialUser }) {
   // Calculate user statistics needed for badge determination
   // These stats are used by the badge system to determine which badges the user has earned
   const userStats = {
-    totalActivities: user.activities?.length || 0, // Total number of activities
+    totalActivities: user.activities?.length || 0,
     activityTypes:
       user.activities?.reduce((types, activity) => {
-        // Count activities by type (e.g., stargazing, hammocking, etc.)
         types[activity.activity_type] =
           (types[activity.activity_type] || 0) + 1;
         return types;
       }, {}) || {},
     longestActivity: Math.max(
-      // Find the longest activity duration in seconds
       ...(user.activities?.map((a) => a.elapsed_time || 0) || [0])
     ),
-    followerCount: user.followers?.length || 0, // Number of followers
-    followingCount: user.following?.length || 0, // Number of users being followed
+    followerCount: user.followers?.length || 0,
+    followingCount: user.following?.length || 0,
+    // Add these new stats:
+    totalDuration:
+      user.activities?.reduce(
+        (total, activity) => total + (activity.elapsed_time || 0),
+        0
+      ) || 0,
+    uniqueLocations: new Set(
+      user.activities?.map((a) => a.location).filter(Boolean)
+    ).size,
+    commentCount:
+      user.activities?.reduce(
+        (total, activity) => total + (activity.comments?.length || 0),
+        0
+      ) || 0,
   };
 
   // Calculate real earned badge count using the badge utility
