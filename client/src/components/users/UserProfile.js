@@ -190,6 +190,17 @@ function UserProfile({ user: initialUser }) {
 
       return streak;
     })(),
+    earlyActivities:
+      user.activities?.filter((activity) => {
+        const hour = new Date(activity.datetime).getHours();
+        return hour >= 5 && hour < 8; // 5 AM to 8 AM
+      }).length || 0,
+
+    lateActivities:
+      user.activities?.filter((activity) => {
+        const hour = new Date(activity.datetime).getHours();
+        return hour >= 22 || hour < 5; // 10 PM to 5 AM
+      }).length || 0,
   };
 
   // Calculate real earned badge count using the badge utility
