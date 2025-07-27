@@ -136,16 +136,6 @@ function UserProfile({ user: initialUser }) {
   };
 
   // ===== BADGE CALCULATIONS =====
-  // Calculate earned badge count based on user's activity count
-  // This is a simplified calculation - in a full implementation, this would use the badge utility functions
-  const earnedBadgeCount =
-    user.activities && user.activities.length >= 5
-      ? 2
-      : user.activities && user.activities.length >= 1
-      ? 1
-      : 0;
-
-  // ===== USER STATISTICS FOR BADGES =====
   // Calculate user statistics needed for badge determination
   // These stats are used by the badge system to determine which badges the user has earned
   const userStats = {
@@ -164,6 +154,12 @@ function UserProfile({ user: initialUser }) {
     followerCount: user.followers?.length || 0, // Number of followers
     followingCount: user.following?.length || 0, // Number of users being followed
   };
+
+  // Calculate real earned badge count using the badge utility
+  const earnedBadges = getUserBadges(userStats, []).filter(
+    (badge) => badge.earned
+  );
+  const earnedBadgeCount = earnedBadges.length;
 
   return (
     <div className="user-profile">
