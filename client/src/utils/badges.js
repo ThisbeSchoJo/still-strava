@@ -86,6 +86,13 @@ export const BADGES = [
     icon: "🧘‍♀️",
     criteria: { duration: 14400 }, // 4 hours in seconds
   },
+  {
+    id: "time_investor",
+    name: "Time Investor",
+    description: "Spend 24 total hours on outdoor activities",
+    icon: "⏳",
+    criteria: { totalDuration: 86400 }, // 24 hours in seconds
+  },
 
   // Social Badges
   {
@@ -189,6 +196,11 @@ export function hasEarnedBadge(badge, userStats) {
   // Duration badges
   if (criteria.duration) {
     return userStats.longestActivity >= criteria.duration;
+  }
+
+  // Total duration badges
+  if (criteria.totalDuration) {
+    return userStats.totalDuration >= criteria.totalDuration;
   }
 
   // Social badges
