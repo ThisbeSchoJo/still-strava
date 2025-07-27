@@ -165,6 +165,31 @@ function UserProfile({ user: initialUser }) {
         (total, activity) => total + (activity.comments?.length || 0),
         0
       ) || 0,
+    currentStreak: (() => {
+      if (!user.activities || user.activities.length === 0) return 0;
+
+      const sortedActivities = user.activities.sort(
+        (a, b) => new Date(b.datetime) - new Date(a.datetime)
+      );
+
+      let streak = 0;
+      let currentDate = new Date();
+
+      for (const activity of sortedActivities) {
+        const activityDate = new Date(activity.datetime);
+        const daysDiff = Math.floor(
+          (currentDate - activityDate) / (1000 * 60 * 60 * 24)
+        );
+
+        if (daysDiff === streak) {
+          streak++;
+        } else {
+          break;
+        }
+      }
+
+      return streak;
+    })(),
   };
 
   // Calculate real earned badge count using the badge utility
