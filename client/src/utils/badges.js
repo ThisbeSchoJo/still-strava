@@ -63,6 +63,13 @@ export const BADGES = [
     icon: "🌅",
     criteria: { activityType: "sunset/sunrise", count: 5 },
   },
+  {
+    id: "activity_explorer",
+    name: "Activity Explorer",
+    description: "Try 3 different types of outdoor activities",
+    icon: "🎯",
+    criteria: { uniqueActivityTypes: 3 },
+  },
 
   // Duration Badges
   {
@@ -222,6 +229,11 @@ export function hasEarnedBadge(badge, userStats) {
 
   if (criteria.weatherConditions) {
     return userStats.weatherConditions >= criteria.weatherConditions;
+  }
+
+  // Activity diversity badges
+  if (criteria.uniqueActivityTypes) {
+    return userStats.uniqueActivityTypes >= criteria.uniqueActivityTypes;
   }
 
   return false;
