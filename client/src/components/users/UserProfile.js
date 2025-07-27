@@ -201,6 +201,9 @@ function UserProfile({ user: initialUser }) {
         const hour = new Date(activity.datetime).getHours();
         return hour >= 22 || hour < 5; // 10 PM to 5 AM
       }).length || 0,
+    uniqueActivityTypes: new Set(
+      user.activities?.map((a) => a.activity_type).filter(Boolean)
+    ).size,
   };
 
   // Calculate real earned badge count using the badge utility
