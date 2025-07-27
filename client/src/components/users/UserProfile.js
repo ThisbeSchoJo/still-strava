@@ -12,10 +12,30 @@ import { getUserBadges } from "../../utils/badges";
 
 import "../../styling/userprofile.css";
 
+/**
+ * UserProfile Component
+ *
+ * Displays a user's profile page with their information, activities, statistics, and badges.
+ * Handles both viewing your own profile and other users' profiles with different functionality.
+ *
+ * Features:
+ * - Profile information display (username, email, location, bio)
+ * - Social media links (website, Twitter, Instagram)
+ * - Activity statistics and charts
+ * - Badge system display
+ * - Follow/unfollow functionality
+ * - Edit profile mode
+ * - Recent activities list
+ * - Followers/following modals
+ *
+ * Props:
+ * - user: initialUser - The user object to display (can be current user or another user)
+ */
 function UserProfile({ user: initialUser }) {
   // Get current user from context (the logged-in user)
   const { user: currentUser } = useContext(UserContext);
 
+  // ===== STATE MANAGEMENT =====
   // Local state for component functionality
   const [editing, setEditing] = useState(false); // Controls edit mode toggle
   const [isFollowing, setIsFollowing] = useState(false); // Tracks if current user is following this profile user
@@ -24,9 +44,11 @@ function UserProfile({ user: initialUser }) {
   const [showFollowers, setShowFollowers] = useState(false); // Controls followers modal visibility
   const [showFollowing, setShowFollowing] = useState(false); // Controls following modal visibility
 
+  // ===== UTILITY VARIABLES =====
   // Check if the profile being viewed belongs to the current logged-in user
   const isCurrentUser = currentUser?.id === user.id;
 
+  // ===== DATA REFRESH FUNCTION =====
   // Function to refresh user data from the server
   // This is called after follow/unfollow actions to update the displayed counts
   const refreshUserData = () => {
@@ -40,6 +62,7 @@ function UserProfile({ user: initialUser }) {
       });
   };
 
+  // ===== FOLLOW STATUS CHECK =====
   // Effect to check if current user is following this profile user
   useEffect(() => {
     // Skip the check if:
@@ -61,6 +84,7 @@ function UserProfile({ user: initialUser }) {
       });
   }, [currentUser, user]);
 
+  // ===== FOLLOW/UNFOLLOW HANDLERS =====
   // Handle follow action
   const handleFollow = () => {
     fetch(getApiUrl(`/users/${user.id}/follow`), {
@@ -111,6 +135,9 @@ function UserProfile({ user: initialUser }) {
       });
   };
 
+  // ===== BADGE CALCULATIONS =====
+  // Calculate earned badge count based on user's activity count
+  // This is a simplified calculation - in a full implementation, this would use the badge utility functions
   const earnedBadgeCount =
     user.activities && user.activities.length >= 5
       ? 2
@@ -118,14 +145,29 @@ function UserProfile({ user: initialUser }) {
       ? 1
       : 0;
 
-  console.log(
-    "getUserBadges test:",
-    getUserBadges({ totalActivities: user.activities?.length || 0 }, [])
-  );
+  // ===== USER STATISTICS FOR BADGES =====
+  // Calculate user statistics needed for badge determination
+  // These stats are used by the badge system to determine which badges the user has earned
+  const userStats = {
+    totalActivities: user.activities?.length || 0, // Total number of activities
+    activityTypes:
+      user.activities?.reduce((types, activity) => {
+        // Count activities by type (e.g., stargazing, hammocking, etc.)
+        types[activity.activity_type] =
+          (types[activity.activity_type] || 0) + 1;
+        return types;
+      }, {}) || {},
+    longestActivity: Math.max(
+      // Find the longest activity duration in seconds
+      ...(user.activities?.map((a) => a.elapsed_time || 0) || [0])
+    ),
+    followerCount: user.followers?.length || 0, // Number of followers
+    followingCount: user.following?.length || 0, // Number of users being followed
+  };
 
   return (
     <div className="user-profile">
-      {/* Profile Header Section */}
+      {/* ===== PROFILE HEADER SECTION ===== */}
       <div className="user-profile-header">
         {/* Profile Image */}
         <div className="user-profile-image">
@@ -166,15 +208,16 @@ function UserProfile({ user: initialUser }) {
         </div>
       </div>
 
-      {/* Conditional Rendering: Edit Form or Profile Content */}
+      {/* ===== CONDITIONAL RENDERING: EDIT FORM OR PROFILE CONTENT ===== */}
       {editing ? (
         // Show edit form when in editing mode
         <EditProfileForm user={user} onClose={() => setEditing(false)} />
       ) : (
         // Show regular profile content when not editing
         <>
-          {/* Profile Information Section */}
+          {/* ===== PROFILE INFORMATION SECTION ===== */}
           <div className="user-profile-info">
+            {/* User Bio */}
             <div className="user-profile-details">
               {user.bio && <p className="user-profile-bio">{user.bio}</p>}
             </div>
@@ -204,8 +247,11 @@ function UserProfile({ user: initialUser }) {
               )}
             </div>
 
+            {/* ===== ACTIVITY STATISTICS AND BADGES ===== */}
             {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
+
+            {/* Badge Count Display */}
             <div
               style={{
                 marginBottom: "0.5rem",
@@ -215,21 +261,20 @@ function UserProfile({ user: initialUser }) {
             >
               Badges: {earnedBadgeCount} earned / {BADGES.length} total
             </div>
-            <Badges
-              badges={getUserBadges(
-                { totalActivities: user.activities?.length || 0 },
-                []
-              )}
-              showUnearned={true}
-            />
+
+            {/* Badge Display Component */}
+            <Badges badges={getUserBadges(userStats, [])} showUnearned={true} />
           </div>
 
-          {/* Profile Statistics Section */}
+          {/* ===== PROFILE STATISTICS SECTION ===== */}
           <div className="user-profile-stats">
+            {/* Activities Count */}
             <div className="stat">
               <span className="stat-value">{user.activities?.length || 0}</span>
               <span className="stat-label">Activities</span>
             </div>
+
+            {/* Followers Count - Clickable to show followers modal */}
             <div className="stat">
               <span
                 className="stat-value clickable"
@@ -240,6 +285,8 @@ function UserProfile({ user: initialUser }) {
               </span>
               <span className="stat-label">Followers</span>
             </div>
+
+            {/* Following Count - Clickable to show following modal */}
             <div className="stat">
               <span
                 className="stat-value clickable"
@@ -252,7 +299,7 @@ function UserProfile({ user: initialUser }) {
             </div>
           </div>
 
-          {/* Recent Activities Section */}
+          {/* ===== RECENT ACTIVITIES SECTION ===== */}
           <div className="user-profile-activities">
             <h2>Recent Activities</h2>
             {user.activities && user.activities.length > 0 ? (
@@ -280,7 +327,8 @@ function UserProfile({ user: initialUser }) {
         </>
       )}
 
-      {/* Followers Modal */}
+      {/* ===== MODAL COMPONENTS ===== */}
+      {/* Followers Modal - Shows list of users who follow this profile */}
       {showFollowers && (
         <FollowersList
           userId={user.id}
@@ -288,7 +336,7 @@ function UserProfile({ user: initialUser }) {
         />
       )}
 
-      {/* Following Modal */}
+      {/* Following Modal - Shows list of users this profile is following */}
       {showFollowing && (
         <FollowingList
           userId={user.id}
