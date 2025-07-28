@@ -126,20 +126,6 @@ export const BADGES = [
 
   // Streak Badges
   {
-    id: "weekend_warrior",
-    name: "Weekend Warrior",
-    description: "Log activities on 4 consecutive weekends",
-    icon: "📅",
-    criteria: { weekendStreak: 4 },
-  },
-  {
-    id: "daily_practitioner",
-    name: "Daily Practitioner",
-    description: "Log activities for 7 consecutive days",
-    icon: "📆",
-    criteria: { dailyStreak: 7 },
-  },
-  {
     id: "streak_master",
     name: "Streak Master",
     description: "Log activities for 5 consecutive days",
@@ -177,13 +163,6 @@ export const BADGES = [
     description: "Log 5 activities after 10 PM",
     icon: "🦉",
     criteria: { lateActivities: 5 },
-  },
-  {
-    id: "weather_warrior",
-    name: "Weather Warrior",
-    description: "Log activities in 3 different weather conditions",
-    icon: "🌦️",
-    criteria: { weatherConditions: 3 },
   },
 ];
 
@@ -231,15 +210,6 @@ export function hasEarnedBadge(badge, userStats) {
   }
 
   // Streak badges
-  if (criteria.weekendStreak) {
-    return userStats.weekendStreak >= criteria.weekendStreak;
-  }
-
-  if (criteria.dailyStreak) {
-    return userStats.dailyStreak >= criteria.dailyStreak;
-  }
-
-  // Current streak badges
   if (criteria.currentStreak) {
     return userStats.currentStreak >= criteria.currentStreak;
   }
@@ -256,10 +226,6 @@ export function hasEarnedBadge(badge, userStats) {
 
   if (criteria.lateActivities) {
     return userStats.lateActivities >= criteria.lateActivities;
-  }
-
-  if (criteria.weatherConditions) {
-    return userStats.weatherConditions >= criteria.weatherConditions;
   }
 
   // Activity diversity badges
