@@ -12,10 +12,13 @@ import { getApiUrl } from "../../utils/api";
  * Features:
  * - Activity details input (title, type, description, photos)
  * - Location selection using MapPicker component
+ * - Photo URL validation with real-time feedback
+ * - Image previews for entered URLs
  * - Form validation and error handling
  * - Navigation back to activity feed after submission
  */
 function ActivityForm() {
+  // ===== FORM STATE MANAGEMENT =====
   // Form state for all activity fields
   const [title, setTitle] = useState("");
   const [activityType, setActivityType] = useState("");
@@ -26,8 +29,11 @@ function ActivityForm() {
   const [song, setSong] = useState("");
   const [elapsedHours, setElapsedHours] = useState("");
   const [elapsedMinutes, setElapsedMinutes] = useState("");
-  const [photos, setPhotos] = useState([""]);
-  const [photoValidation, setPhotoValidation] = useState([null]); // Track validation for each photo
+
+  // Photo management state
+  const [photos, setPhotos] = useState([""]); // Array of photo URLs, starts with one empty input
+  const [photoValidation, setPhotoValidation] = useState([null]); // Track validation status for each photo URL
+  // photoValidation array values: null = no input, true = valid URL, false = invalid URL
 
   // UI state for loading, error handling, and success
   const [error, setError] = useState(null);
@@ -38,6 +44,7 @@ function ActivityForm() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
+  // ===== LOCATION HANDLING =====
   /**
    * Handles location selection from the MapPicker component
    * Updates form state with selected location coordinates and name
@@ -50,11 +57,15 @@ function ActivityForm() {
     setLocationName(location.name);
   };
 
+  // ===== PHOTO URL VALIDATION =====
   /**
    * Validates if a URL is a valid image URL
+   * Checks for proper URL format and common image file extensions
+   * @param {string} url - The URL to validate
+   * @returns {boolean|null} - true if valid, false if invalid, null if empty
    */
   const validateImageUrl = (url) => {
-    if (!url.trim()) return null; // Empty URL is neutral
+    if (!url.trim()) return null; // Empty URL is neutral (no validation shown)
 
     try {
       const urlObj = new URL(url);
@@ -78,18 +89,23 @@ function ActivityForm() {
 
   /**
    * Handles photo URL changes and validation
+   * Updates both the photo URL and its validation status
+   * @param {number} index - Index of the photo in the photos array
+   * @param {string} value - The new URL value
    */
   const handlePhotoChange = (index, value) => {
+    // Update the photo URL at the specified index
     const newUrls = [...photos];
     newUrls[index] = value;
     setPhotos(newUrls);
 
-    // Update validation state
+    // Update validation state for this photo
     const newValidation = [...photoValidation];
     newValidation[index] = validateImageUrl(value);
     setPhotoValidation(newValidation);
   };
 
+  // ===== FORM SUBMISSION =====
   /**
    * Handles form submission
    * Validates user authentication, prepares data, and sends to backend
@@ -120,7 +136,7 @@ function ActivityForm() {
           ? parseInt(elapsedHours || 0) * 3600 +
             parseInt(elapsedMinutes || 0) * 60
           : null,
-      photos: photos.filter((url) => url.trim()).join(","),
+      photos: photos.filter((url) => url.trim()).join(","), // Convert array to comma-separated string
       user_id: user.id,
     };
 
@@ -158,6 +174,7 @@ function ActivityForm() {
     navigate("/activity-feed");
   };
 
+  // ===== RENDER =====
   return (
     <div className="activity-form-container">
       {/* Form Header */}
@@ -302,13 +319,16 @@ function ActivityForm() {
           </div>
         </div>
 
-        {/* Multiple Photo URLs */}
-        {/* photos.map() creates an input field for each photo URL, onChange updates the specific photo URL at that index, and placeholder shows "Photo 1 URL", "Photo 2 URL", etc. */}
+        {/* ===== PHOTO UPLOAD SECTION ===== */}
+        {/* Multiple Photo URLs with validation and preview */}
         <div className="form-group">
           <label>Photos</label>
           <p className="form-help-text">Add photo URLs (optional)</p>
+
+          {/* Map through photos array to create input fields */}
           {photos.map((url, index) => (
             <div key={index} className="photo-input-container">
+              {/* Photo URL Input with Validation */}
               <div className="photo-input-wrapper">
                 <input
                   type="text"
@@ -323,7 +343,7 @@ function ActivityForm() {
                       : ""
                   }`}
                 />
-                {/* Validation indicator */}
+                {/* Validation indicator - shows checkmark or X based on URL validity */}
                 {photoValidation[index] !== null && (
                   <span
                     className={`validation-indicator ${
@@ -335,50 +355,50 @@ function ActivityForm() {
                 )}
               </div>
 
-              {/* Image Preview */}
+              {/* Image Preview - shows thumbnail of the entered URL */}
               {url && (
                 <div className="photo-preview">
                   <img
                     src={url}
                     alt={`Preview ${index + 1}`}
                     onError={(e) => {
-                      e.target.style.display = "none";
+                      e.target.style.display = "none"; // Hide broken images
                     }}
                     onLoad={(e) => {
-                      e.target.style.display = "block";
+                      e.target.style.display = "block"; // Show valid images
                     }}
                   />
                 </div>
               )}
 
-              {/* If the current index is the last one, show the "Add Another Photo" button */}
+              {/* Add Another Photo Button - only shows on the last input */}
               {index === photos.length - 1 && (
                 <button
                   type="button"
                   onClick={() => {
-                    setPhotos([...photos, ""]);
-                    setPhotoValidation([...photoValidation, null]);
+                    setPhotos([...photos, ""]); // Add empty URL to photos array
+                    setPhotoValidation([...photoValidation, null]); // Add null validation for new photo
                   }}
                   className="add-photo-btn"
                 >
                   + Add Another Photo
                 </button>
               )}
-              {/* If the current index is not the last one, show the "Remove" button */}
+
+              {/* Remove Photo Button - shows on all inputs except the last one */}
               {photos.length > 1 && (
                 <button
                   type="button"
                   onClick={() => {
-                    const newUrls = photos.filter((_, i) => i !== index);
+                    const newUrls = photos.filter((_, i) => i !== index); // Remove URL at this index
                     const newValidation = photoValidation.filter(
                       (_, i) => i !== index
-                    );
+                    ); // Remove validation at this index
                     setPhotos(newUrls);
                     setPhotoValidation(newValidation);
                   }}
                   className="remove-photo-btn"
                 >
-                  {/* Remove the photo URL at the current index */}
                   Remove
                 </button>
               )}
