@@ -43,6 +43,7 @@ function UserProfile({ user: initialUser }) {
   const [user, setUserData] = useState(initialUser); // Local state for user data (allows updates)
   const [showFollowers, setShowFollowers] = useState(false); // Controls followers modal visibility
   const [showFollowing, setShowFollowing] = useState(false); // Controls following modal visibility
+  const [showAllBadges, setShowAllBadges] = useState(false);
 
   // ===== UTILITY VARIABLES =====
   // Check if the profile being viewed belongs to the current logged-in user
@@ -309,8 +310,29 @@ function UserProfile({ user: initialUser }) {
               Badges: {earnedBadgeCount} earned / {BADGES.length} total
             </div>
 
+            {/* Badge Toggle Button */}
+            <div style={{ marginBottom: "1rem" }}>
+              <button
+                onClick={() => setShowAllBadges(!showAllBadges)}
+                style={{
+                  padding: "0.5rem 1rem",
+                  backgroundColor: "#fc4c02",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "20px",
+                  cursor: "pointer",
+                  fontSize: "0.9rem",
+                }}
+              >
+                {showAllBadges ? "Show Only Earned" : "Show All Badges"}
+              </button>
+            </div>
+
             {/* Badge Display Component */}
-            <Badges badges={getUserBadges(userStats, [])} showUnearned={true} />
+            <Badges
+              badges={getUserBadges(userStats, [])}
+              showUnearned={showAllBadges}
+            />
           </div>
 
           {/* ===== PROFILE STATISTICS SECTION ===== */}
