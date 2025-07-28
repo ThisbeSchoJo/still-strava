@@ -16,6 +16,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Interactive Maps**: Google Maps integration for activity locations (requires API key setup)
 - **Photo Galleries**: Upload and display multiple photos per activity
 - **User Profiles**: Detailed profiles with activity statistics, bio, and social links
+- **Badge System**: Earn badges for achievements like activity counts, diversity, and social engagement
 
 ### Advanced Features
 
@@ -87,6 +88,7 @@ still-strava/
 │   │   │   │   ├── MapPicker.js         # Location selection
 │   │   │   │   ├── MapDisplay.js        # Location display
 │   │   │   │   ├── NavBar.js            # Navigation
+│   │   │   │   ├── Badges.js            # Badge display component
 │   │   │   │   └── ErrorPage.js         # Error handling
 │   │   │   └── users/      # User profile components
 │   │   │       ├── UserProfile.js       # User profile display
@@ -102,7 +104,8 @@ still-strava/
 │   │   ├── styling/        # CSS files
 │   │   └── utils/          # Utility functions
 │   │       ├── api.js      # API configuration
-│   │       └── activityIcons.js # Activity type icons
+│   │       ├── activityIcons.js # Activity type icons
+│   │       └── badges.js   # Badge system logic
 │   └── package.json
 ├── server/                 # Flask backend
 │   ├── app.py             # Main Flask application
@@ -153,8 +156,8 @@ still-strava/
 
    The frontend will run on `http://localhost:3000`
 
-4. **Environment Variables**
-   Create a `.env` file in the `client` directory:
+4. **Environment Variables** (Optional)
+   Create a `.env` file in the `client` directory for Google Maps integration:
    ```env
    REACT_APP_API_URL=http://localhost:5555
    REACT_APP_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
@@ -258,6 +261,18 @@ Interactive charts showing activity statistics including:
 - **Activity Types Pie Chart**: Breakdown of activity types
 - **Activity Calendar Heatmap**: Visual calendar showing activity days with intensity based on duration
 
+### Badges
+
+Comprehensive badge system with:
+
+- **Activity Count Badges**: First Steps, Explorer, Adventurer, Nature Master
+- **Activity Type Badges**: Stargazer, Hammock Master, Bird Watcher, Sunset Chaser
+- **Duration Badges**: Patient Observer, Meditation Master, Time Investor
+- **Social Badges**: Social Butterfly, Nature Influencer, Community Commenter
+- **Location Badges**: Local Explorer, Nature Traveler
+- **Diversity Badges**: Activity Explorer, Activity Master
+- **Time-based Badges**: Early Bird, Night Owl
+
 ### MapPicker
 
 Google Maps integration for selecting activity locations with geocoding and reverse geocoding.
@@ -297,6 +312,7 @@ Modal components for displaying user followers and following lists with follow/u
 - **Improved Comments**: Better spacing and visual hierarchy
 - **Enhanced Home Page**: Added inspiration section explaining the app's story
 - **Better Activity Sorting**: Activities now display from most recent to least recent
+- **Badge System**: Complete achievement system with earned/unearned states
 
 ### Visual Improvements
 
@@ -304,6 +320,7 @@ Modal components for displaying user followers and following lists with follow/u
 - **Line Chart**: Replaced scatter plot with line chart for better trend visualization
 - **Responsive Stats**: Charts stack vertically on mobile devices
 - **Clean Tooltips**: Simplified pie chart tooltips to show only activity type names
+- **Badge Display**: Clean badge grid with toggle between earned and all badges
 
 ### Social Features
 
