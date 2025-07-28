@@ -70,6 +70,13 @@ export const BADGES = [
     icon: "🎯",
     criteria: { uniqueActivityTypes: 3 },
   },
+  {
+    id: "activity_master",
+    name: "Activity Master",
+    description: "Try 5 different types of outdoor activities",
+    icon: "🎖️",
+    criteria: { uniqueActivityTypes: 5 },
+  },
 
   // Duration Badges
   {
@@ -271,7 +278,7 @@ export function hasEarnedBadge(badge, userStats) {
  */
 export function getUserBadges(userStats, userBadges = []) {
   return BADGES.map((badge) => {
-    const earned = userBadges.some((ub) => ub.badge_id === badge.id);
+    const earned = hasEarnedBadge(badge, userStats);
     const earnedDate = userBadges.find(
       (ub) => ub.badge_id === badge.id
     )?.earned_date;
