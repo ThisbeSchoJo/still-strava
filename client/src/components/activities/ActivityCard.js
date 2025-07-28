@@ -241,11 +241,13 @@ function ActivityCard({ activity, activities, setActivities }) {
       return "Yesterday";
     } else {
       const diffTime = todayOnly.getTime() - activityDateOnly.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays <= 7) {
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays > 0 && diffDays <= 7) {
         return `${diffDays} days ago`;
-      } else {
+      } else if (diffDays > 7) {
         return activityDate.toLocaleDateString();
+      } else {
+        return "Today";
       }
     }
   };
