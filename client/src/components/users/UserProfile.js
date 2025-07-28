@@ -7,7 +7,6 @@ import FollowersList from "./FollowersList";
 import FollowingList from "./FollowingList";
 import { getApiUrl } from "../../utils/api";
 import Badges from "../shared/Badges";
-import { BADGES } from "../../utils/badges";
 import { getUserBadges } from "../../utils/badges";
 
 import "../../styling/userprofile.css";
@@ -211,7 +210,6 @@ function UserProfile({ user: initialUser }) {
   const earnedBadges = getUserBadges(userStats, []).filter(
     (badge) => badge.earned
   );
-  const earnedBadgeCount = earnedBadges.length;
 
   return (
     <div className="user-profile">
