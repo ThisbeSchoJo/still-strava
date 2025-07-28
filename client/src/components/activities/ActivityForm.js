@@ -279,6 +279,23 @@ function ActivityForm() {
                 placeholder={`Photo ${index + 1} URL`}
                 className="photo-input"
               />
+
+              {/* Image Preview */}
+              {url && (
+                <div className="photo-preview">
+                  <img
+                    src={url}
+                    alt={`Preview ${index + 1}`}
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
+                    onLoad={(e) => {
+                      e.target.style.display = "block";
+                    }}
+                  />
+                </div>
+              )}
+
               {/* If the current index is the last one, show the "Add Another Photo" button */}
               {index === photos.length - 1 && (
                 <button
