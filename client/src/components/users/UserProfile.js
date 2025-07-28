@@ -299,39 +299,11 @@ function UserProfile({ user: initialUser }) {
             {/* Activity Statistics Chart */}
             <UserStats userActivities={user.activities} />
 
-            {/* Badge Count Display */}
-            <div
-              style={{
-                marginBottom: "0.5rem",
-                fontSize: "0.9rem",
-                color: "#666",
-              }}
-            >
-              Badges: {earnedBadgeCount} earned / {BADGES.length} total
-            </div>
-
-            {/* Badge Toggle Button */}
-            <div style={{ marginBottom: "1rem" }}>
-              <button
-                onClick={() => setShowAllBadges(!showAllBadges)}
-                style={{
-                  padding: "0.5rem 1rem",
-                  backgroundColor: "#fc4c02",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "20px",
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
-                }}
-              >
-                {showAllBadges ? "Show Only Earned" : "Show All Badges"}
-              </button>
-            </div>
-
             {/* Badge Display Component */}
             <Badges
               badges={getUserBadges(userStats, [])}
               showUnearned={showAllBadges}
+              onToggleShowAll={() => setShowAllBadges(!showAllBadges)}
             />
           </div>
 
