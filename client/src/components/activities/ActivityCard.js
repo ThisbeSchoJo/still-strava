@@ -44,9 +44,6 @@ function ActivityCard({ activity, activities, setActivities }) {
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
 
-  // State for photo gallery (keeping for potential future use)
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
   // Parse photos from comma-separated string
   const photoArray = activity.photos
     ? activity.photos.split(",").filter((url) => url.trim())
@@ -242,39 +239,13 @@ function ActivityCard({ activity, activities, setActivities }) {
     } else {
       const diffTime = todayOnly.getTime() - activityDateOnly.getTime();
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays > 0 && diffDays <= 7) {
-        return `${diffDays} days ago`;
-      } else if (diffDays > 7) {
-        return activityDate.toLocaleDateString();
+
+      if (diffDays > 0) {
+        return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
       } else {
         return "Today";
       }
     }
-  };
-
-  /**
-   * Navigate to next photo in gallery (unused - keeping for future carousel)
-   */
-  const handleNextPhoto = () => {
-    setCurrentPhotoIndex((prev) =>
-      prev === photoArray.length - 1 ? 0 : prev + 1
-    );
-  };
-
-  /**
-   * Navigate to previous photo in gallery (unused - keeping for future carousel)
-   */
-  const handlePrevPhoto = () => {
-    setCurrentPhotoIndex((prev) =>
-      prev === 0 ? photoArray.length - 1 : prev - 1
-    );
-  };
-
-  /**
-   * Navigate to specific photo in gallery (unused - keeping for future carousel)
-   */
-  const handlePhotoSelect = (index) => {
-    setCurrentPhotoIndex(index);
   };
 
   /**
@@ -363,10 +334,7 @@ function ActivityCard({ activity, activities, setActivities }) {
               {/* Then the existing photos */}
               {photoArray.map((photo, index) => (
                 <div key={index} className="photo-grid-item">
-                  <img
-                    src={photo}
-                    alt={`${activity.title} - Photo ${index + 1}`}
-                  />
+                  <img src={photo} alt={`${activity.title} - ${index + 1}`} />
                 </div>
               ))}
             </div>
