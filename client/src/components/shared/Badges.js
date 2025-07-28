@@ -7,16 +7,41 @@ import "../../styling/badges.css";
  * - badges: array of badge objects with id, name, description, icon, earned, earnedDate
  * - showUnearned: boolean to show/hide unearned badges (default: false)
  */
-function Badges({ badges = [], showUnearned = false }) {
+function Badges({ badges = [], showUnearned = false, onToggleShowAll }) {
   // Filter badges based on showUnearned prop
   const displayBadges = showUnearned
     ? badges
     : badges.filter((badge) => badge.earned);
 
+  const earnedCount = badges.filter((badge) => badge.earned).length;
+
   if (displayBadges.length === 0) {
     return (
       <div className="badges-container">
-        <h3>Badges</h3>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          <h3>Badges ({earnedCount} earned)</h3>
+          <button
+            onClick={onToggleShowAll}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: "#fc4c02",
+              color: "white",
+              border: "none",
+              borderRadius: "20px",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+            }}
+          >
+            {showUnearned ? "Show Only Earned" : "Show All Badges"}
+          </button>
+        </div>
         <p className="no-badges">
           No badges earned yet. Keep exploring nature!
         </p>
@@ -26,7 +51,30 @@ function Badges({ badges = [], showUnearned = false }) {
 
   return (
     <div className="badges-container">
-      <h3>Badges ({displayBadges.length})</h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <h3>Badges ({earnedCount} earned)</h3>
+        <button
+          onClick={onToggleShowAll}
+          style={{
+            padding: "0.5rem 1rem",
+            backgroundColor: "#fc4c02",
+            color: "white",
+            border: "none",
+            borderRadius: "20px",
+            cursor: "pointer",
+            fontSize: "0.9rem",
+          }}
+        >
+          {showUnearned ? "Show Only Earned" : "Show All Badges"}
+        </button>
+      </div>
       <div className="badges-grid">
         {displayBadges.map((badge) => (
           <div
