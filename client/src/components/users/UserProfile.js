@@ -304,6 +304,7 @@ function UserProfile({ user: initialUser }) {
               badges={getUserBadges(userStats, [])}
               showUnearned={showAllBadges}
               onToggleShowAll={() => setShowAllBadges(!showAllBadges)}
+              userStats={userStats} // Add this line
             />
           </div>
 

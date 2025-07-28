@@ -7,7 +7,12 @@ import "../../styling/badges.css";
  * - badges: array of badge objects with id, name, description, icon, earned, earnedDate
  * - showUnearned: boolean to show/hide unearned badges (default: false)
  */
-function Badges({ badges = [], showUnearned = false, onToggleShowAll }) {
+function Badges({
+  badges = [],
+  showUnearned = false,
+  onToggleShowAll,
+  userStats,
+}) {
   // Filter badges based on showUnearned prop
   const displayBadges = showUnearned
     ? badges
