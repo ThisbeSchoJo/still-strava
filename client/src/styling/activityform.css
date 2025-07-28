@@ -392,3 +392,24 @@
     min-width: 50px;
   }
 }
+
+/* Photo Preview Styles */
+.photo-preview {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+  max-width: 200px;
+}
+
+.photo-preview img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: none; /* Hidden by default, shown on load */
+}
+
+.photo-preview img[style*="display: block"] {
+  display: block !important;
+}
