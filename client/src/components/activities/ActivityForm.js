@@ -34,6 +34,7 @@ function ActivityForm() {
   const [photos, setPhotos] = useState([""]); // Array of photo URLs, starts with one empty input
   const [photoValidation, setPhotoValidation] = useState([null]); // Track validation status for each photo URL
   // photoValidation array values: null = no input, true = valid URL, false = invalid URL
+  const [isDragOver, setIsDragOver] = useState(false); // Track if files are being dragged over the drop zone
 
   // UI state for loading, error handling, and success
   const [error, setError] = useState(null);
@@ -103,6 +104,51 @@ function ActivityForm() {
     const newValidation = [...photoValidation];
     newValidation[index] = validateImageUrl(value);
     setPhotoValidation(newValidation);
+  };
+
+  /**
+   * Handles drag and drop file upload
+   * Converts dropped files to data URLs for preview
+   */
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+
+    if (imageFiles.length > 0) {
+      // Convert the first image file to a data URL
+      const file = imageFiles[0];
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const dataUrl = event.target.result;
+        // Add the data URL to the photos array
+        const newUrls = [...photos, dataUrl];
+        const newValidation = [...photoValidation, true]; // Data URLs are always valid
+        setPhotos(newUrls);
+        setPhotoValidation(newValidation);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  /**
+   * Handles drag over events to show visual feedback
+   */
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  /**
+   * Handles drag leave events to hide visual feedback
+   */
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
   };
 
   // ===== FORM SUBMISSION =====
@@ -323,7 +369,24 @@ function ActivityForm() {
         {/* Multiple Photo URLs with validation and preview */}
         <div className="form-group">
           <label>Photos</label>
-          <p className="form-help-text">Add photo URLs (optional)</p>
+          <p className="form-help-text">
+            Add photo URLs (optional) or drag & drop image files
+          </p>
+
+          {/* Drag & Drop Zone */}
+          <div
+            className={`drag-drop-zone ${isDragOver ? "drag-over" : ""}`}
+            onDrop={handleFileDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+          >
+            <div className="drag-drop-content">
+              <span className="drag-drop-icon">📁</span>
+              <p className="drag-drop-text">
+                {isDragOver ? "Drop image here!" : "Drag image files here"}
+              </p>
+            </div>
+          </div>
 
           {/* Map through photos array to create input fields */}
           {photos.map((url, index) => (
