@@ -132,6 +132,13 @@ export const BADGES = [
     icon: "📆",
     criteria: { dailyStreak: 7 },
   },
+  {
+    id: "streak_master",
+    name: "Streak Master",
+    description: "Log activities for 5 consecutive days",
+    icon: "🔥",
+    criteria: { currentStreak: 5 },
+  },
 
   // Location Badges
   {
@@ -223,6 +230,11 @@ export function hasEarnedBadge(badge, userStats) {
 
   if (criteria.dailyStreak) {
     return userStats.dailyStreak >= criteria.dailyStreak;
+  }
+
+  // Current streak badges
+  if (criteria.currentStreak) {
+    return userStats.currentStreak >= criteria.currentStreak;
   }
 
   // Location badges
