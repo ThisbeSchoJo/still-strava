@@ -27,6 +27,7 @@ function ActivityForm() {
   const [elapsedHours, setElapsedHours] = useState("");
   const [elapsedMinutes, setElapsedMinutes] = useState("");
   const [photos, setPhotos] = useState([""]);
+  const [photoValidation, setPhotoValidation] = useState([null]); // Track validation for each photo
 
   // UI state for loading, error handling, and success
   const [error, setError] = useState(null);
@@ -47,6 +48,46 @@ function ActivityForm() {
     setLatitude(location.lat);
     setLongitude(location.lng);
     setLocationName(location.name);
+  };
+
+  /**
+   * Validates if a URL is a valid image URL
+   */
+  const validateImageUrl = (url) => {
+    if (!url.trim()) return null; // Empty URL is neutral
+
+    try {
+      const urlObj = new URL(url);
+      const validImageExtensions = [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".webp",
+        ".svg",
+      ];
+      const hasValidExtension = validImageExtensions.some((ext) =>
+        urlObj.pathname.toLowerCase().includes(ext)
+      );
+
+      return hasValidExtension;
+    } catch {
+      return false; // Invalid URL format
+    }
+  };
+
+  /**
+   * Handles photo URL changes and validation
+   */
+  const handlePhotoChange = (index, value) => {
+    const newUrls = [...photos];
+    newUrls[index] = value;
+    setPhotos(newUrls);
+
+    // Update validation state
+    const newValidation = [...photoValidation];
+    newValidation[index] = validateImageUrl(value);
+    setPhotoValidation(newValidation);
   };
 
   /**
@@ -268,17 +309,31 @@ function ActivityForm() {
           <p className="form-help-text">Add photo URLs (optional)</p>
           {photos.map((url, index) => (
             <div key={index} className="photo-input-container">
-              <input
-                type="text"
-                value={url}
-                onChange={(e) => {
-                  const newUrls = [...photos];
-                  newUrls[index] = e.target.value;
-                  setPhotos(newUrls);
-                }}
-                placeholder={`Photo ${index + 1} URL`}
-                className="photo-input"
-              />
+              <div className="photo-input-wrapper">
+                <input
+                  type="text"
+                  value={url}
+                  onChange={(e) => handlePhotoChange(index, e.target.value)}
+                  placeholder={`Photo ${index + 1} URL`}
+                  className={`photo-input ${
+                    photoValidation[index] === true
+                      ? "valid"
+                      : photoValidation[index] === false
+                      ? "invalid"
+                      : ""
+                  }`}
+                />
+                {/* Validation indicator */}
+                {photoValidation[index] !== null && (
+                  <span
+                    className={`validation-indicator ${
+                      photoValidation[index] ? "valid" : "invalid"
+                    }`}
+                  >
+                    {photoValidation[index] ? "✓" : "✗"}
+                  </span>
+                )}
+              </div>
 
               {/* Image Preview */}
               {url && (
@@ -300,7 +355,10 @@ function ActivityForm() {
               {index === photos.length - 1 && (
                 <button
                   type="button"
-                  onClick={() => setPhotos([...photos, ""])}
+                  onClick={() => {
+                    setPhotos([...photos, ""]);
+                    setPhotoValidation([...photoValidation, null]);
+                  }}
                   className="add-photo-btn"
                 >
                   + Add Another Photo
@@ -312,7 +370,11 @@ function ActivityForm() {
                   type="button"
                   onClick={() => {
                     const newUrls = photos.filter((_, i) => i !== index);
+                    const newValidation = photoValidation.filter(
+                      (_, i) => i !== index
+                    );
                     setPhotos(newUrls);
+                    setPhotoValidation(newValidation);
                   }}
                   className="remove-photo-btn"
                 >
