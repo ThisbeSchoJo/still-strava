@@ -74,7 +74,7 @@ function MapDisplay({ latitude, longitude, locationName }) {
       </div>
     );
   }
-  
+
   return (
     <div
       ref={mapRef}
