@@ -60,7 +60,13 @@ function ActivityList() {
       });
   }, [user]); // Re-fetch when user changes
 
-  if (loading) return <div className="loading">Loading activities...</div>;
+  if (loading)
+    return (
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <div>Loading activities...</div>
+      </div>
+    );
   if (error) return <div className="error">Error: {error}</div>;
 
   return (
