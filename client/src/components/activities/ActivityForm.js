@@ -108,7 +108,7 @@ function ActivityForm() {
 
   /**
    * Handles drag and drop file upload
-   * Converts dropped files to data URLs for preview
+   * Converts dropped files to compressed data URLs for preview
    */
   const handleFileDrop = (e) => {
     e.preventDefault();
@@ -118,17 +118,54 @@ function ActivityForm() {
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
 
     if (imageFiles.length > 0) {
-      // Convert the first image file to a data URL
+      // Convert the first image file to a compressed data URL
       const file = imageFiles[0];
       const reader = new FileReader();
 
       reader.onload = (event) => {
-        const dataUrl = event.target.result;
-        // Add the data URL to the photos array
-        const newUrls = [...photos, dataUrl];
-        const newValidation = [...photoValidation, true]; // Data URLs are always valid
-        setPhotos(newUrls);
-        setPhotoValidation(newValidation);
+        const img = new Image();
+        img.onload = () => {
+          // Create a canvas to compress the image
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          // Set maximum dimensions (800x600 for reasonable file size)
+          const maxWidth = 800;
+          const maxHeight = 600;
+
+          let { width, height } = img;
+
+          // Calculate new dimensions while maintaining aspect ratio
+          if (width > height) {
+            if (width > maxWidth) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
+
+          // Set canvas dimensions
+          canvas.width = width;
+          canvas.height = height;
+
+          // Draw the compressed image
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Convert to data URL with compression (0.8 quality for good balance)
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+
+          // Add the compressed data URL to the photos array
+          const newUrls = [...photos, compressedDataUrl];
+          const newValidation = [...photoValidation, true]; // Compressed data URLs are always valid
+          setPhotos(newUrls);
+          setPhotoValidation(newValidation);
+        };
+
+        img.src = event.target.result;
       };
 
       reader.readAsDataURL(file);
@@ -182,7 +219,7 @@ function ActivityForm() {
           ? parseInt(elapsedHours || 0) * 3600 +
             parseInt(elapsedMinutes || 0) * 60
           : null,
-      photos: photos.filter((url) => url.trim()).join(","), // Convert array to comma-separated string
+      photos: photos.filter((url) => url.trim()).join("|||"), // Convert array to delimiter-separated string
       user_id: user.id,
     };
 
@@ -385,6 +422,80 @@ function ActivityForm() {
               <p className="drag-drop-text">
                 {isDragOver ? "Drop image here!" : "Drag image files here"}
               </p>
+              <p className="drag-drop-subtext">or</p>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const files = Array.from(e.target.files);
+                  if (files.length > 0) {
+                    const file = files[0];
+                    const reader = new FileReader();
+
+                    reader.onload = (event) => {
+                      const img = new Image();
+                      img.onload = () => {
+                        // Create a canvas to compress the image
+                        const canvas = document.createElement("canvas");
+                        const ctx = canvas.getContext("2d");
+
+                        // Set maximum dimensions (800x600 for reasonable file size)
+                        const maxWidth = 800;
+                        const maxHeight = 600;
+
+                        let { width, height } = img;
+
+                        // Calculate new dimensions while maintaining aspect ratio
+                        if (width > height) {
+                          if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                          }
+                        } else {
+                          if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                          }
+                        }
+
+                        // Set canvas dimensions
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        // Draw the compressed image
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Convert to data URL with compression (0.8 quality for good balance)
+                        const compressedDataUrl = canvas.toDataURL(
+                          "image/jpeg",
+                          0.8
+                        );
+
+                        // Add the compressed data URL to the photos array
+                        const newUrls = [...photos, compressedDataUrl];
+                        const newValidation = [...photoValidation, true];
+                        setPhotos(newUrls);
+                        setPhotoValidation(newValidation);
+                      };
+
+                      img.src = event.target.result;
+                    };
+
+                    reader.readAsDataURL(file);
+                  }
+                  // Reset the input
+                  e.target.value = "";
+                }}
+                style={{ display: "none" }}
+                id="file-input"
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById("file-input").click()}
+                className="file-input-button"
+              >
+                Choose File
+              </button>
             </div>
           </div>
 

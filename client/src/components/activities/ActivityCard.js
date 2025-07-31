@@ -44,10 +44,16 @@ function ActivityCard({ activity, activities, setActivities }) {
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
 
-  // Parse photos from comma-separated string
+  // Parse photos from delimiter-separated string (with backward compatibility)
   const photoArray = activity.photos
-    ? activity.photos.split(",").filter((url) => url.trim())
+    ? activity.photos.includes("|||")
+      ? activity.photos.split("|||").filter((url) => url.trim())
+      : activity.photos.split(",").filter((url) => url.trim())
     : [];
+
+  // Debug: Log photo data
+  console.log("Activity photos:", activity.photos);
+  console.log("Parsed photo array:", photoArray);
 
   // Update like state when activity data changes
   useEffect(() => {
