@@ -301,7 +301,7 @@ function ActivityCard({ activity, activities, setActivities }) {
           <h2 className="activity-card-title">{activity.title}</h2>
           <div className="activity-card-meta">
             <span className="activity-card-date">
-              {formatDate(activity.datetime)}
+              {activity.activity_type} - {formatDate(activity.datetime)}
             </span>
             {activity.location_name && (
               <>
@@ -494,9 +494,6 @@ function ActivityCard({ activity, activities, setActivities }) {
 
       {/* Activity Information */}
       <div className="activity-card-info">
-        <div className="activity-card-stats">
-          <span>Activity Type: {activity.activity_type}</span>
-        </div>
         <p className="activity-card-description">{activity.description}</p>
         {activity.song && (
           <p className="activity-card-song">🎵 {activity.song}</p>
