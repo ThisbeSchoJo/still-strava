@@ -120,10 +120,6 @@ function ActivityForm() {
     setIsDragOver(false);
 
     const files = Array.from(e.dataTransfer.files);
-    console.log(
-      "Files dropped:",
-      files.map((f) => f.name)
-    );
 
     // Filter out unsupported file types
     const imageFiles = files.filter((file) => {
@@ -238,8 +234,6 @@ function ActivityForm() {
 
     // Prepare activity data for submission
     const filteredPhotos = photos.filter((url) => url.trim());
-    console.log("Submitting photos:", filteredPhotos);
-    console.log("Photos string:", filteredPhotos.join("|||"));
 
     const activityData = {
       title: title,
@@ -464,7 +458,6 @@ function ActivityForm() {
                 accept="image/*"
                 onChange={(e) => {
                   const files = Array.from(e.target.files);
-                  console.log("File selected:", files[0]?.name);
                   if (files.length > 0) {
                     const file = files[0];
 

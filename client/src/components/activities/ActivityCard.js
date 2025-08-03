@@ -53,14 +53,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       : activity.photos.split(",").filter((url) => url.trim())
     : [];
 
-  // Debug: Log photo data
-  console.log("Activity photos:", activity.photos);
-  console.log("Parsed photo array:", photoArray);
-  console.log("Photo array length:", photoArray.length);
-  console.log(
-    "First photo (if exists):",
-    photoArray[0]?.substring(0, 100) + "..."
-  );
+  // Parse photos from delimiter-separated string (with backward compatibility)
 
   // Update like state when activity data changes
   useEffect(() => {
@@ -351,17 +344,7 @@ function ActivityCard({ activity, activities, setActivities }) {
                     src={photo}
                     alt={`${activity.title} - ${index + 1}`}
                     onError={(e) => {
-                      console.error(
-                        `Failed to load image ${index + 1}:`,
-                        photo
-                      );
                       e.target.style.display = "none";
-                    }}
-                    onLoad={(e) => {
-                      console.log(
-                        `Successfully loaded image ${index + 1}:`,
-                        photo
-                      );
                     }}
                   />
                 </div>
