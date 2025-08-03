@@ -421,6 +421,19 @@
   align-items: center;
 }
 
+.uploaded-file-display {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.uploaded-file-display input {
+  background-color: #f0f8ff;
+  color: #0066cc;
+  font-weight: 500;
+  cursor: default;
+}
+
 .photo-input.valid {
   border-color: #28a745;
   box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.15);
