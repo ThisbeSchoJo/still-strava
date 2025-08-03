@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
 import { getActivityIcon } from "../../utils/activityIcons";
-import MapDisplay from "../shared/MapDisplay";
 import ActivityEditModal from "./ActivityEditModal";
 import ActivityComments from "./ActivityComments";
 import ActivityActionButtons from "./ActivityActionButtons";
+import ActivityMediaGallery from "./ActivityMediaGallery";
 import { getApiUrl } from "../../utils/api";
 
 /**
@@ -29,17 +29,6 @@ function ActivityCard({ activity, activities, setActivities }) {
 
   // State for managing comment form visibility
   const [isCommenting, setIsCommenting] = useState(false);
-
-  // Parse photos from delimiter-separated string (with backward compatibility)
-  const photoArray = activity.photos
-    ? activity.photos.includes("|||")
-      ? activity.photos.split("|||").filter((url) => url.trim())
-      : activity.photos.startsWith("data:")
-      ? [activity.photos] // Data URLs should not be split
-      : activity.photos.split(",").filter((url) => url.trim())
-    : [];
-
-  // Parse photos from delimiter-separated string (with backward compatibility)
 
   /**
    * Toggles the comment form visibility
@@ -173,49 +162,8 @@ function ActivityCard({ activity, activities, setActivities }) {
         </div>
       </div>
 
-      {/* Map and Photos Container */}
-      <div
-        className={`activity-card-media-container ${
-          !activity.latitude || !activity.longitude ? "no-map" : ""
-        }`}
-      >
-        {/* Photo Gallery */}
-        {photoArray.length > 0 && (
-          <div className="activity-card-image">
-            <div
-              className="photo-grid"
-              data-photo-count={
-                photoArray.length +
-                (activity.latitude && activity.longitude ? 1 : 0)
-              }
-            >
-              {/* Add map here as first item only if coordinates exist */}
-              {activity.latitude && activity.longitude && (
-                <div className="photo-grid-item">
-                  <MapDisplay
-                    latitude={activity.latitude}
-                    longitude={activity.longitude}
-                    locationName={activity.location_name}
-                  />
-                </div>
-              )}
-
-              {/* Then the existing photos */}
-              {photoArray.map((photo, index) => (
-                <div key={index} className="photo-grid-item">
-                  <img
-                    src={photo}
-                    alt={`${activity.title} - ${index + 1}`}
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      {/* Media Gallery Component */}
+      <ActivityMediaGallery activity={activity} />
 
       {/* Edit Modal */}
       <ActivityEditModal
