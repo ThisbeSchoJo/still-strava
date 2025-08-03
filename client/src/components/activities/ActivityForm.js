@@ -120,12 +120,35 @@ function ActivityForm() {
     setIsDragOver(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    console.log(
+      "Files dropped:",
+      files.map((f) => f.name)
+    );
+    
+    // Filter out unsupported file types
+    const imageFiles = files.filter((file) => {
+      const isImage = file.type.startsWith("image/");
+      const isHeic = file.name.toLowerCase().endsWith(".heic");
+      return isImage && !isHeic;
+    });
 
-    if (imageFiles.length > 0) {
-      // Convert the first image file to a compressed data URL
-      const file = imageFiles[0];
-      const reader = new FileReader();
+    if (imageFiles.length === 0) {
+      const unsupportedFiles = files.filter(file => 
+        file.name.toLowerCase().endsWith(".heic") || !file.type.startsWith("image/")
+      );
+      
+      if (unsupportedFiles.length > 0) {
+        const errorMessage = unsupportedFiles.some(f => f.name.toLowerCase().endsWith(".heic"))
+          ? "HEIC files are not supported by web browsers. Please convert your images to JPEG or PNG format."
+          : "Some files are not supported image formats. Please use JPEG, PNG, GIF, or WebP files.";
+        alert(errorMessage);
+      }
+      return;
+    }
+
+    // Convert the first image file to a compressed data URL
+    const file = imageFiles[0];
+    const reader = new FileReader();
 
       reader.onload = (event) => {
         const img = new Image();
@@ -174,7 +197,6 @@ function ActivityForm() {
       };
 
       reader.readAsDataURL(file);
-    }
   };
 
   /**
@@ -437,8 +459,23 @@ function ActivityForm() {
                 accept="image/*"
                 onChange={(e) => {
                   const files = Array.from(e.target.files);
+                  console.log("File selected:", files[0]?.name);
                   if (files.length > 0) {
                     const file = files[0];
+
+                    // Check if it's a supported image type
+                    if (
+                      !file.type.startsWith("image/") ||
+                      file.name.toLowerCase().endsWith(".heic")
+                    ) {
+                      console.error("Unsupported file type:", file.type);
+                      const errorMessage = file.name.toLowerCase().endsWith(".heic") 
+                        ? "HEIC files are not supported by web browsers. Please convert your image to JPEG or PNG format."
+                        : `"${file.name}" is not a supported image file. Please select a JPEG, PNG, GIF, or WebP file.`;
+                      alert(errorMessage);
+                      return;
+                    }
+
                     const reader = new FileReader();
 
                     reader.onload = (event) => {
@@ -487,9 +524,16 @@ function ActivityForm() {
                         setPhotoValidation(newValidation);
                       };
 
+                      img.onerror = (error) => {
+                        console.error("Error loading image:", error);
+                      };
+
                       img.src = event.target.result;
                     };
 
+                    reader.onerror = (error) => {
+                      console.error("FileReader error:", error);
+                    };
                     reader.readAsDataURL(file);
                   }
                   // Reset the input
@@ -513,28 +557,44 @@ function ActivityForm() {
             <div key={index} className="photo-input-container">
               {/* Photo URL Input with Validation */}
               <div className="photo-input-wrapper">
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => handlePhotoChange(index, e.target.value)}
-                  placeholder={`Photo ${index + 1} URL`}
-                  className={`photo-input ${
-                    photoValidation[index] === true
-                      ? "valid"
-                      : photoValidation[index] === false
-                      ? "invalid"
-                      : ""
-                  }`}
-                />
-                {/* Validation indicator - shows checkmark or X based on URL validity */}
-                {photoValidation[index] !== null && (
-                  <span
-                    className={`validation-indicator ${
-                      photoValidation[index] ? "valid" : "invalid"
-                    }`}
-                  >
-                    {photoValidation[index] ? "✓" : "✗"}
-                  </span>
+                {url.startsWith("data:") ? (
+                  // For uploaded files, show a read-only input with file info
+                  <div className="uploaded-file-display">
+                    <input
+                      type="text"
+                      value={`📁 Uploaded file ${index + 1}`}
+                      readOnly
+                      className="photo-input valid"
+                    />
+                    <span className="validation-indicator valid">✓</span>
+                  </div>
+                ) : (
+                  // For URL inputs, show editable text input
+                  <>
+                    <input
+                      type="text"
+                      value={url}
+                      onChange={(e) => handlePhotoChange(index, e.target.value)}
+                      placeholder={`Photo ${index + 1} URL`}
+                      className={`photo-input ${
+                        photoValidation[index] === true
+                          ? "valid"
+                          : photoValidation[index] === false
+                          ? "invalid"
+                          : ""
+                      }`}
+                    />
+                    {/* Validation indicator - shows checkmark or X based on URL validity */}
+                    {photoValidation[index] !== null && (
+                      <span
+                        className={`validation-indicator ${
+                          photoValidation[index] ? "valid" : "invalid"
+                        }`}
+                      >
+                        {photoValidation[index] ? "✓" : "✗"}
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
 
