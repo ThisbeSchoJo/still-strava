@@ -124,7 +124,7 @@ function ActivityForm() {
       "Files dropped:",
       files.map((f) => f.name)
     );
-    
+
     // Filter out unsupported file types
     const imageFiles = files.filter((file) => {
       const isImage = file.type.startsWith("image/");
@@ -133,12 +133,16 @@ function ActivityForm() {
     });
 
     if (imageFiles.length === 0) {
-      const unsupportedFiles = files.filter(file => 
-        file.name.toLowerCase().endsWith(".heic") || !file.type.startsWith("image/")
+      const unsupportedFiles = files.filter(
+        (file) =>
+          file.name.toLowerCase().endsWith(".heic") ||
+          !file.type.startsWith("image/")
       );
-      
+
       if (unsupportedFiles.length > 0) {
-        const errorMessage = unsupportedFiles.some(f => f.name.toLowerCase().endsWith(".heic"))
+        const errorMessage = unsupportedFiles.some((f) =>
+          f.name.toLowerCase().endsWith(".heic")
+        )
           ? "HEIC files are not supported by web browsers. Please convert your images to JPEG or PNG format."
           : "Some files are not supported image formats. Please use JPEG, PNG, GIF, or WebP files.";
         alert(errorMessage);
@@ -150,53 +154,53 @@ function ActivityForm() {
     const file = imageFiles[0];
     const reader = new FileReader();
 
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          // Create a canvas to compress the image
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        // Create a canvas to compress the image
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-          // Set maximum dimensions (800x600 for reasonable file size)
-          const maxWidth = 800;
-          const maxHeight = 600;
+        // Set maximum dimensions (800x600 for reasonable file size)
+        const maxWidth = 800;
+        const maxHeight = 600;
 
-          let { width, height } = img;
+        let { width, height } = img;
 
-          // Calculate new dimensions while maintaining aspect ratio
-          if (width > height) {
-            if (width > maxWidth) {
-              height = (height * maxWidth) / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width = (width * maxHeight) / height;
-              height = maxHeight;
-            }
+        // Calculate new dimensions while maintaining aspect ratio
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
           }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
 
-          // Set canvas dimensions
-          canvas.width = width;
-          canvas.height = height;
+        // Set canvas dimensions
+        canvas.width = width;
+        canvas.height = height;
 
-          // Draw the compressed image
-          ctx.drawImage(img, 0, 0, width, height);
+        // Draw the compressed image
+        ctx.drawImage(img, 0, 0, width, height);
 
-          // Convert to data URL with compression (0.8 quality for good balance)
-          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+        // Convert to data URL with compression (0.8 quality for good balance)
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
 
-          // Add the compressed data URL to the photos array
-          const newUrls = [...photos, compressedDataUrl];
-          const newValidation = [...photoValidation, true]; // Compressed data URLs are always valid
-          setPhotos(newUrls);
-          setPhotoValidation(newValidation);
-        };
-
-        img.src = event.target.result;
+        // Add the compressed data URL to the photos array
+        const newUrls = [...photos, compressedDataUrl];
+        const newValidation = [...photoValidation, true]; // Compressed data URLs are always valid
+        setPhotos(newUrls);
+        setPhotoValidation(newValidation);
       };
 
-      reader.readAsDataURL(file);
+      img.src = event.target.result;
+    };
+
+    reader.readAsDataURL(file);
   };
 
   /**
@@ -348,6 +352,7 @@ function ActivityForm() {
               Catching amphibians and reptiles
             </option>
             <option value="Gardening">Gardening</option>
+            <option value="Meditating">Meditating</option>
           </select>
         </div>
 
@@ -469,7 +474,9 @@ function ActivityForm() {
                       file.name.toLowerCase().endsWith(".heic")
                     ) {
                       console.error("Unsupported file type:", file.type);
-                      const errorMessage = file.name.toLowerCase().endsWith(".heic") 
+                      const errorMessage = file.name
+                        .toLowerCase()
+                        .endsWith(".heic")
                         ? "HEIC files are not supported by web browsers. Please convert your image to JPEG or PNG format."
                         : `"${file.name}" is not a supported image file. Please select a JPEG, PNG, GIF, or WebP file.`;
                       alert(errorMessage);
