@@ -4,6 +4,7 @@ import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
 import { getActivityIcon } from "../../utils/activityIcons";
 import MapDisplay from "../shared/MapDisplay";
+import ActivityEditModal from "./ActivityEditModal";
 import { getApiUrl } from "../../utils/api";
 
 /**
@@ -28,16 +29,8 @@ function ActivityCard({ activity, activities, setActivities }) {
   });
   const [commentContent, setCommentContent] = useState("");
 
-  // State for managing edit mode and form data
+  // State for managing edit mode
   const [isEditing, setIsEditing] = useState(false);
-  const [editedActivity, setEditedActivity] = useState({
-    title: activity.title,
-    activity_type: activity.activity_type,
-    description: activity.description,
-    song: activity.song,
-    location_name: activity.location_name,
-    photos: activity.photos,
-  });
 
   // State for managing comment form visibility
   const [isCommenting, setIsCommenting] = useState(false);
@@ -168,48 +161,21 @@ function ActivityCard({ activity, activities, setActivities }) {
   };
 
   /**
-   * Enters edit mode and initializes the edit form with current activity data
+   * Handles edit button click to open edit modal
    */
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedActivity({
-      title: activity.title,
-      activity_type: activity.activity_type,
-      description: activity.description,
-      location_name: activity.location_name,
-      photos: activity.photos,
-    });
   };
 
   /**
-   * Saves the edited activity data to the backend
-   * Updates the activities list with the new data
+   * Handles saving the edited activity
    */
-  const handleSaveEdit = (e) => {
-    e.preventDefault();
-    fetch(getApiUrl(`/activities/${activity.id}`), {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: editedActivity.title,
-        activity_type: editedActivity.activity_type,
-        description: editedActivity.description,
-        song: editedActivity.song,
-        location_name: editedActivity.location_name,
-        photos: editedActivity.photos,
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to edit activity");
-        return res.json();
-      })
-      .then((updated) => {
-        setActivities((prev) =>
-          prev.map((a) => (a.id === activity.id ? updated : a))
-        );
-        setIsEditing(false);
-      })
-      .catch((err) => console.error(err));
+  const handleSaveEdit = (updatedActivity) => {
+    // Update the activities array with the edited activity
+    const updatedActivities = activities.map((a) =>
+      a.id === activity.id ? updatedActivity : a
+    );
+    setActivities(updatedActivities);
   };
 
   /**
@@ -359,143 +325,13 @@ function ActivityCard({ activity, activities, setActivities }) {
         )}
       </div>
 
-      {/* Edit Modal - Appears when user clicks edit button */}
-      {isEditing && (
-        <div>
-          <div className="edit-modal">
-            {/* Modal Header */}
-            <div className="edit-modal-header">
-              <h2 className="edit-modal-title">Edit Activity</h2>
-              <button
-                type="button"
-                className="edit-modal-close"
-                onClick={() => setIsEditing(false)}
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Modal Body - Edit Form */}
-            <div className="edit-modal-body">
-              <form className="edit-form">
-                {/* Title Field */}
-                <div className="edit-form-group">
-                  <label htmlFor="edit-title">Title</label>
-                  <input
-                    type="text"
-                    id="edit-title"
-                    value={editedActivity.title}
-                    onChange={(e) =>
-                      setEditedActivity({
-                        ...editedActivity,
-                        title: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Activity Type Field */}
-                <div className="edit-form-group">
-                  <label htmlFor="edit-activity-type">Activity Type</label>
-                  <input
-                    type="text"
-                    id="edit-activity-type"
-                    value={editedActivity.activity_type}
-                    onChange={(e) =>
-                      setEditedActivity({
-                        ...editedActivity,
-                        activity_type: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Location Name Field */}
-                <div className="edit-form-group">
-                  <label htmlFor="edit-location-name">Location Name</label>
-                  <input
-                    type="text"
-                    id="edit-location-name"
-                    value={editedActivity.location_name || ""}
-                    onChange={(e) =>
-                      setEditedActivity({
-                        ...editedActivity,
-                        location_name: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Description Field */}
-                <div className="edit-form-group">
-                  <label htmlFor="edit-description">Description</label>
-                  <textarea
-                    id="edit-description"
-                    value={editedActivity.description}
-                    onChange={(e) =>
-                      setEditedActivity({
-                        ...editedActivity,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                {/* Song Field */}
-                <div className="edit-form-group">
-                  <label htmlFor="edit-song">Song (Optional)</label>
-                  <input
-                    type="text"
-                    id="edit-song"
-                    value={editedActivity.song || ""}
-                    onChange={(e) =>
-                      setEditedActivity({
-                        ...editedActivity,
-                        song: e.target.value,
-                      })
-                    }
-                    placeholder="e.g., 'Bohemian Rhapsody' by Queen"
-                  />
-                </div>
-
-                {/* Photo URL Field */}
-                <div className="edit-form-group">
-                  <label htmlFor="edit-photos">Photo URL</label>
-                  <input
-                    type="text"
-                    id="edit-photos"
-                    value={editedActivity.photos}
-                    onChange={(e) =>
-                      setEditedActivity({
-                        ...editedActivity,
-                        photos: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </form>
-            </div>
-
-            {/* Modal Footer - Action Buttons */}
-            <div className="edit-modal-footer">
-              <button
-                type="button"
-                className="edit-modal-button secondary"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="edit-modal-button primary"
-                onClick={handleSaveEdit}
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Edit Modal */}
+      <ActivityEditModal
+        isOpen={isEditing}
+        onClose={() => setIsEditing(false)}
+        activity={activity}
+        onSave={handleSaveEdit}
+      />
 
       {/* Activity Information */}
       <div className="activity-card-info">
