@@ -6,6 +6,7 @@ import { getActivityIcon } from "../../utils/activityIcons";
 import MapDisplay from "../shared/MapDisplay";
 import ActivityEditModal from "./ActivityEditModal";
 import ActivityComments from "./ActivityComments";
+import ActivityActionButtons from "./ActivityActionButtons";
 import { getApiUrl } from "../../utils/api";
 
 /**
@@ -23,12 +24,6 @@ function ActivityCard({ activity, activities, setActivities }) {
   // Get current user from context
   const { user } = useContext(UserContext);
 
-  // State for managing likes and user interactions
-  const [likeState, setLikeState] = useState({
-    count: activity.like_count || 0,
-    isLiked: activity.user_liked || false,
-  });
-
   // State for managing edit mode
   const [isEditing, setIsEditing] = useState(false);
 
@@ -45,52 +40,6 @@ function ActivityCard({ activity, activities, setActivities }) {
     : [];
 
   // Parse photos from delimiter-separated string (with backward compatibility)
-
-  // Update like state when activity data changes
-  useEffect(() => {
-    setLikeState({
-      count: activity.like_count || 0,
-      isLiked: activity.user_liked || false,
-    });
-  }, [activity.like_count, activity.user_liked]);
-
-  /**
-   * Handles the like/unlike functionality
-   * Uses the new like/unlike endpoints
-   */
-  const handleLike = () => {
-    if (!user) {
-      alert("Log in to like activities!");
-      return;
-    }
-
-    const endpoint = likeState.isLiked ? "unlike" : "like";
-    const method = likeState.isLiked ? "DELETE" : "POST";
-
-    fetch(getApiUrl(`/activities/${activity.id}/${endpoint}`), {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: user.id }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Failed to ${endpoint} activity`);
-        return res.json();
-      })
-      .then(() => {
-        // Fetch updated activity data to get accurate like count and status
-        return fetch(
-          getApiUrl(`/activities/${activity.id}?user_id=${user.id}`)
-        );
-      })
-      .then((res) => res.json())
-      .then((updatedActivity) => {
-        // Update the activity in the activities list
-        setActivities((prev) =>
-          prev.map((a) => (a.id === activity.id ? updatedActivity : a))
-        );
-      })
-      .catch((err) => console.error("Error in handleLike:", err));
-  };
 
   /**
    * Toggles the comment form visibility
@@ -284,78 +233,13 @@ function ActivityCard({ activity, activities, setActivities }) {
         )}
       </div>
 
-      {/* Like and Comment Buttons */}
-      <div className="activity-card-actions">
-        <div className="action-buttons">
-          <button
-            className={`like-button ${likeState.isLiked ? "liked" : ""}`}
-            onClick={handleLike}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleLike();
-              }
-            }}
-            title={likeState.isLiked ? "Unlike" : "Like"}
-            aria-label={
-              likeState.isLiked ? "Unlike this activity" : "Like this activity"
-            }
-            aria-pressed={likeState.isLiked}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
-          </button>
-          <button
-            className="comment-button"
-            onClick={handleComment}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleComment();
-              }
-            }}
-            title="Comment"
-            aria-label="Add a comment to this activity"
-            aria-expanded={isCommenting}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-          </button>
-        </div>
-        <div className="like-display">
-          {activity.like_users && activity.like_users.length > 0 && (
-            <div className="like-users">
-              {activity.like_users.map((likeUser, index) => (
-                <img
-                  key={likeUser.id}
-                  src={likeUser.image}
-                  alt={likeUser.username}
-                  className="like-user-avatar"
-                  title={likeUser.username}
-                  style={{ zIndex: activity.like_users.length - index }}
-                />
-              ))}
-            </div>
-          )}
-          <span className="like-count">
-            {likeState.count || activity.like_count || 0} gave kudos
-          </span>
-        </div>
-      </div>
+      {/* Action Buttons Component */}
+      <ActivityActionButtons
+        activity={activity}
+        onCommentToggle={() => setIsCommenting(!isCommenting)}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
       {/* Comments Component */}
       <ActivityComments
@@ -363,20 +247,6 @@ function ActivityCard({ activity, activities, setActivities }) {
         isOpen={isCommenting}
         onToggle={() => setIsCommenting(!isCommenting)}
       />
-
-      {/* Delete and Edit Buttons - Only shown to activity owner */}
-      <div className="activity-card-actions">
-        {activity.user && user && activity.user.id === user.id && (
-          <>
-            <button className="delete-button" onClick={handleDelete}>
-              Delete
-            </button>
-            <button className="edit-button" onClick={handleEdit}>
-              Edit
-            </button>
-          </>
-        )}
-      </div>
     </div>
   );
 }
