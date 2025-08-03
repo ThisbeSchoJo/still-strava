@@ -322,8 +322,8 @@ function ActivityCard({ activity, activities, setActivities }) {
         }`}
       >
         {/* Photo Gallery */}
-        <div className="activity-card-image">
-          {photoArray.length > 0 ? (
+        {photoArray.length > 0 && (
+          <div className="activity-card-image">
             <div
               className="photo-grid"
               data-photo-count={photoArray.length + 1}
@@ -350,13 +350,8 @@ function ActivityCard({ activity, activities, setActivities }) {
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="no-photo-placeholder">
-              <span>📸</span>
-              <p>No photos</p>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Edit Modal - Appears when user clicks edit button */}
