@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../../styling/activityform.css";
 import ImageProcessor from "./ImageProcessor";
 import PhotoInput from "./PhotoInput";
+import DragDropZone from "./DragDropZone";
 
 /**
  * PhotoUploadSection Component
@@ -24,8 +25,6 @@ function PhotoUploadSection({
   onPhotosChange,
   onPhotoValidationChange,
 }) {
-  const [isDragOver, setIsDragOver] = useState(false);
-
   /**
    * Validates if a URL is a valid image URL
    * @param {string} url - The URL to validate
@@ -77,76 +76,23 @@ function PhotoUploadSection({
   };
 
   /**
-   * Handles file drop events
-   * @param {DragEvent} e - The drop event
+   * Handles file selection from drag drop or file input
+   * @param {File} file - The selected file
    */
-  const handleFileDrop = (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    if (files.length > 0) {
-      const file = files[0];
-
-      ImageProcessor(
-        file,
-        (compressedDataUrl) => {
-          // Add the compressed data URL to the photos array
-          const newUrls = [...photos, compressedDataUrl];
-          const newValidation = [...photoValidation, true];
-          onPhotosChange(newUrls);
-          onPhotoValidationChange(newValidation);
-        },
-        (errorMessage) => {
-          alert(errorMessage);
-        }
-      );
-    }
-  };
-
-  /**
-   * Handles drag over events
-   * @param {DragEvent} e - The drag over event
-   */
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  /**
-   * Handles drag leave events
-   * @param {DragEvent} e - The drag leave event
-   */
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
-
-  /**
-   * Handles file input change
-   * @param {Event} e - The file input change event
-   */
-  const handleFileInputChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > 0) {
-      const file = files[0];
-
-      ImageProcessor(
-        file,
-        (compressedDataUrl) => {
-          // Add the compressed data URL to the photos array
-          const newUrls = [...photos, compressedDataUrl];
-          const newValidation = [...photoValidation, true];
-          onPhotosChange(newUrls);
-          onPhotoValidationChange(newValidation);
-        },
-        (errorMessage) => {
-          alert(errorMessage);
-        }
-      );
-    }
-    // Reset the input
-    e.target.value = "";
+  const handleFileSelect = (file) => {
+    ImageProcessor(
+      file,
+      (compressedDataUrl) => {
+        // Add the compressed data URL to the photos array
+        const newUrls = [...photos, compressedDataUrl];
+        const newValidation = [...photoValidation, true];
+        onPhotosChange(newUrls);
+        onPhotoValidationChange(newValidation);
+      },
+      (errorMessage) => {
+        alert(errorMessage);
+      }
+    );
   };
 
   return (
@@ -157,34 +103,7 @@ function PhotoUploadSection({
       </p>
 
       {/* Drag & Drop Zone */}
-      <div
-        className={`drag-drop-zone ${isDragOver ? "drag-over" : ""}`}
-        onDrop={handleFileDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-      >
-        <div className="drag-drop-content">
-          <span className="drag-drop-icon">📁</span>
-          <p className="drag-drop-text">
-            {isDragOver ? "Drop image here!" : "Drag image files here"}
-          </p>
-          <p className="drag-drop-subtext">or</p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileInputChange}
-            style={{ display: "none" }}
-            id="file-input"
-          />
-          <button
-            type="button"
-            onClick={() => document.getElementById("file-input").click()}
-            className="file-input-button"
-          >
-            Choose File
-          </button>
-        </div>
-      </div>
+      <DragDropZone onFileSelect={handleFileSelect} />
 
       {/* Map through photos array to create input fields */}
       {photos.map((url, index) => (
