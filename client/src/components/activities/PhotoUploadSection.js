@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../../styling/activityform.css";
 import ImageProcessor from "./ImageProcessor";
+import PhotoInput from "./PhotoInput";
 
 /**
  * PhotoUploadSection Component
@@ -187,98 +188,27 @@ function PhotoUploadSection({
 
       {/* Map through photos array to create input fields */}
       {photos.map((url, index) => (
-        <div key={index} className="photo-input-container">
-          {/* Photo URL Input with Validation */}
-          <div className="photo-input-wrapper">
-            {url.startsWith("data:") ? (
-              // For uploaded files, show a read-only input with file info
-              <div className="uploaded-file-display">
-                <input
-                  type="text"
-                  value={`📁 Uploaded file ${index + 1}`}
-                  readOnly
-                  className="photo-input valid"
-                />
-                <span className="validation-indicator valid">✓</span>
-              </div>
-            ) : (
-              // For URL inputs, show editable text input
-              <>
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => handlePhotoChange(index, e.target.value)}
-                  placeholder={`Photo ${index + 1} URL`}
-                  className={`photo-input ${
-                    photoValidation[index] === true
-                      ? "valid"
-                      : photoValidation[index] === false
-                      ? "invalid"
-                      : ""
-                  }`}
-                />
-                {/* Validation indicator - shows checkmark or X based on URL validity */}
-                {photoValidation[index] !== null && (
-                  <span
-                    className={`validation-indicator ${
-                      photoValidation[index] ? "valid" : "invalid"
-                    }`}
-                  >
-                    {photoValidation[index] ? "✓" : "✗"}
-                  </span>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Image Preview - shows thumbnail of the entered URL */}
-          {url && (
-            <div className="photo-preview">
-              <img
-                src={url}
-                alt={`Preview ${index + 1}`}
-                onError={(e) => {
-                  e.target.style.display = "none"; // Hide broken images
-                }}
-                onLoad={(e) => {
-                  e.target.style.display = "block"; // Show valid images
-                }}
-              />
-            </div>
-          )}
-
-          {/* Add Another Photo Button - only shows on the last input */}
-          {index === photos.length - 1 && (
-            <button
-              type="button"
-              onClick={() => {
-                onPhotosChange([...photos, ""]); // Add empty URL to photos array
-                onPhotoValidationChange([...photoValidation, null]); // Add null validation for new photo
-              }}
-              className="add-photo-btn"
-            >
-              + Add Another Photo
-            </button>
-          )}
-
-          {/* Remove Photo Button - shows on all inputs except the last one */}
-          {photos.length > 1 && (
-            <button
-              type="button"
-              onClick={() => {
-                const newUrls = photos.filter((_, i) => i !== index); // Remove URL at this index
-                const newValidation = photoValidation.filter(
-                  (_, i) => i !== index
-                ); // Remove validation at this index
-                onPhotosChange(newUrls);
-                onPhotoValidationChange(newValidation);
-              }}
-              className="remove-photo-btn"
-            >
-              Remove
-            </button>
-          )}
-        </div>
+        <PhotoInput
+          key={index}
+          url={url}
+          index={index}
+          isValid={photoValidation[index]}
+          isLast={index === photos.length - 1}
+          canRemove={photos.length > 1}
+          onChange={handlePhotoChange}
+          onAdd={() => {
+            onPhotosChange([...photos, ""]); // Add empty URL to photos array
+            onPhotoValidationChange([...photoValidation, null]); // Add null validation for new photo
+          }}
+          onRemove={(indexToRemove) => {
+            const newUrls = photos.filter((_, i) => i !== indexToRemove); // Remove URL at this index
+            const newValidation = photoValidation.filter(
+              (_, i) => i !== indexToRemove
+            ); // Remove validation at this index
+            onPhotosChange(newUrls);
+            onPhotoValidationChange(newValidation);
+          }}
+        />
       ))}
     </div>
   );
