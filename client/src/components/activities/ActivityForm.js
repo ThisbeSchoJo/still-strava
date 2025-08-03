@@ -326,33 +326,33 @@ function ActivityForm() {
             onChange={(e) => setActivityType(e.target.value)}
           >
             <option value="">Select an activity type</option>
-            <option value="Hammocking">Hammocking</option>
-            <option value="Rockhounding">Rockhounding</option>
-            <option value="Sunset Watching">Sunset Watching</option>
-            <option value="Sunrise Watching">Sunrise Watching</option>
-            <option value="Camping">Camping</option>
-            <option value="Foraging">Foraging</option>
-            <option value="Stargazing">Stargazing</option>
-            <option value="Bird Watching">Bird Watching</option>
-            <option value="Wood carving">Wood carving</option>
-            <option value="Seashell Collecting">Seashell Collecting</option>
-            <option value="Fossil Hunting">Fossil Hunting</option>
-            <option value="Fishing">Fishing</option>
-            <option value="Picnicking">Picnicking</option>
-            <option value="Mycology Walk">Mycology Walk</option>
-            <option value="Outdoor Reading">Outdoor Reading</option>
-            <option value="Campfire">Campfire</option>
             <option value="Bioblitzing">Bioblitzing</option>
-            <option value="Catching fireflies">Catching fireflies</option>
-            <option value="Tidepooling">Tidepooling</option>
+            <option value="Bird Watching">Bird Watching</option>
             <option value="Building a sandcastle">Building a sandcastle</option>
             <option value="Building a snowman">Building a snowman</option>
-            <option value="Skipping stones">Skipping stones</option>
+            <option value="Campfire">Campfire</option>
+            <option value="Camping">Camping</option>
             <option value="Catching amphibians and reptiles">
               Catching amphibians and reptiles
             </option>
+            <option value="Catching fireflies">Catching fireflies</option>
+            <option value="Fishing">Fishing</option>
+            <option value="Foraging">Foraging</option>
+            <option value="Fossil Hunting">Fossil Hunting</option>
             <option value="Gardening">Gardening</option>
+            <option value="Hammocking">Hammocking</option>
             <option value="Meditating">Meditating</option>
+            <option value="Mycology Walk">Mycology Walk</option>
+            <option value="Outdoor Reading">Outdoor Reading</option>
+            <option value="Picnicking">Picnicking</option>
+            <option value="Rockhounding">Rockhounding</option>
+            <option value="Seashell Collecting">Seashell Collecting</option>
+            <option value="Skipping stones">Skipping stones</option>
+            <option value="Stargazing">Stargazing</option>
+            <option value="Sunrise Watching">Sunrise Watching</option>
+            <option value="Sunset Watching">Sunset Watching</option>
+            <option value="Tidepooling">Tidepooling</option>
+            <option value="Wood carving">Wood carving</option>
           </select>
         </div>
 
