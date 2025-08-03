@@ -48,12 +48,19 @@ function ActivityCard({ activity, activities, setActivities }) {
   const photoArray = activity.photos
     ? activity.photos.includes("|||")
       ? activity.photos.split("|||").filter((url) => url.trim())
+      : activity.photos.startsWith("data:")
+      ? [activity.photos] // Data URLs should not be split
       : activity.photos.split(",").filter((url) => url.trim())
     : [];
 
   // Debug: Log photo data
   console.log("Activity photos:", activity.photos);
   console.log("Parsed photo array:", photoArray);
+  console.log("Photo array length:", photoArray.length);
+  console.log(
+    "First photo (if exists):",
+    photoArray[0]?.substring(0, 100) + "..."
+  );
 
   // Update like state when activity data changes
   useEffect(() => {
@@ -340,7 +347,23 @@ function ActivityCard({ activity, activities, setActivities }) {
               {/* Then the existing photos */}
               {photoArray.map((photo, index) => (
                 <div key={index} className="photo-grid-item">
-                  <img src={photo} alt={`${activity.title} - ${index + 1}`} />
+                  <img
+                    src={photo}
+                    alt={`${activity.title} - ${index + 1}`}
+                    onError={(e) => {
+                      console.error(
+                        `Failed to load image ${index + 1}:`,
+                        photo
+                      );
+                      e.target.style.display = "none";
+                    }}
+                    onLoad={(e) => {
+                      console.log(
+                        `Successfully loaded image ${index + 1}:`,
+                        photo
+                      );
+                    }}
+                  />
                 </div>
               ))}
             </div>

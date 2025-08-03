@@ -68,6 +68,11 @@ function ActivityForm() {
   const validateImageUrl = (url) => {
     if (!url.trim()) return null; // Empty URL is neutral (no validation shown)
 
+    // Handle data URLs (base64 encoded images)
+    if (url.startsWith("data:image/")) {
+      return true; // Data URLs are always valid
+    }
+
     try {
       const urlObj = new URL(url);
       const validImageExtensions = [
@@ -206,6 +211,10 @@ function ActivityForm() {
     }
 
     // Prepare activity data for submission
+    const filteredPhotos = photos.filter((url) => url.trim());
+    console.log("Submitting photos:", filteredPhotos);
+    console.log("Photos string:", filteredPhotos.join("|||"));
+
     const activityData = {
       title: title,
       activity_type: activityType,
@@ -219,7 +228,7 @@ function ActivityForm() {
           ? parseInt(elapsedHours || 0) * 3600 +
             parseInt(elapsedMinutes || 0) * 60
           : null,
-      photos: photos.filter((url) => url.trim()).join("|||"), // Convert array to delimiter-separated string
+      photos: filteredPhotos.join("|||"), // Convert array to delimiter-separated string
       user_id: user.id,
     };
 
