@@ -171,6 +171,13 @@
   animation: fadeIn 0.5s ease-out;
 }
 
+/* Add Activity Button Container - Centers the button */
+.activity-list-container > div:has(.add-activity-button) {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 /* Add Activity Button Styling */
 .add-activity-button {
   background-color: #fc4c02;
@@ -182,7 +189,6 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
