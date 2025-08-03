@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
 import { UserContext } from "../../context/UserContext";
@@ -10,8 +10,6 @@ import ActivityMediaGallery from "./ActivityMediaGallery";
 import { getApiUrl } from "../../utils/api";
 
 /**
-
- *
  * Displays a single activity in a card format, similar to Strava's activity feed.
  * Handles user interactions like liking, commenting, editing, and deleting activities.
  *
@@ -31,13 +29,9 @@ function ActivityCard({ activity, activities, setActivities }) {
   const [isCommenting, setIsCommenting] = useState(false);
 
   /**
-   * Toggles the comment form visibility
+   * Handles comment form toggle
    */
-  const handleComment = () => {
-    if (!user) {
-      alert("Log in to leave a comment!");
-      return;
-    }
+  const handleCommentToggle = () => {
     setIsCommenting(!isCommenting);
   };
 
@@ -119,6 +113,7 @@ function ActivityCard({ activity, activities, setActivities }) {
         })
         .catch((err) => {
           console.error("Error deleting activity:", err);
+          alert("Failed to delete activity. Please try again.");
         });
     }
   };
@@ -184,7 +179,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       {/* Action Buttons Component */}
       <ActivityActionButtons
         activity={activity}
-        onCommentToggle={() => setIsCommenting(!isCommenting)}
+        onCommentToggle={handleCommentToggle}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
@@ -193,7 +188,7 @@ function ActivityCard({ activity, activities, setActivities }) {
       <ActivityComments
         activityId={activity.id}
         isOpen={isCommenting}
-        onToggle={() => setIsCommenting(!isCommenting)}
+        onToggle={handleCommentToggle}
       />
     </div>
   );
