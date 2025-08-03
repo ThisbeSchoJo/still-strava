@@ -176,11 +176,11 @@
 }
 
 .activity-card-info {
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .activity-card-info p {
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
   color: #444;
   line-height: 1.5;
 }
