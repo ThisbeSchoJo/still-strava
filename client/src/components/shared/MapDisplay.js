@@ -43,36 +43,9 @@ function MapDisplay({ latitude, longitude, locationName }) {
     }
   }, [latitude, longitude, locationName]);
 
-  // If no coordinates, show a placeholder
+  // If no coordinates, don't render anything
   if (!latitude || !longitude) {
-    return (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#f8f9fa",
-          color: "#666",
-          fontSize: "0.9rem",
-          borderRadius: "8px",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
-          <span
-            style={{
-              fontSize: "1.5rem",
-              display: "block",
-              marginBottom: "0.5rem",
-            }}
-          >
-            📍
-          </span>
-          <span>No location data</span>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (

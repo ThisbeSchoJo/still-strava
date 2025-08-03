@@ -326,16 +326,21 @@ function ActivityCard({ activity, activities, setActivities }) {
           <div className="activity-card-image">
             <div
               className="photo-grid"
-              data-photo-count={photoArray.length + 1}
+              data-photo-count={
+                photoArray.length +
+                (activity.latitude && activity.longitude ? 1 : 0)
+              }
             >
-              {/* Add map here as first item */}
-              <div className="photo-grid-item">
-                <MapDisplay
-                  latitude={activity.latitude}
-                  longitude={activity.longitude}
-                  locationName={activity.location_name}
-                />
-              </div>
+              {/* Add map here as first item only if coordinates exist */}
+              {activity.latitude && activity.longitude && (
+                <div className="photo-grid-item">
+                  <MapDisplay
+                    latitude={activity.latitude}
+                    longitude={activity.longitude}
+                    locationName={activity.location_name}
+                  />
+                </div>
+              )}
 
               {/* Then the existing photos */}
               {photoArray.map((photo, index) => (
