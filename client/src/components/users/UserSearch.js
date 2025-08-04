@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { getApiUrl } from "../../utils/api";
+import "../../styling/usersearch.css";
 
 /**
  * UserSearch Component
