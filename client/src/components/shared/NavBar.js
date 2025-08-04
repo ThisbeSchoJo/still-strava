@@ -18,6 +18,13 @@ function NavBar() {
       >
         Activity Feed
       </NavLink>
+      <NavLink
+        to="/find-users"
+        className="nav-links"
+        aria-label="Find other users"
+      >
+        Find Users
+      </NavLink>
       {user && (
         <>
           <NavLink

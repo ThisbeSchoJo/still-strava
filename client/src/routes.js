@@ -8,6 +8,7 @@ import Logout from "./components/auth/Logout";
 import SignUp from "./components/auth/SignUp";
 import UserProfilePage from "./components/users/UserProfilePage";
 import ActivityForm from "./components/activities/ActivityForm";
+import UserSearch from "./components/users/UserSearch";
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
       {
         path: "/users/:id",
         element: <UserProfilePage />,
+      },
+      {
+        path: "/find-users",
+        element: <UserSearch />,
       },
       {
         path: "/login",
