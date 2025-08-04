@@ -37,7 +37,7 @@ const routes = [
       },
       {
         path: "/logout",
-        element: <Logout />
+        element: <Logout />,
       },
       {
         path: "/signup",
