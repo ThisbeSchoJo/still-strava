@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback, useMemo } from "react";
 import { UserContext } from "../../context/UserContext";
 import EditProfileForm from "./EditProfileForm";
 import ActivityCard from "../activities/ActivityCard";
@@ -35,140 +35,143 @@ function UserProfile({ user: initialUser }) {
   const { user: currentUser } = useContext(UserContext);
 
   // ===== STATE MANAGEMENT =====
-  // Local state for component functionality
-  const [editing, setEditing] = useState(false); // Controls edit mode toggle
-  const [isFollowing, setIsFollowing] = useState(false); // Tracks if current user is following this profile user
-  const [followLoading, setFollowLoading] = useState(true); // Loading state for follow status check
-  const [user, setUserData] = useState(initialUser); // Local state for user data (allows updates)
-  const [showFollowers, setShowFollowers] = useState(false); // Controls followers modal visibility
-  const [showFollowing, setShowFollowing] = useState(false); // Controls following modal visibility
+  const [editing, setEditing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(true);
+  const [user, setUserData] = useState(initialUser);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
   const [showAllBadges, setShowAllBadges] = useState(false);
 
   // ===== UTILITY VARIABLES =====
   // Check if the profile being viewed belongs to the current logged-in user
   const isCurrentUser = currentUser?.id === user.id;
 
-  // ===== DATA REFRESH FUNCTION =====
-  // Function to refresh user data from the server
-  // This is called after follow/unfollow actions to update the displayed counts
-  const refreshUserData = () => {
+  // ===== HELPER FUNCTIONS =====
+
+  /**
+   * Refreshes user data from the server
+   */
+  const refreshUserData = useCallback(() => {
     fetch(getApiUrl(`/users/${user.id}`))
       .then((res) => res.json())
       .then((updatedUser) => {
-        setUserData(updatedUser); // Update local state with fresh data
+        setUserData(updatedUser);
       })
       .catch((error) => {
         console.error("Error refreshing user data:", error);
       });
-  };
+  }, [user.id]);
 
-  // ===== FOLLOW STATUS CHECK =====
-  // Effect to check if current user is following this profile user
-  useEffect(() => {
-    // Skip the check if:
-    // - No current user (not logged in)
-    // - No profile user ID
-    // - Current user is viewing their own profile
-    if (!currentUser || !user?.id || currentUser.id === user.id) {
-      setFollowLoading(false);
-      return;
+  /**
+   * Handles follow/unfollow actions
+   */
+  const handleFollowAction = useCallback(
+    (action) => {
+      const method = action === "follow" ? "POST" : "DELETE";
+      const endpoint = action === "follow" ? "follow" : "unfollow";
+
+      fetch(getApiUrl(`/users/${user.id}/${endpoint}`), {
+        method,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then(() => {
+          setIsFollowing(action === "follow");
+          refreshUserData();
+        })
+        .catch((error) => {
+          console.error(`Error ${action}ing user:`, error);
+        });
+    },
+    [user.id, refreshUserData]
+  );
+
+  /**
+   * Renders social media links
+   */
+  const renderSocialLinks = useCallback(() => {
+    const links = [];
+
+    if (user.website) {
+      links.push(
+        <a key="website" href={user.website} className="user-profile-website">
+          🌐 Website
+        </a>
+      );
     }
 
-    // Fetch the current user's following list to check if they're following this profile
-    fetch(getApiUrl(`/users/${currentUser.id}/following`))
-      .then((res) => res.json())
-      .then((followingList) => {
-        // Check if this profile user is in the current user's following list
-        setIsFollowing(followingList.some((u) => u.id === user.id));
-        setFollowLoading(false);
-      });
-  }, [currentUser, user]);
+    if (user.twitter) {
+      links.push(
+        <a
+          key="twitter"
+          href={`https://twitter.com/${user.twitter}`}
+          className="user-profile-twitter"
+        >
+          🐦 Twitter
+        </a>
+      );
+    }
 
-  // ===== FOLLOW/UNFOLLOW HANDLERS =====
-  // Handle follow action
-  const handleFollow = () => {
-    fetch(getApiUrl(`/users/${user.id}/follow`), {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(() => {
-        setIsFollowing(true); // Update local state to show "Unfollow" button
-        refreshUserData(); // Refresh user data to update follower/following counts
-      })
-      .catch((error) => {
-        console.error("Error following user:", error);
-        // Optionally show user feedback here
-      });
-  };
+    if (user.instagram) {
+      links.push(
+        <a
+          key="instagram"
+          href={`https://instagram.com/${user.instagram}`}
+          className="user-profile-instagram"
+        >
+          📸 Instagram
+        </a>
+      );
+    }
 
-  // Handle unfollow action
-  const handleUnfollow = () => {
-    fetch(getApiUrl(`/users/${user.id}/unfollow`), {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(() => {
-        setIsFollowing(false); // Update local state to show "Follow" button
-        refreshUserData(); // Refresh user data to update follower/following counts
-      })
-      .catch((error) => {
-        console.error("Error unfollowing user:", error);
-        // Optionally show user feedback here
-      });
-  };
+    return links.length > 0 ? (
+      <div className="user-profile-social">{links}</div>
+    ) : null;
+  }, [user.website, user.twitter, user.instagram]);
 
-  // ===== BADGE CALCULATIONS =====
-  // Calculate user statistics needed for badge determination
-  // These stats are used by the badge system to determine which badges the user has earned
-  const userStats = {
-    totalActivities: user.activities?.length || 0,
-    activityTypes:
-      user.activities?.reduce((types, activity) => {
-        types[activity.activity_type] =
-          (types[activity.activity_type] || 0) + 1;
-        return types;
-      }, {}) || {},
-    longestActivity: Math.max(
-      ...(user.activities?.map((a) => a.elapsed_time || 0) || [0])
-    ),
-    followerCount: user.followers?.length || 0,
-    followingCount: user.following?.length || 0,
-    // Add these new stats:
-    totalDuration:
-      user.activities?.reduce(
-        (total, activity) => total + (activity.elapsed_time || 0),
-        0
-      ) || 0,
-    uniqueLocations: new Set(
-      user.activities?.map((a) => a.location).filter(Boolean)
-    ).size,
-    commentCount:
-      user.activities?.reduce(
-        (total, activity) => total + (activity.comments?.length || 0),
-        0
-      ) || 0,
-    currentStreak: (() => {
-      if (!user.activities || user.activities.length === 0) return 0;
+  /**
+   * Calculates user statistics for badges
+   */
+  const userStats = useMemo(() => {
+    const activities = user.activities || [];
 
-      const sortedActivities = user.activities.sort(
+    // Calculate activity types
+    const activityTypes = activities.reduce((types, activity) => {
+      types[activity.activity_type] = (types[activity.activity_type] || 0) + 1;
+      return types;
+    }, {});
+
+    // Calculate total duration
+    const totalDuration = activities.reduce(
+      (total, activity) => total + (activity.elapsed_time || 0),
+      0
+    );
+
+    // Calculate unique locations
+    const uniqueLocations = new Set(
+      activities.map((a) => a.location).filter(Boolean)
+    ).size;
+
+    // Calculate comment count
+    const commentCount = activities.reduce(
+      (total, activity) => total + (activity.comments?.length || 0),
+      0
+    );
+
+    // Calculate current streak
+    const currentStreak = (() => {
+      if (activities.length === 0) return 0;
+
+      const sortedActivities = activities.sort(
         (a, b) => new Date(b.datetime) - new Date(a.datetime)
       );
 
@@ -189,27 +192,72 @@ function UserProfile({ user: initialUser }) {
       }
 
       return streak;
-    })(),
-    earlyActivities:
-      user.activities?.filter((activity) => {
-        const hour = new Date(activity.datetime).getHours();
-        return hour >= 5 && hour < 8; // 5 AM to 8 AM
-      }).length || 0,
+    })();
 
-    lateActivities:
-      user.activities?.filter((activity) => {
-        const hour = new Date(activity.datetime).getHours();
-        return hour >= 22 || hour < 5; // 10 PM to 5 AM
-      }).length || 0,
-    uniqueActivityTypes: new Set(
-      user.activities?.map((a) => a.activity_type).filter(Boolean)
-    ).size,
-  };
+    // Calculate time-based activities
+    const earlyActivities = activities.filter((activity) => {
+      const hour = new Date(activity.datetime).getHours();
+      return hour >= 5 && hour < 8;
+    }).length;
 
-  // Calculate real earned badge count using the badge utility
-  const earnedBadges = getUserBadges(userStats, []).filter(
-    (badge) => badge.earned
-  );
+    const lateActivities = activities.filter((activity) => {
+      const hour = new Date(activity.datetime).getHours();
+      return hour >= 22 || hour < 5;
+    }).length;
+
+    return {
+      totalActivities: activities.length,
+      activityTypes,
+      longestActivity: Math.max(
+        ...activities.map((a) => a.elapsed_time || 0),
+        0
+      ),
+      followerCount: user.followers?.length || 0,
+      followingCount: user.following?.length || 0,
+      totalDuration,
+      uniqueLocations,
+      commentCount,
+      currentStreak,
+      earlyActivities,
+      lateActivities,
+      uniqueActivityTypes: new Set(
+        activities.map((a) => a.activity_type).filter(Boolean)
+      ).size,
+    };
+  }, [user.activities, user.followers?.length, user.following?.length]);
+
+  /**
+   * Gets sorted activities for display
+   */
+  const sortedActivities = useMemo(() => {
+    return (user.activities || []).sort(
+      (a, b) => new Date(b.datetime) - new Date(a.datetime)
+    );
+  }, [user.activities]);
+
+  // ===== FOLLOW STATUS CHECK =====
+  useEffect(() => {
+    if (!currentUser || !user?.id || currentUser.id === user.id) {
+      setFollowLoading(false);
+      return;
+    }
+
+    fetch(getApiUrl(`/users/${currentUser.id}/following`))
+      .then((res) => res.json())
+      .then((followingList) => {
+        setIsFollowing(followingList.some((u) => u.id === user.id));
+        setFollowLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error checking follow status:", error);
+        setFollowLoading(false);
+      });
+  }, [currentUser?.id, user?.id]);
+
+  // ===== BADGE CALCULATIONS =====
+  const earnedBadges = useMemo(() => {
+    return getUserBadges(userStats, []).filter((badge) => badge.earned);
+  }, [userStats]);
 
   return (
     <div className="user-profile">
@@ -238,16 +286,21 @@ function UserProfile({ user: initialUser }) {
             </button>
           )}
 
-          {/* Follow/Unfollow Button - Only show for other users' profiles */}
           {!isCurrentUser &&
             !followLoading &&
             currentUser &&
             (isFollowing ? (
-              <button className="unfollow-btn" onClick={handleUnfollow}>
+              <button
+                className="unfollow-btn"
+                onClick={() => handleFollowAction("unfollow")}
+              >
                 Unfollow
               </button>
             ) : (
-              <button className="follow-btn" onClick={handleFollow}>
+              <button
+                className="follow-btn"
+                onClick={() => handleFollowAction("follow")}
+              >
                 Follow
               </button>
             ))}
@@ -268,30 +321,7 @@ function UserProfile({ user: initialUser }) {
               {user.bio && <p className="user-profile-bio">{user.bio}</p>}
             </div>
 
-            {/* Social Media Links */}
-            <div className="user-profile-social">
-              {user.website && (
-                <a href={user.website} className="user-profile-website">
-                  🌐 Website
-                </a>
-              )}
-              {user.twitter && (
-                <a
-                  href={`https://twitter.com/${user.twitter}`}
-                  className="user-profile-twitter"
-                >
-                  🐦 Twitter
-                </a>
-              )}
-              {user.instagram && (
-                <a
-                  href={`https://instagram.com/${user.instagram}`}
-                  className="user-profile-instagram"
-                >
-                  📸 Instagram
-                </a>
-              )}
-            </div>
+            {renderSocialLinks()}
 
             {/* ===== ACTIVITY STATISTICS AND BADGES ===== */}
             {/* Activity Statistics Chart */}
@@ -302,7 +332,7 @@ function UserProfile({ user: initialUser }) {
               badges={getUserBadges(userStats, [])}
               showUnearned={showAllBadges}
               onToggleShowAll={() => setShowAllBadges(!showAllBadges)}
-              userStats={userStats} // Add this line
+              userStats={userStats}
             />
           </div>
 
@@ -342,24 +372,20 @@ function UserProfile({ user: initialUser }) {
           {/* ===== RECENT ACTIVITIES SECTION ===== */}
           <div className="user-profile-activities">
             <h2>Recent Activities</h2>
-            {user.activities && user.activities.length > 0 ? (
-              // Sort activities by datetime (most recent first) and render ActivityCard for each
-              user.activities
-                .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
-                .map((activity) => (
-                  <ActivityCard
-                    key={activity.id}
-                    activity={activity}
-                    activities={user.activities}
-                    setActivities={(updatedActivities) => {
-                      // Update the user's activities using the state setter
-                      setUserData((prevUser) => ({
-                        ...prevUser,
-                        activities: updatedActivities,
-                      }));
-                    }}
-                  />
-                ))
+            {sortedActivities.length > 0 ? (
+              sortedActivities.map((activity) => (
+                <ActivityCard
+                  key={activity.id}
+                  activity={activity}
+                  activities={user.activities}
+                  setActivities={(updatedActivities) => {
+                    setUserData((prevUser) => ({
+                      ...prevUser,
+                      activities: updatedActivities,
+                    }));
+                  }}
+                />
+              ))
             ) : (
               <p>No activities yet</p>
             )}
