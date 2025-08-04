@@ -82,6 +82,38 @@
   color: #333;
 }
 
+.map-picker-location-btn {
+  background-color: #fc4c02;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.map-picker-location-btn:hover {
+  background-color: #e34402;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.3);
+}
+
+.map-picker-location-btn:active {
+  transform: translateY(0);
+}
+
+.map-picker-location-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .map-picker-status {
   font-size: 0.8rem;
   color: #666;
