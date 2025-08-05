@@ -2,12 +2,15 @@
 
 # Standard library imports
 from datetime import datetime, timedelta, timezone
+import os
+import uuid
 
 # Remote library imports
-from flask import request, make_response, current_app
+from flask import request, make_response, current_app, send_from_directory
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from flask_restful import Resource
 from flask_jwt_extended.exceptions import JWTExtendedException
+from werkzeug.utils import secure_filename
 
 
 # Local imports
@@ -59,6 +62,11 @@ def get_activity_with_likes(activity, current_user_id=None):
 @app.route('/')
 def index():
     return '<h1>Still Strava</h1>'
+
+# Serve uploaded files
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory('uploads', filename)
 
 # Login route
 class Login(Resource):
@@ -355,6 +363,46 @@ class UserSearch(Resource):
         return make_response(results, 200)
 
 api.add_resource(UserSearch, '/users/search')
+
+# File upload endpoint
+class UploadImage(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            if 'image' not in request.files:
+                return make_response({"error": "No image file provided"}, 400)
+            
+            file = request.files['image']
+            if file.filename == '':
+                return make_response({"error": "No file selected"}, 400)
+            
+            # Check file type
+            allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+            if not file.filename.lower().endswith(tuple('.' + ext for ext in allowed_extensions)):
+                return make_response({"error": "Invalid file type. Please upload an image."}, 400)
+            
+            # Create uploads directory if it doesn't exist
+            upload_folder = 'uploads'
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+            
+            # Generate unique filename
+            filename = secure_filename(file.filename)
+            unique_filename = f"{uuid.uuid4()}_{filename}"
+            file_path = os.path.join(upload_folder, unique_filename)
+            
+            # Save file
+            file.save(file_path)
+            
+            # Return the URL (in production, this would be a CDN URL)
+            image_url = f"/uploads/{unique_filename}"
+            
+            return make_response({"imageUrl": image_url}, 200)
+            
+        except Exception as e:
+            return make_response({"error": str(e)}, 500)
+
+api.add_resource(UploadImage, '/upload-image')
 
 # CRUD for activities
 class AllActivities(Resource):
