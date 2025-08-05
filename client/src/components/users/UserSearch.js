@@ -27,7 +27,30 @@ function UserSearch() {
    */
   const searchUsers = async (term) => {
     if (!term.trim()) {
-      setSearchResults([]);
+      // Show all users when search term is empty
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+        };
+
+        // Add authorization header if user is logged in
+        const token = localStorage.getItem("token");
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(getApiUrl("/users"), { headers });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+
+        const results = await response.json();
+        setSearchResults(results);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        setError("Failed to fetch users. Please try again.");
+      }
       return;
     }
 
