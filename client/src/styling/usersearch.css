@@ -119,29 +119,6 @@
   margin: 0 0 0.5rem 0;
 }
 
-.user-bio {
-  color: #555;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.user-card-stats {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.stat {
-  color: #666;
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
 /* User Card Actions */
 .user-card-actions {
   display: flex;
