@@ -131,10 +131,48 @@ api.add_resource(Me, '/me')
 # CRUD for users
 class AllUsers(Resource):
     def get(self):
+        print("=== DEBUG: AllUsers endpoint called ===")
         stmt = select(User)
         result = db.session.execute(stmt)
         users = result.scalars().all()
-        response_body = [user.to_dict(only=('id', 'username', 'email', 'image')) for user in users]
+        
+        # Get current user to check follow status
+        current_user_id = None
+        if request.headers.get('Authorization'):
+            try:
+                from flask_jwt_extended import verify_jwt_in_request
+                verify_jwt_in_request()
+                current_user_id = get_jwt_identity()
+                print(f"=== DEBUG: Current user ID: {current_user_id} ===")
+            except Exception as e:
+                # If JWT is invalid, just continue without user context
+                current_user_id = None
+                print(f"=== DEBUG: JWT error: {e} ===")
+        else:
+            print("=== DEBUG: No Authorization header ===")
+        
+        response_body = []
+        for user in users:
+            user_dict = user.to_dict(only=('id', 'username', 'email', 'image', 'location', 'bio'))
+            
+            # Add activity and follower counts
+            user_dict['activities'] = len(user.activities)
+            user_dict['followers'] = len(user.followers)
+            
+            # Check if current user is following this user
+            if current_user_id and current_user_id != user.id:
+                is_following = Follow.query.filter_by(
+                    follower_id=current_user_id,
+                    followed_id=user.id
+                ).first() is not None
+                user_dict['isFollowing'] = is_following
+                print(f"=== DEBUG: User {user.id} ({user.username}) - Following: {is_following} ===")
+            else:
+                user_dict['isFollowing'] = False
+                print(f"=== DEBUG: User {user.id} ({user.username}) - No follow check (current_user_id: {current_user_id}) ===")
+            
+            response_body.append(user_dict)
+        
         return make_response(response_body, 200)
     
     # update : data=request.json >>> data.get('password') etc

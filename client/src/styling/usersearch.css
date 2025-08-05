@@ -154,28 +154,28 @@
   width: 100%;
 }
 
- .follow-button.follow {
-   background-color: #fc4c02;
-   color: white;
- }
+.follow-button.follow {
+  background-color: #fc4c02;
+  color: white;
+}
 
- .follow-button.follow:hover {
-   background-color: #e34402;
-   transform: translateY(-1px);
-   box-shadow: 0 2px 4px rgba(252, 76, 2, 0.3);
- }
+.follow-button.follow:hover {
+  background-color: #e34402;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(252, 76, 2, 0.3);
+}
 
- .follow-button.unfollow {
-   background-color: #f3f4f6;
-   color: #666;
-   border: 1px solid #d1d5db;
- }
+.follow-button.unfollow {
+  background-color: #f3f4f6;
+  color: #666;
+  border: 1px solid #d1d5db;
+}
 
- .follow-button.unfollow:hover {
-   background-color: #ef4444;
-   color: white;
-   border-color: #ef4444;
- }
+.follow-button.unfollow:hover {
+  background-color: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
 
 /* No Results */
 .no-results {
