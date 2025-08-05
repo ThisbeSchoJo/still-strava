@@ -179,13 +179,7 @@ function UserSearch() {
                   {user.location && (
                     <p className="user-location">📍 {user.location}</p>
                   )}
-                  {user.bio && <p className="user-bio">{user.bio}</p>}
                 </div>
-              </div>
-
-              <div className="user-card-stats">
-                <span className="stat">{user.activities || 0} activities</span>
-                <span className="stat">{user.followers || 0} followers</span>
               </div>
 
               <div className="user-card-actions">
