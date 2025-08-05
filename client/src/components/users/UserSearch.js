@@ -35,8 +35,19 @@ function UserSearch() {
     setError(null);
 
     try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      // Add authorization header if user is logged in
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const response = await fetch(
-        getApiUrl(`/users/search?q=${encodeURIComponent(term)}`)
+        getApiUrl(`/users/search?q=${encodeURIComponent(term)}`),
+        { headers }
       );
 
       if (!response.ok) {
@@ -141,12 +152,8 @@ function UserSearch() {
               </div>
 
               <div className="user-card-stats">
-                <span className="stat">
-                  {user.activities?.length || 0} activities
-                </span>
-                <span className="stat">
-                  {user.followers?.length || 0} followers
-                </span>
+                <span className="stat">{user.activities || 0} activities</span>
+                <span className="stat">{user.followers || 0} followers</span>
               </div>
 
               {/* Follow/Unfollow Button */}

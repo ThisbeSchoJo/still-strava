@@ -280,6 +280,51 @@ class AllFollowing(Resource):
     
 api.add_resource(AllFollowing, '/users/<int:user_id>/following')
 
+class UserSearch(Resource):
+    def get(self):
+        query = request.args.get('q', '').strip()
+        
+        if not query:
+            return make_response([], 200)
+        
+        # Search users by username (case-insensitive)
+        users = User.query.filter(
+            User.username.ilike(f'%{query}%')
+        ).limit(20).all()  # Limit results to 20 users
+        
+        # Get current user to check follow status
+        current_user_id = None
+        if request.headers.get('Authorization'):
+            try:
+                current_user_id = get_jwt_identity()
+            except:
+                # If JWT is invalid, just continue without user context
+                current_user_id = None
+        
+        results = []
+        for user in users:
+            user_dict = user.to_dict(only=('id', 'username', 'email', 'image', 'location', 'bio'))
+            
+            # Add activity and follower counts (using len() to avoid serialization issues)
+            user_dict['activities'] = len(user.activities)
+            user_dict['followers'] = len(user.followers)
+            
+            # Check if current user is following this user
+            if current_user_id and current_user_id != user.id:
+                is_following = Follow.query.filter_by(
+                    follower_id=current_user_id,
+                    followed_id=user.id
+                ).first() is not None
+                user_dict['isFollowing'] = is_following
+            else:
+                user_dict['isFollowing'] = False
+            
+            results.append(user_dict)
+        
+        return make_response(results, 200)
+
+api.add_resource(UserSearch, '/users/search')
+
 # CRUD for activities
 class AllActivities(Resource):
     def get(self):
