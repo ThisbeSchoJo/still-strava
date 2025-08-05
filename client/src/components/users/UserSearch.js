@@ -168,45 +168,47 @@ function UserSearch() {
         {searchResults.length > 0 ? (
           searchResults.map((user) => (
             <div key={user.id} className="user-card">
-              <div className="user-card-header">
-                <img
-                  src={user.image}
-                  alt={user.username}
-                  className="user-avatar"
-                />
-                <div className="user-info">
-                  <h3 className="user-username">{user.username}</h3>
-                  {user.location && (
-                    <p className="user-location">📍 {user.location}</p>
+              <div className="user-card-content">
+                <div className="user-info-section">
+                  <img
+                    src={user.image}
+                    alt={user.username}
+                    className="user-avatar"
+                  />
+                  <div className="user-info">
+                    <h3 className="user-username">{user.username}</h3>
+                    {user.location && (
+                      <p className="user-location">📍 {user.location}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="user-actions-section">
+                  {/* View Profile Button */}
+                  <button
+                    className="view-profile-button"
+                    onClick={() => handleUserClick(user.id)}
+                  >
+                    View Profile
+                  </button>
+
+                  {/* Follow/Unfollow Button */}
+                  {currentUser && currentUser.id !== user.id && (
+                    <button
+                      className={`follow-button ${
+                        user.isFollowing ? "unfollow" : "follow"
+                      }`}
+                      onClick={() =>
+                        handleFollowAction(
+                          user.id,
+                          user.isFollowing ? "unfollow" : "follow"
+                        )
+                      }
+                    >
+                      {user.isFollowing ? "Unfollow" : "Follow"}
+                    </button>
                   )}
                 </div>
-              </div>
-
-              <div className="user-card-actions">
-                {/* View Profile Button */}
-                <button
-                  className="view-profile-button"
-                  onClick={() => handleUserClick(user.id)}
-                >
-                  View Profile
-                </button>
-
-                {/* Follow/Unfollow Button */}
-                {currentUser && currentUser.id !== user.id && (
-                  <button
-                    className={`follow-button ${
-                      user.isFollowing ? "unfollow" : "follow"
-                    }`}
-                    onClick={() =>
-                      handleFollowAction(
-                        user.id,
-                        user.isFollowing ? "unfollow" : "follow"
-                      )
-                    }
-                  >
-                    {user.isFollowing ? "Unfollow" : "Follow"}
-                  </button>
-                )}
               </div>
             </div>
           ))
