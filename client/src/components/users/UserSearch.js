@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { getApiUrl } from "../../utils/api";
 import "../../styling/usersearch.css";
@@ -17,6 +18,7 @@ import "../../styling/usersearch.css";
  */
 function UserSearch() {
   const { user: currentUser } = useContext(UserContext);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -122,6 +124,13 @@ function UserSearch() {
   };
 
   /**
+   * Handles clicking on a user card to navigate to their profile
+   */
+  const handleUserClick = (userId) => {
+    navigate(`/users/${userId}`);
+  };
+
+  /**
    * Debounced search effect
    */
   useEffect(() => {
@@ -179,22 +188,32 @@ function UserSearch() {
                 <span className="stat">{user.followers || 0} followers</span>
               </div>
 
-              {/* Follow/Unfollow Button */}
-              {currentUser && currentUser.id !== user.id && (
+              <div className="user-card-actions">
+                {/* View Profile Button */}
                 <button
-                  className={`follow-button ${
-                    user.isFollowing ? "unfollow" : "follow"
-                  }`}
-                  onClick={() =>
-                    handleFollowAction(
-                      user.id,
-                      user.isFollowing ? "unfollow" : "follow"
-                    )
-                  }
+                  className="view-profile-button"
+                  onClick={() => handleUserClick(user.id)}
                 >
-                  {user.isFollowing ? "Unfollow" : "Follow"}
+                  View Profile
                 </button>
-              )}
+
+                {/* Follow/Unfollow Button */}
+                {currentUser && currentUser.id !== user.id && (
+                  <button
+                    className={`follow-button ${
+                      user.isFollowing ? "unfollow" : "follow"
+                    }`}
+                    onClick={() =>
+                      handleFollowAction(
+                        user.id,
+                        user.isFollowing ? "unfollow" : "follow"
+                      )
+                    }
+                  >
+                    {user.isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                )}
+              </div>
             </div>
           ))
         ) : searchTerm.trim() && !isLoading ? (
