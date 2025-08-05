@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import UserProfile from "./UserProfile";
 import { getApiUrl } from "../../utils/api";
 
@@ -8,8 +8,14 @@ function UserProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams(); // This gets the user ID from the URL
+  const location = useLocation();
 
   useEffect(() => {
+    // Reset state when ID changes
+    setUser(null);
+    setLoading(true);
+    setError(null);
+
     fetch(getApiUrl(`/users/${id}`))
       .then((response) => {
         if (!response.ok) {
@@ -27,13 +33,28 @@ function UserProfilePage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [id]);
+  }, [id, location.pathname]);
 
-  if (loading) return <div className="loading">Loading user profile...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
-  if (!user) return <div className="error">User not found</div>;
+  if (loading)
+    return (
+      <div key={id} className="loading">
+        Loading user profile...
+      </div>
+    );
+  if (error)
+    return (
+      <div key={id} className="error">
+        Error: {error}
+      </div>
+    );
+  if (!user)
+    return (
+      <div key={id} className="error">
+        User not found
+      </div>
+    );
 
-  return <UserProfile user={user} />;
+  return <UserProfile key={id} user={user} />;
 }
 
 export default UserProfilePage;

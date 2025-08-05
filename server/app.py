@@ -131,7 +131,6 @@ api.add_resource(Me, '/me')
 # CRUD for users
 class AllUsers(Resource):
     def get(self):
-        print("=== DEBUG: AllUsers endpoint called ===")
         stmt = select(User)
         result = db.session.execute(stmt)
         users = result.scalars().all()
@@ -143,13 +142,9 @@ class AllUsers(Resource):
                 from flask_jwt_extended import verify_jwt_in_request
                 verify_jwt_in_request()
                 current_user_id = get_jwt_identity()
-                print(f"=== DEBUG: Current user ID: {current_user_id} ===")
             except Exception as e:
                 # If JWT is invalid, just continue without user context
                 current_user_id = None
-                print(f"=== DEBUG: JWT error: {e} ===")
-        else:
-            print("=== DEBUG: No Authorization header ===")
         
         response_body = []
         for user in users:
@@ -166,10 +161,8 @@ class AllUsers(Resource):
                     followed_id=user.id
                 ).first() is not None
                 user_dict['isFollowing'] = is_following
-                print(f"=== DEBUG: User {user.id} ({user.username}) - Following: {is_following} ===")
             else:
                 user_dict['isFollowing'] = False
-                print(f"=== DEBUG: User {user.id} ({user.username}) - No follow check (current_user_id: {current_user_id}) ===")
             
             response_body.append(user_dict)
         

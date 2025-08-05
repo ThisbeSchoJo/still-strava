@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getApiUrl } from "../../utils/api";
 import "../../styling/followinglist.css";
 
 function FollowingList({ userId, onClose }) {
+  const navigate = useNavigate();
   const [following, setFollowing] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -78,7 +80,15 @@ function FollowingList({ userId, onClose }) {
           {following.length > 0 ? (
             <div className="following-list">
               {following.map((user) => (
-                <div key={user.id} className="following-item">
+                <div
+                  key={user.id}
+                  className="following-item"
+                  onClick={() => {
+                    navigate(`/users/${user.id}`);
+                    onClose();
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   <img
                     src={user.image}
                     alt={user.username}
