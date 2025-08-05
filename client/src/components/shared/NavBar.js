@@ -23,7 +23,7 @@ function NavBar() {
         className="nav-links"
         aria-label="Find other users"
       >
-        Find Users
+        Find Friends
       </NavLink>
       {user && (
         <>

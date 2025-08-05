@@ -144,7 +144,7 @@ function UserSearch() {
   return (
     <div className="user-search-container">
       <div className="user-search-header">
-        <h2>Find Users</h2>
+        <h2>Friend Search</h2>
         <p>Search for users to follow and connect with</p>
       </div>
 
