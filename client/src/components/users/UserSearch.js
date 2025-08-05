@@ -48,7 +48,11 @@ function UserSearch() {
         }
 
         const results = await response.json();
-        setSearchResults(results);
+        // Filter out the current user from the results
+        const filteredResults = currentUser
+          ? results.filter((user) => user.id !== currentUser.id)
+          : results;
+        setSearchResults(filteredResults);
       } catch (err) {
         console.error("Error fetching users:", err);
         setError("Failed to fetch users. Please try again.");
@@ -80,7 +84,11 @@ function UserSearch() {
       }
 
       const results = await response.json();
-      setSearchResults(results);
+      // Filter out the current user from the results
+      const filteredResults = currentUser
+        ? results.filter((user) => user.id !== currentUser.id)
+        : results;
+      setSearchResults(filteredResults);
     } catch (err) {
       console.error("Error searching users:", err);
       setError("Failed to search users. Please try again.");
