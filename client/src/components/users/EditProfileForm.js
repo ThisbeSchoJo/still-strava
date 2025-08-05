@@ -18,6 +18,9 @@ function EditProfileForm({ user, onClose }) {
     instagram: user.instagram || "",
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(user.image || "");
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -26,32 +29,72 @@ function EditProfileForm({ user, onClose }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      // Create preview URL
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch(getApiUrl("/upload-image"), {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const result = await response.json();
+    return result.imageUrl;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
-    fetch(getApiUrl(`/users/${user.id}`), {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to update profile");
-        return res.json();
-      })
-      .then((updatedUser) => {
-        setUser(updatedUser);
-        setSuccess("Profile updated successfully!");
-        setTimeout(() => {
-          onClose();
-        }, 1500);
-      })
-      .catch((err) => {
-        console.error("Profile update failed:", err);
-        setError("Failed to update profile. Please try again.");
+    try {
+      let imageUrl = formData.image;
+
+      // Upload new image if file is selected
+      if (selectedFile) {
+        imageUrl = await uploadImage(selectedFile);
+      }
+
+      // Update profile with new image URL
+      const updateData = { ...formData, image: imageUrl };
+
+      const response = await fetch(getApiUrl(`/users/${user.id}`), {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updateData),
       });
+
+      if (!response.ok) throw new Error("Failed to update profile");
+
+      const updatedUser = await response.json();
+      setUser(updatedUser);
+      setSuccess("Profile updated successfully!");
+      setTimeout(() => {
+        onClose();
+      }, 1500);
+    } catch (err) {
+      console.error("Profile update failed:", err);
+      setError("Failed to update profile. Please try again.");
+    }
   };
 
   return (
@@ -80,8 +123,28 @@ function EditProfileForm({ user, onClose }) {
       </label>
 
       <label>
-        Profile Image URL:
-        <input name="image" value={formData.image} onChange={handleChange} />
+        Profile Image:
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ marginBottom: "10px" }}
+        />
+        {previewUrl && (
+          <div style={{ marginTop: "10px" }}>
+            <img
+              src={previewUrl}
+              alt="Profile preview"
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                border: "2px solid #fc4c02",
+              }}
+            />
+          </div>
+        )}
       </label>
 
       <label>
