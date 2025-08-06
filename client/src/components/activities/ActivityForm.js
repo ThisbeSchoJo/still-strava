@@ -139,7 +139,11 @@ function ActivityForm() {
       </div>
 
       {/* Main Form */}
-      <form className="activity-form" onSubmit={handleSubmit}>
+      <form
+        className="activity-form"
+        onSubmit={handleSubmit}
+        aria-label="Create new activity form"
+      >
         {/* Activity Title Field */}
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -150,6 +154,8 @@ function ActivityForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Give your activity a catchy title"
+            aria-required="true"
+            aria-describedby="title-help"
           />
         </div>
 
@@ -161,6 +167,8 @@ function ActivityForm() {
             name="activity_type"
             value={activityType}
             onChange={(e) => setActivityType(e.target.value)}
+            aria-required="true"
+            aria-describedby="activity-type-help"
           >
             <option value="">Select an activity type</option>
             <option value="Bioblitzing">Bioblitzing</option>
@@ -203,6 +211,7 @@ function ActivityForm() {
             value={locationName}
             onChange={(e) => setLocationName(e.target.value)}
             placeholder="e.g., Central Park, NYC"
+            aria-describedby="location-name-help"
           />
         </div>
 
@@ -215,6 +224,7 @@ function ActivityForm() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Tell us about your adventure..."
+            aria-describedby="description-help"
           />
         </div>
 
@@ -228,13 +238,18 @@ function ActivityForm() {
             value={song}
             onChange={(e) => setSong(e.target.value)}
             placeholder="e.g., 'Bohemian Rhapsody' by Queen"
+            aria-describedby="song-help"
           />
         </div>
 
         {/* Elapsed Time Field */}
         <div className="form-group">
           <label htmlFor="elapsed_time">Duration (Optional)</label>
-          <div className="duration-inputs">
+          <div
+            className="duration-inputs"
+            role="group"
+            aria-labelledby="duration-label"
+          >
             <div className="duration-input">
               <input
                 type="number"
@@ -245,6 +260,7 @@ function ActivityForm() {
                 placeholder="0"
                 min="0"
                 max="24"
+                aria-describedby="duration-help"
               />
               <label htmlFor="elapsed_hours">Hours</label>
             </div>
@@ -258,19 +274,21 @@ function ActivityForm() {
                 placeholder="0"
                 min="0"
                 max="59"
+                aria-describedby="duration-help"
               />
               <label htmlFor="elapsed_minutes">Minutes</label>
             </div>
           </div>
-          <p className="form-help-text">
-            How long did you spend on this activity?
-          </p>
         </div>
 
         {/* Location Selection with MapPicker */}
         <div className="form-group">
-          <label>Location</label>
-          <div className="map-container">
+          <label id="location-label">Location</label>
+          <div
+            className="map-container"
+            role="group"
+            aria-labelledby="location-label"
+          >
             <MapPicker onLocationSelect={handleLocationSelect} />
           </div>
         </div>
@@ -284,13 +302,18 @@ function ActivityForm() {
         />
 
         {/* Form Action Buttons */}
-        <div className="activity-form-buttons">
+        <div
+          className="activity-form-buttons"
+          role="group"
+          aria-label="Form actions"
+        >
           <button
             type="submit"
             className="submit-button"
             disabled={isLoading}
             aria-busy={isLoading}
             aria-live="polite"
+            aria-describedby="submit-help"
           >
             {isLoading ? "Creating Activity..." : "Create Activity"}
           </button>
@@ -299,6 +322,7 @@ function ActivityForm() {
             className="cancel-button"
             onClick={handleCancel}
             disabled={isLoading}
+            aria-describedby="cancel-help"
           >
             Cancel
           </button>

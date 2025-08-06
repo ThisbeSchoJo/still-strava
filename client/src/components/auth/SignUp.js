@@ -44,14 +44,26 @@ function SignUp() {
   };
 
   return (
-    <div className="signup-container">
+    <div
+      className="signup-container"
+      role="main"
+      aria-labelledby="signup-title"
+    >
       <div className="signup-header">
-        <h1>Create Account</h1>
+        <h1 id="signup-title">Create Account</h1>
         <p>Join our community</p>
       </div>
 
-      <form className="signup-form" onSubmit={handleSubmit}>
-        {error && <p className="error">{error}</p>}
+      <form
+        className="signup-form"
+        onSubmit={handleSubmit}
+        aria-label="Sign up form"
+      >
+        {error && (
+          <p className="error" role="alert" aria-live="polite">
+            {error}
+          </p>
+        )}
 
         <div className="form-group">
           <label htmlFor="username">Username</label>
@@ -61,6 +73,8 @@ function SignUp() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Choose a username"
+            aria-required="true"
+            aria-describedby="username-help"
           />
         </div>
 
@@ -72,6 +86,8 @@ function SignUp() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
+            aria-required="true"
+            aria-describedby="email-help"
           />
         </div>
 
@@ -83,6 +99,8 @@ function SignUp() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Create a password"
+            aria-required="true"
+            aria-describedby="password-help"
           />
         </div>
 
@@ -94,6 +112,8 @@ function SignUp() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm your password"
+            aria-required="true"
+            aria-describedby="confirm-password-help"
           />
         </div>
 
@@ -105,10 +125,15 @@ function SignUp() {
             value={image}
             onChange={(e) => setImage(e.target.value)}
             placeholder="Optional image URL"
+            aria-describedby="image-help"
           />
         </div>
 
-        <button type="submit" className="signup-button">
+        <button
+          type="submit"
+          className="signup-button"
+          aria-describedby="submit-help"
+        >
           Create Account
         </button>
       </form>

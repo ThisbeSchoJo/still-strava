@@ -147,52 +147,86 @@ function UserSearch() {
   }, [searchTerm]);
 
   return (
-    <div className="user-search-container">
+    <div
+      className="user-search-container"
+      role="main"
+      aria-labelledby="search-title"
+    >
       <div className="user-search-header">
-        <h2>Friend Search</h2>
+        <h2 id="search-title">Friend Search</h2>
         <p>Search for users to follow and connect with</p>
       </div>
 
       {/* Search Input */}
       <div className="search-input-container">
+        <label htmlFor="search-input" className="sr-only">
+          Search users
+        </label>
         <input
           type="text"
+          id="search-input"
           placeholder="Search by username..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
+          aria-describedby="search-help"
         />
-        {isLoading && <div className="search-loading">Searching...</div>}
+        {isLoading && (
+          <div className="search-loading" aria-live="polite">
+            Searching...
+          </div>
+        )}
       </div>
 
       {/* Error Display */}
-      {error && <div className="search-error">{error}</div>}
+      {error && (
+        <div className="search-error" role="alert" aria-live="polite">
+          {error}
+        </div>
+      )}
 
       {/* Search Results */}
-      <div className="search-results">
+      <div className="search-results" role="region" aria-label="Search results">
         {searchResults.length > 0 ? (
           searchResults.map((user) => (
-            <div key={user.id} className="user-card">
+            <div
+              key={user.id}
+              className="user-card"
+              role="article"
+              aria-labelledby={`user-${user.id}-name`}
+            >
               <div className="user-card-content">
                 <div className="user-info-section">
                   <img
                     src={user.image}
-                    alt={user.username}
+                    alt={`Profile picture of ${user.username}`}
                     className="user-avatar"
                   />
                   <div className="user-info">
-                    <h3 className="user-username">{user.username}</h3>
+                    <h3 className="user-username" id={`user-${user.id}-name`}>
+                      {user.username}
+                    </h3>
                     {user.location && (
-                      <p className="user-location">📍 {user.location}</p>
+                      <p
+                        className="user-location"
+                        aria-label={`Location: ${user.location}`}
+                      >
+                        📍 {user.location}
+                      </p>
                     )}
                   </div>
                 </div>
 
-                <div className="user-actions-section">
+                <div
+                  className="user-actions-section"
+                  role="group"
+                  aria-label={`Actions for ${user.username}`}
+                >
                   {/* View Profile Button */}
                   <button
                     className="view-profile-button"
                     onClick={() => handleUserClick(user.id)}
+                    aria-label={`View ${user.username}'s profile`}
                   >
                     View Profile
                   </button>
@@ -209,6 +243,9 @@ function UserSearch() {
                           user.isFollowing ? "unfollow" : "follow"
                         )
                       }
+                      aria-label={`${
+                        user.isFollowing ? "Unfollow" : "Follow"
+                      } ${user.username}`}
                     >
                       {user.isFollowing ? "Unfollow" : "Follow"}
                     </button>
@@ -218,7 +255,7 @@ function UserSearch() {
             </div>
           ))
         ) : searchTerm.trim() && !isLoading ? (
-          <div className="no-results">
+          <div className="no-results" role="status" aria-live="polite">
             <p>No users found matching "{searchTerm}"</p>
           </div>
         ) : null}
