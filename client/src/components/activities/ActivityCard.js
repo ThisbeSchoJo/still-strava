@@ -112,7 +112,6 @@ function ActivityCard({ activity, activities, setActivities }) {
           setActivities(activities.filter((a) => a.id !== activity.id));
         })
         .catch((err) => {
-          console.error("Error deleting activity:", err);
           alert("Failed to delete activity. Please try again.");
         });
     }

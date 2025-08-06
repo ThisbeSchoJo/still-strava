@@ -53,7 +53,6 @@ function ActivityEditModal({ isOpen, onClose, activity, onSave }) {
         throw new Error("Failed to update activity");
       }
     } catch (error) {
-      console.error("Error updating activity:", error);
       setError("Failed to update activity. Please try again.");
     } finally {
       setIsLoading(false);

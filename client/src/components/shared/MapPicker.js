@@ -88,7 +88,6 @@ function MapPicker({
         onLocationSelect?.({ lat, lng, name: placeName });
       } else {
         // Failure: Use coordinates as fallback
-        console.error("Geocoding failed:", status);
         const coordName = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
         setLocationStatus(`Location set: ${coordName}`);
         onLocationSelect?.({ lat, lng, name: coordName });
@@ -102,8 +101,6 @@ function MapPicker({
    * @param {Object} event - Google Maps click event
    */
   const handleMapClick = (event) => {
-    console.log("Map clicked!", event.latLng.lat(), event.latLng.lng());
-
     // Extract coordinates from click event
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
@@ -149,7 +146,6 @@ function MapPicker({
       },
       // Error callback: Geolocation failed
       (error) => {
-        console.error("Error getting location:", error);
         setLocationStatus("Unable to get location");
         setIsLoadingLocation(false);
       },
@@ -168,34 +164,24 @@ function MapPicker({
    * Sets up map configuration, click listeners, and automatic location detection
    */
   useEffect(() => {
-    console.log("MapPicker useEffect running...");
-    console.log("window.google:", !!window.google);
-    console.log("mapRef.current:", !!mapRef.current);
-    console.log("mapInstanceRef.current:", !!mapInstanceRef.current);
-
     // Check if Google Maps API is loaded
     if (!window.google) {
-      console.error("Google Maps API not loaded!");
       setMapError("Google Maps API not available");
       return;
     }
 
     // Check if map container exists
     if (!mapRef.current) {
-      console.error("Map container not found!");
       setMapError("Map container not found");
       return;
     }
 
     // Prevent re-initialization if map already exists
     if (mapInstanceRef.current) {
-      console.log("Map already initialized");
       return;
     }
 
     try {
-      console.log("Initializing map...");
-
       // Create new Google Maps instance
       const map = new window.google.maps.Map(mapRef.current, {
         center: defaultCenter, // Starting center coordinates
@@ -205,12 +191,10 @@ function MapPicker({
 
       // Add click listener for manual location selection
       clickListenerRef.current = map.addListener("click", handleMapClick);
-      console.log("Click listener added successfully");
 
       // Try to get user's location automatically when map loads
       getUserLocation();
     } catch (error) {
-      console.error("Error initializing map:", error);
       setMapError("Failed to initialize map");
     }
 

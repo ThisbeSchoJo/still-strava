@@ -21,7 +21,6 @@ export function UserProvider({ children }) {
         })
         .then((user) => setUser(user))
         .catch((err) => {
-          console.error("Auto-login failed:", err);
           localStorage.removeItem("token");
         });
     }

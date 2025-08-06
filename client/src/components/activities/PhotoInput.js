@@ -4,18 +4,15 @@ import "../../styling/activityform.css";
  * PhotoInput Component
  *
  * Handles individual photo input functionality:
- * - Uploaded file display
  * - Image preview
  * - Remove photo button
  *
  * @param {Object} props
  * @param {string} props.url - The photo data URL
  * @param {number} props.index - Index of this photo in the array
- * @param {boolean|null} props.isValid - Validation state (true=valid, false=invalid, null=no input)
- * @param {boolean} props.isLast - Whether this is the last photo input
  * @param {Function} props.onRemove - Callback to remove this photo
  */
-function PhotoInput({ url, index, isValid, isLast, onRemove }) {
+function PhotoInput({ url, index, onRemove }) {
   // Only render if there's actually a file
   if (!url) return null;
 

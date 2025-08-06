@@ -32,7 +32,6 @@ function Login() {
         navigate(`/users/${data.user.id}`); // ✅ redirect to profile
       })
       .catch((err) => {
-        console.error("Login error:", err);
         setError(err.message);
       });
   };
