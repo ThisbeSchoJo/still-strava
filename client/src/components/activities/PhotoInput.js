@@ -20,42 +20,35 @@ function PhotoInput({ url, index, isValid, isLast, onRemove }) {
   if (!url) return null;
 
   return (
-    <div className="photo-input-container">
-      {/* Uploaded File Display */}
-      <div className="photo-input-wrapper">
-        <div className="uploaded-file-display">
-          <input
-            type="text"
-            value={`📁 Uploaded file ${index + 1}`}
-            readOnly
-            className="photo-input valid"
-          />
-          <span className="validation-indicator valid">✓</span>
-        </div>
-      </div>
-
-      {/* Image Preview - shows thumbnail of the entered URL */}
-      <div className="photo-preview">
+    <div className="photo-card">
+      {/* Image Preview with Overlay */}
+      <div className="photo-preview-card">
         <img
           src={url}
           alt={`Preview ${index + 1}`}
           onError={(e) => {
-            e.target.style.display = "none"; // Hide broken images
+            e.target.style.display = "none";
           }}
           onLoad={(e) => {
-            e.target.style.display = "block"; // Show valid images
+            e.target.style.display = "block";
           }}
         />
-      </div>
 
-      {/* Remove Photo Button - show for all uploaded photos */}
-      <button
-        type="button"
-        onClick={() => onRemove(index)}
-        className="remove-photo-btn"
-      >
-        Remove
-      </button>
+        {/* Success Badge */}
+        <div className="success-badge">
+          <span>✓</span>
+        </div>
+
+        {/* Remove Button Overlay */}
+        <button
+          type="button"
+          onClick={() => onRemove(index)}
+          className="remove-overlay-btn"
+          title="Remove photo"
+        >
+          ×
+        </button>
+      </div>
     </div>
   );
 }
