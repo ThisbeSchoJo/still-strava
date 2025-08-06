@@ -9,12 +9,11 @@ import DragDropZone from "./DragDropZone";
  *
  * Handles all photo-related functionality for activity forms:
  * - Drag & drop file uploads
- * - Photo URL inputs with validation
  * - Image previews
- * - Add/remove photo functionality
+ * - Remove photo functionality
  *
  * @param {Object} props
- * @param {Array} props.photos - Array of photo URLs/data URLs
+ * @param {Array} props.photos - Array of photo data URLs
  * @param {Array} props.photoValidation - Array of validation states for each photo
  * @param {Function} props.onPhotosChange - Callback when photos array changes
  * @param {Function} props.onPhotoValidationChange - Callback when validation array changes
@@ -63,7 +62,6 @@ function PhotoUploadSection({
           index={index}
           isValid={photoValidation[index]}
           isLast={index === photos.length - 1}
-          canRemove={photos.length > 1}
           onRemove={(indexToRemove) => {
             const newUrls = photos.filter((_, i) => i !== indexToRemove);
             const newValidation = photoValidation.filter(

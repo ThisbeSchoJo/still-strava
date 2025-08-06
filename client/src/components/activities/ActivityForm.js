@@ -32,8 +32,8 @@ function ActivityForm() {
   const [elapsedMinutes, setElapsedMinutes] = useState("");
 
   // Photo management state
-  const [photos, setPhotos] = useState([""]); // Array of photo URLs, starts with one empty input
-  const [photoValidation, setPhotoValidation] = useState([null]); // Track validation status for each photo URL
+  const [photos, setPhotos] = useState([]); // Array of photo URLs, starts empty
+  const [photoValidation, setPhotoValidation] = useState([]); // Track validation status for each photo URL
   // photoValidation array values: null = no input, true = valid URL, false = invalid URL
 
   // UI state for loading, error handling, and success
