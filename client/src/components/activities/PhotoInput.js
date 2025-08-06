@@ -19,55 +19,20 @@ import "../../styling/activityform.css";
  * @param {Function} props.onAdd - Callback to add new photo
  * @param {Function} props.onRemove - Callback to remove this photo
  */
-function PhotoInput({
-  url,
-  index,
-  isValid,
-  isLast,
-  canRemove,
-  onChange,
-  onAdd,
-  onRemove,
-}) {
+function PhotoInput({ url, index, isValid, isLast, canRemove, onRemove }) {
   return (
     <div className="photo-input-container">
-      {/* Photo URL Input with Validation */}
+      {/* Uploaded File Display */}
       <div className="photo-input-wrapper">
-        {url.startsWith("data:") ? (
-          // For uploaded files, show a read-only input with file info
-          <div className="uploaded-file-display">
-            <input
-              type="text"
-              value={`📁 Uploaded file ${index + 1}`}
-              readOnly
-              className="photo-input valid"
-            />
-            <span className="validation-indicator valid">✓</span>
-          </div>
-        ) : (
-          // For URL inputs, show editable text input
-          <>
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => onChange(index, e.target.value)}
-              placeholder={`Photo ${index + 1} URL`}
-              className={`photo-input ${
-                isValid === true ? "valid" : isValid === false ? "invalid" : ""
-              }`}
-            />
-            {/* Validation indicator - shows checkmark or X based on URL validity */}
-            {isValid !== null && (
-              <span
-                className={`validation-indicator ${
-                  isValid ? "valid" : "invalid"
-                }`}
-              >
-                {isValid ? "✓" : "✗"}
-              </span>
-            )}
-          </>
-        )}
+        <div className="uploaded-file-display">
+          <input
+            type="text"
+            value={`📁 Uploaded file ${index + 1}`}
+            readOnly
+            className="photo-input valid"
+          />
+          <span className="validation-indicator valid">✓</span>
+        </div>
       </div>
 
       {/* Image Preview - shows thumbnail of the entered URL */}
@@ -84,13 +49,6 @@ function PhotoInput({
             }}
           />
         </div>
-      )}
-
-      {/* Add Another Photo Button - only shows on the last input */}
-      {isLast && (
-        <button type="button" onClick={onAdd} className="add-photo-btn">
-          + Add Another Photo
-        </button>
       )}
 
       {/* Remove Photo Button - shows on all inputs except the last one */}
