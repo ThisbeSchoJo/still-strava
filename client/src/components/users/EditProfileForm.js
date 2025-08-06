@@ -92,7 +92,6 @@ function EditProfileForm({ user, onClose }) {
         onClose();
       }, 1500);
     } catch (err) {
-      console.error("Profile update failed:", err);
       setError("Failed to update profile. Please try again.");
     }
   };

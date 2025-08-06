@@ -59,7 +59,7 @@ function UserProfile({ user: initialUser }) {
         setUserData(updatedUser);
       })
       .catch((error) => {
-        console.error("Error refreshing user data:", error);
+        // Handle error silently
       });
   }, [user.id]);
 
@@ -89,7 +89,7 @@ function UserProfile({ user: initialUser }) {
           refreshUserData();
         })
         .catch((error) => {
-          console.error(`Error ${action}ing user:`, error);
+          // Handle error silently
         });
     },
     [user.id, refreshUserData]
@@ -249,7 +249,6 @@ function UserProfile({ user: initialUser }) {
         setFollowLoading(false);
       })
       .catch((error) => {
-        console.error("Error checking follow status:", error);
         setFollowLoading(false);
       });
   }, [currentUser?.id, user?.id]);

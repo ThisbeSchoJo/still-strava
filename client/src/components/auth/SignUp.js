@@ -39,7 +39,6 @@ function SignUp() {
         navigate(`/users/${data.user.id}`); // redirect to profile
       })
       .catch((err) => {
-        console.error("Signup error:", err);
         setError("Signup failed. Try again.");
       });
   };

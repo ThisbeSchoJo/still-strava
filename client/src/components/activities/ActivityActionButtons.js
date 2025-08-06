@@ -69,7 +69,6 @@ function ActivityActionButtons({
         });
       })
       .catch((err) => {
-        console.error("Error updating like:", err);
         alert("Failed to update like. Please try again.");
       });
   };

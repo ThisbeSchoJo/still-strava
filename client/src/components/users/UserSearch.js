@@ -54,7 +54,6 @@ function UserSearch() {
           : results;
         setSearchResults(filteredResults);
       } catch (err) {
-        console.error("Error fetching users:", err);
         setError("Failed to fetch users. Please try again.");
       }
       return;
@@ -90,7 +89,6 @@ function UserSearch() {
         : results;
       setSearchResults(filteredResults);
     } catch (err) {
-      console.error("Error searching users:", err);
       setError("Failed to search users. Please try again.");
     } finally {
       setIsLoading(false);
@@ -126,7 +124,6 @@ function UserSearch() {
         )
       );
     } catch (err) {
-      console.error(`Error ${action}ing user:`, err);
       setError(`Failed to ${action} user. Please try again.`);
     }
   };

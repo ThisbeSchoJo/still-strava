@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../../styling/activityform.css";
 import ImageProcessor from "./ImageProcessor";
 import PhotoInput from "./PhotoInput";
@@ -60,8 +59,6 @@ function PhotoUploadSection({
           key={index}
           url={url}
           index={index}
-          isValid={photoValidation[index]}
-          isLast={index === photos.length - 1}
           onRemove={(indexToRemove) => {
             const newUrls = photos.filter((_, i) => i !== indexToRemove);
             const newValidation = photoValidation.filter(

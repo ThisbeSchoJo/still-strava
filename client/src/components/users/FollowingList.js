@@ -25,7 +25,6 @@ function FollowingList({ userId, onClose }) {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching following:", error);
         setError("Failed to load following");
         setLoading(false);
       });

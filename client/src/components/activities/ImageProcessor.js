@@ -66,7 +66,6 @@ function ImageProcessor(file, onSuccess, onError) {
     };
 
     img.onerror = (error) => {
-      console.error("Error loading image:", error);
       onError("Failed to process image. Please try again.");
     };
 
@@ -74,7 +73,6 @@ function ImageProcessor(file, onSuccess, onError) {
   };
 
   reader.onerror = (error) => {
-    console.error("FileReader error:", error);
     onError("Failed to read file. Please try again.");
   };
 

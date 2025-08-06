@@ -52,7 +52,6 @@ function ActivityList() {
         setActivities(sortedActivities);
       })
       .catch((error) => {
-        console.error("Error fetching activities:", error);
         setError(error.message);
       })
       .finally(() => {
