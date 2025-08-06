@@ -44,9 +44,9 @@ function PhotoUploadSection({
   };
 
   return (
-    <div className="form-group">
-      <label>Photos</label>
-      <p className="form-help-text">
+    <div className="form-group" role="group" aria-labelledby="photos-label">
+      <label id="photos-label">Photos</label>
+      <p className="form-help-text" id="photos-help">
         Drag & drop image files to add photos to your activity
       </p>
 

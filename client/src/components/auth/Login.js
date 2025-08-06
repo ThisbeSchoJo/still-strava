@@ -37,14 +37,22 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container" role="main" aria-labelledby="login-title">
       <div className="login-header">
-        <h1>Welcome Back</h1>
+        <h1 id="login-title">Welcome Back</h1>
         <p>Sign in to continue</p>
       </div>
 
-      <form className="login-form" onSubmit={handleSubmit}>
-        {error && <p className="error">{error}</p>}
+      <form
+        className="login-form"
+        onSubmit={handleSubmit}
+        aria-label="Login form"
+      >
+        {error && (
+          <p className="error" role="alert" aria-live="polite">
+            {error}
+          </p>
+        )}
 
         <div className="form-group">
           <label htmlFor="email">Email</label>
@@ -54,6 +62,8 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
+            aria-required="true"
+            aria-describedby="email-help"
           />
         </div>
 
@@ -65,10 +75,16 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
+            aria-required="true"
+            aria-describedby="password-help"
           />
         </div>
 
-        <button type="submit" className="login-button">
+        <button
+          type="submit"
+          className="login-button"
+          aria-describedby="submit-help"
+        >
           Sign In
         </button>
       </form>

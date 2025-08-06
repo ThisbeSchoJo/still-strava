@@ -1,5 +1,18 @@
 /* client/src/styling/activityform.css */
 
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Activity form container - centered card layout */
 .activity-form-container {
   max-width: 600px;

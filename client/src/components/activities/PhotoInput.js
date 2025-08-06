@@ -17,12 +17,12 @@ function PhotoInput({ url, index, onRemove }) {
   if (!url) return null;
 
   return (
-    <div className="photo-card">
+    <div className="photo-card" role="group" aria-label={`Photo ${index + 1}`}>
       {/* Image Preview with Overlay */}
       <div className="photo-preview-card">
         <img
           src={url}
-          alt={`Preview ${index + 1}`}
+          alt={`Preview of uploaded photo ${index + 1}`}
           onError={(e) => {
             e.target.style.display = "none";
           }}
@@ -32,8 +32,8 @@ function PhotoInput({ url, index, onRemove }) {
         />
 
         {/* Success Badge */}
-        <div className="success-badge">
-          <span>✓</span>
+        <div className="success-badge" aria-label="Photo uploaded successfully">
+          <span aria-hidden="true">✓</span>
         </div>
 
         {/* Remove Button Overlay */}
@@ -41,9 +41,10 @@ function PhotoInput({ url, index, onRemove }) {
           type="button"
           onClick={() => onRemove(index)}
           className="remove-overlay-btn"
+          aria-label={`Remove photo ${index + 1}`}
           title="Remove photo"
         >
-          ×
+          <span aria-hidden="true">×</span>
         </button>
       </div>
     </div>
