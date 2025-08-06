@@ -14,7 +14,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Activity Tracking**: Log outdoor activities with photos, location, duration, and descriptions
 - **Social Features**: Like activities, leave comments, and follow other users
 - **Interactive Maps**: Google Maps integration for activity locations (requires API key setup)
-- **Photo Galleries**: Upload and display multiple photos per activity
+- **Photo Upload**: Drag & drop file uploads with image compression and preview
 - **User Profiles**: Detailed profiles with activity statistics, bio, and social links
 - **Badge System**: Earn badges for achievements like activity counts, diversity, and social engagement
 
@@ -23,6 +23,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Activity Statistics**: Interactive charts showing weekly activity trends, activity type breakdown, and calendar heatmap
 - **Real-time Updates**: Dynamic activity feeds with live like/comment updates
 - **Follow System**: Follow/unfollow users with followers/following lists
+- **User Search**: Search for users with real-time filtering and follow/unfollow functionality
 - **Mobile Responsive**: Optimized for mobile and desktop use
 - **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
 - **Error Handling**: Graceful error handling with user-friendly messages
@@ -32,6 +33,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **JWT Authentication**: Secure token-based authentication
 - **RESTful API**: Clean, well-documented backend API
 - **Database Migrations**: Alembic migrations for database schema management
+- **File Upload**: Secure image upload with validation and compression
 - **CORS Configuration**: Proper cross-origin resource sharing setup
 - **Environment Variables**: Secure configuration management
 
@@ -44,7 +46,6 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Chart.js v4** - Interactive charts and statistics
 - **Google Maps API** - Location services and mapping
 - **CSS3** - Custom styling with responsive design
-- **React Icons** - Icon library for UI elements
 
 ### Backend
 
@@ -55,6 +56,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Flask-JWT-Extended** - JWT authentication
 - **bcrypt** - Password hashing
 - **SQLite** - Lightweight database (development)
+- **Werkzeug** - File upload handling
 
 ### Deployment
 
@@ -73,17 +75,20 @@ still-strava/
 │   │   │   │   ├── ActivityCard.js      # Individual activity display
 │   │   │   │   ├── ActivityForm.js      # Create/edit activities
 │   │   │   │   ├── ActivityList.js      # Activity feed
-│   │   │   │   └── ActivitiyDetail.js   # Activity detail view
+│   │   │   │   ├── ActivityEditModal.js # Edit activity modal
+│   │   │   │   ├── ActivityActionButtons.js # Like/comment buttons
+│   │   │   │   ├── ActivityComments.js  # Comment functionality
+│   │   │   │   ├── ActivityMediaGallery.js # Photo gallery
+│   │   │   │   ├── PhotoUploadSection.js # Photo upload interface
+│   │   │   │   ├── PhotoInput.js        # Individual photo input
+│   │   │   │   ├── DragDropZone.js      # Drag & drop upload
+│   │   │   │   └── ImageProcessor.js    # Image compression
 │   │   │   ├── auth/       # Authentication components
 │   │   │   │   ├── Login.js             # User login
 │   │   │   │   ├── SignUp.js            # User registration
 │   │   │   │   └── Logout.js            # User logout
 │   │   │   ├── comments/   # Comment functionality
-│   │   │   │   ├── CommentForm.js       # Comment creation
-│   │   │   │   └── CommentList.js       # Comment display
-│   │   │   ├── friends/    # Social features
-│   │   │   │   ├── FriendList.js        # Friends list
-│   │   │   │   └── FriendProfile.js     # Friend profiles
+│   │   │   │   └── CommentForm.js       # Comment creation
 │   │   │   ├── shared/     # Shared components
 │   │   │   │   ├── MapPicker.js         # Location selection
 │   │   │   │   ├── MapDisplay.js        # Location display
@@ -97,7 +102,7 @@ still-strava/
 │   │   │       ├── EditProfileForm.js   # Profile editing
 │   │   │       ├── FollowersList.js     # Followers modal
 │   │   │       ├── FollowingList.js     # Following modal
-│   │   │       └── UserList.js          # User discovery
+│   │   │       └── UserSearch.js        # User discovery
 │   │   ├── context/        # React context providers
 │   │   │   └── UserContext.js           # User authentication state
 │   │   ├── routes.js       # Application routing
@@ -112,6 +117,7 @@ still-strava/
 │   ├── config.py          # Flask configuration
 │   ├── models.py          # SQLAlchemy models
 │   ├── seed.py            # Database seeding
+│   ├── uploads/           # File upload directory
 │   └── migrations/        # Database migrations
 └── README.md
 ```
@@ -228,6 +234,7 @@ still-strava/
 ### Users
 
 - `GET /users` - Get all users
+- `GET /users/search` - Search users by username
 - `GET /users/:id` - Get user profile
 - `PATCH /users/:id` - Update user profile
 - `DELETE /users/:id` - Delete user
@@ -247,11 +254,25 @@ still-strava/
 - `GET /users/:id/followers` - Get user's followers
 - `GET /users/:id/following` - Get users being followed
 
+### File Upload
+
+- `POST /upload-image` - Upload profile image
+- `GET /uploads/<filename>` - Serve uploaded files
+
 ## 🎨 Key Components
 
 ### ActivityCard
 
 Displays individual activities with photos, maps, likes, and comments. Handles user interactions and real-time updates.
+
+### PhotoUploadSection
+
+Modern drag & drop photo upload interface with:
+
+- **Drag & Drop**: Intuitive file upload
+- **Image Compression**: Automatic image optimization
+- **Preview Cards**: Visual photo management
+- **Accessibility**: Full ARIA support
 
 ### UserStats
 
@@ -277,6 +298,15 @@ Comprehensive badge system with:
 
 Google Maps integration for selecting activity locations with geocoding and reverse geocoding.
 
+### UserSearch
+
+Advanced user discovery with:
+
+- **Real-time Search**: Instant filtering as you type
+- **Follow Integration**: Direct follow/unfollow from search results
+- **Profile Navigation**: Click to view user profiles
+- **Current User Filtering**: Automatically excludes current user from results
+
 ### FollowersList/FollowingList
 
 Modal components for displaying user followers and following lists with follow/unfollow functionality.
@@ -288,6 +318,7 @@ Modal components for displaying user followers and following lists with follow/u
 - **CORS Configuration**: Proper cross-origin security
 - **Input Validation**: Server-side data validation
 - **SQL Injection Protection**: SQLAlchemy ORM protection
+- **File Upload Security**: Secure filename handling and type validation
 
 ## 📱 Mobile Optimization
 
@@ -308,6 +339,8 @@ Modal components for displaying user followers and following lists with follow/u
 
 ### Enhanced User Experience
 
+- **Photo Upload System**: Complete drag & drop photo upload with compression
+- **User Search**: Real-time user discovery with follow integration
 - **Activity Duration Tracking**: Hours and minutes input with validation
 - **Improved Comments**: Better spacing and visual hierarchy
 - **Enhanced Home Page**: Added inspiration section explaining the app's story
@@ -316,6 +349,7 @@ Modal components for displaying user followers and following lists with follow/u
 
 ### Visual Improvements
 
+- **Modern Photo Cards**: Clean card-based photo management
 - **Consistent Chart Styling**: All chart titles now match the "Activity Calendar" styling
 - **Line Chart**: Replaced scatter plot with line chart for better trend visualization
 - **Responsive Stats**: Charts stack vertically on mobile devices
