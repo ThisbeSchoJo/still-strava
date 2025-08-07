@@ -839,3 +839,113 @@
     min-height: 44px;
   }
 }
+
+/* Photo upload section in edit modal */
+.edit-modal .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.edit-modal .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.edit-modal .form-help-text {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.edit-modal .drag-drop-zone {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.edit-modal .drag-drop-zone:hover,
+.edit-modal .drag-drop-zone.dragover {
+  border-color: #007bff;
+  background-color: #e3f2fd;
+}
+
+.edit-modal .drag-drop-text {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.edit-modal .photo-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-modal .photo-preview-card {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.edit-modal .success-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: #28a745;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.edit-modal .remove-overlay-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(220, 53, 69, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.edit-modal .remove-overlay-btn:hover {
+  background: rgba(220, 53, 69, 0.5);
+  opacity: 1;
+}
+
+/* Cross-out effect for edit modal */
+.edit-modal .remove-overlay-btn::before,
+.edit-modal .remove-overlay-btn::after {
+  content: "";
+  position: absolute;
+  background: rgba(220, 53, 69, 0.9);
+  width: 3px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.edit-modal .remove-overlay-btn::before {
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.edit-modal .remove-overlay-btn::after {
+  transform: translateX(-50%) rotate(-45deg);
+}

@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { getApiUrl } from "../../utils/api";
+import PhotoUploadSection from "./PhotoUploadSection";
+import ImageProcessor from "./ImageProcessor";
 import "../../styling/activitycard.css";
 
 /**
@@ -7,6 +10,7 @@ import "../../styling/activitycard.css";
  * Handles the edit functionality for activities:
  * - Modal UI with form fields
  * - Form validation and state management
+ * - Photo upload and management
  * - Save/cancel operations
  *
  * @param {Object} props
@@ -16,15 +20,19 @@ import "../../styling/activitycard.css";
  * @param {Function} props.onSave - Callback when activity is saved
  */
 function ActivityEditModal({ isOpen, onClose, activity, onSave }) {
+  // Parse existing photos from string to array
+  const existingPhotos = activity.photos ? activity.photos.split("|||").filter(photo => photo.trim()) : [];
+  
   const [editedActivity, setEditedActivity] = useState({
     title: activity.title,
     activity_type: activity.activity_type,
     description: activity.description,
     song: activity.song,
     location_name: activity.location_name,
-    photos: activity.photos,
   });
 
+  const [photos, setPhotos] = useState(existingPhotos);
+  const [photoValidation, setPhotoValidation] = useState(existingPhotos.map(() => true));
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -37,12 +45,18 @@ function ActivityEditModal({ isOpen, onClose, activity, onSave }) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/activities/${activity.id}`, {
+      // Prepare activity data with photos
+      const activityData = {
+        ...editedActivity,
+        photos: photos.join("|||"), // Convert array to delimiter-separated string
+      };
+
+      const response = await fetch(getApiUrl(`/activities/${activity.id}`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(editedActivity),
+        body: JSON.stringify(activityData),
       });
 
       if (response.ok) {
@@ -148,6 +162,14 @@ function ActivityEditModal({ isOpen, onClose, activity, onSave }) {
                 placeholder="e.g., 'Bohemian Rhapsody' by Queen"
               />
             </div>
+
+            {/* Photo Upload Section */}
+            <PhotoUploadSection
+              photos={photos}
+              photoValidation={photoValidation}
+              onPhotosChange={setPhotos}
+              onPhotoValidationChange={setPhotoValidation}
+            />
 
             {/* Error Display */}
             {error && (

@@ -466,15 +466,27 @@ class ActivityById(Resource):
         activity = db.session.get(Activity, id)
         if activity:
             try:
-                for attr in request.json:
-                    setattr(activity, attr, request.json[attr])
+                data = request.json
+                
+                # Only update allowed fields
+                allowed_fields = ['title', 'activity_type', 'description', 'song', 'location_name', 'photos']
+                
+                for field in allowed_fields:
+                    if field in data:
+                        # Handle empty strings for optional fields
+                        if field in ['description', 'song', 'location_name', 'photos'] and data[field] == '':
+                            setattr(activity, field, None)
+                        else:
+                            setattr(activity, field, data[field])
+                
                 db.session.commit()
                 
                 # Get current user ID for like status
-                current_user_id = request.json.get('user_id')
+                current_user_id = data.get('user_id')
                 response_body = get_activity_with_likes(activity, current_user_id)
                 return make_response(response_body, 200)
             except Exception as e:
+                db.session.rollback()
                 response_body = {
                     "error": str(e)
                 }

@@ -134,6 +134,8 @@ class Activity(db.Model, SerializerMixin):
     
     @validates('description')
     def validate_description(self, key, value):
+        if value is None:
+            return None
         if type(value) != str:
             raise TypeError("Description must be a string")
         elif len(value) < 10:
@@ -152,11 +154,12 @@ class Activity(db.Model, SerializerMixin):
         
     @validates('location_name')
     def validate_location_name(self, key, value):
-        if value is not None and value != "":
-            if type(value) != str:
-                raise TypeError("Location name must be a string")
-            elif len(value) < 3:
-                raise ValueError("Location name must be at least 3 characters long")
+        if value is None or value == "":
+            return None
+        if type(value) != str:
+            raise TypeError("Location name must be a string")
+        elif len(value) < 3:
+            raise ValueError("Location name must be at least 3 characters long")
         return value
         
     @validates('datetime')
@@ -168,6 +171,8 @@ class Activity(db.Model, SerializerMixin):
 
     @validates('photos')
     def validate_photos(self, key, value):
+        if value is None:
+            return None
         if type(value) != str:
             raise TypeError("Photos must be a string")
         else:
