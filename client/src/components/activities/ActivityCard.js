@@ -178,6 +178,8 @@ function ActivityCard({ activity, activities, setActivities }) {
       {/* Action Buttons Component */}
       <ActivityActionButtons
         activity={activity}
+        activities={activities}
+        setActivities={setActivities}
         onCommentToggle={handleCommentToggle}
         onEdit={handleEdit}
         onDelete={handleDelete}
