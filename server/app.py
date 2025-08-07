@@ -204,11 +204,23 @@ class UserById(Resource):
     def get(self, id):
         user = db.session.get(User, id)
         if user:
+            # Get current user ID from request if available
+            current_user_id = request.args.get('user_id', type=int)
+            
             response_body = user.to_dict(only=(
                 'id', 'username', 'email', 'image',
                 'bio', 'location', 'website', 'twitter', 'instagram',
-                'activities', 'comments', 'followers', 'following'
+                'comments', 'followers', 'following'
             ))
+            
+            # Process activities with like information
+            activities_with_likes = []
+            for activity in user.activities:
+                activity_with_likes = get_activity_with_likes(activity, current_user_id)
+                activities_with_likes.append(activity_with_likes)
+            
+            response_body['activities'] = activities_with_likes
+            
             return make_response(response_body, 200)
         else:
             response_body = {
@@ -500,9 +512,16 @@ class ActivityById(Resource):
     def delete(self, id):
         activity = db.session.get(Activity, id)
         if activity:
-            db.session.delete(activity)
-            db.session.commit()
-            return make_response({}, 204)
+            try:
+                db.session.delete(activity)
+                db.session.commit()
+                return make_response({}, 204)
+            except Exception as e:
+                db.session.rollback()
+                response_body = {
+                    "error": str(e)
+                }
+                return make_response(response_body, 422)
         else:
             response_body = {
                 "error": "Activity not found"
@@ -640,9 +659,16 @@ class LikeActivity(Resource):
             db.session.add(new_like)
             db.session.commit()
             
-            return make_response({"message": "Activity liked successfully"}, 201)
+            # Get the updated activity with like information
+            activity = db.session.get(Activity, activity_id)
+            if activity:
+                response_body = get_activity_with_likes(activity, user_id)
+                return make_response(response_body, 201)
+            else:
+                return make_response({"error": "Activity not found"}, 404)
             
         except Exception as e:
+            db.session.rollback()
             return make_response({"error": str(e)}, 422)
 
 class UnlikeActivity(Resource):
@@ -667,9 +693,16 @@ class UnlikeActivity(Resource):
             db.session.delete(like)
             db.session.commit()
             
-            return make_response({"message": "Activity unliked successfully"}, 200)
+            # Get the updated activity with like information
+            activity = db.session.get(Activity, activity_id)
+            if activity:
+                response_body = get_activity_with_likes(activity, user_id)
+                return make_response(response_body, 200)
+            else:
+                return make_response({"error": "Activity not found"}, 404)
             
         except Exception as e:
+            db.session.rollback()
             return make_response({"error": str(e)}, 422)
 
 api.add_resource(LikeActivity, '/activities/<int:activity_id>/like')

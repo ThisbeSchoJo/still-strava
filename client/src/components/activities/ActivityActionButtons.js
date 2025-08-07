@@ -14,12 +14,16 @@ import "../../styling/activitycard.css";
  *
  * @param {Object} props
  * @param {Object} props.activity - The activity object
+ * @param {Array} props.activities - Array of all activities
+ * @param {Function} props.setActivities - Function to update activities array
  * @param {Function} props.onCommentToggle - Callback to toggle comment form
  * @param {Function} props.onEdit - Callback to open edit modal
  * @param {Function} props.onDelete - Callback to delete activity
  */
 function ActivityActionButtons({
   activity,
+  activities,
+  setActivities,
   onCommentToggle,
   onEdit,
   onDelete,
@@ -53,20 +57,39 @@ function ActivityActionButtons({
     const endpoint = likeState.isLiked ? "unlike" : "like";
     const method = likeState.isLiked ? "DELETE" : "POST";
 
+    const requestBody = { user_id: user.id };
+
     fetch(getApiUrl(`/activities/${activity.id}/${endpoint}`), {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: user.id }),
+      body: JSON.stringify(requestBody),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to update like");
         return res.json();
       })
       .then((data) => {
+        // Update like state based on the response
         setLikeState({
           count: data.like_count || 0,
           isLiked: data.user_liked || false,
         });
+
+        // Update the activity in the parent component
+        if (activity && data && activities && setActivities) {
+          const updatedActivity = {
+            ...activity,
+            like_count: data.like_count || 0,
+            user_liked: data.user_liked || false,
+            like_users: data.like_users || [],
+          };
+
+          // Find and update the activity in the activities array
+          const updatedActivities = activities.map((a) =>
+            a.id === activity.id ? updatedActivity : a
+          );
+          setActivities(updatedActivities);
+        }
       })
       .catch((err) => {
         alert("Failed to update like. Please try again.");

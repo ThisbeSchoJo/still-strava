@@ -111,13 +111,12 @@ class Activity(db.Model, SerializerMixin):
     datetime = db.Column(db.DateTime)
     elapsed_time = db.Column(db.Integer)  # Duration in seconds
     photos = db.Column(db.String)
-    likes = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Relationships
-    comments = db.relationship('Comment', back_populates='activity')
+    comments = db.relationship('Comment', back_populates='activity', cascade='all, delete-orphan')
     user = db.relationship('User', back_populates='activities')
-    likes = db.relationship('Like', back_populates='activity')
+    likes = db.relationship('Like', back_populates='activity', cascade='all, delete-orphan')
 
     # Serialization rules to avoid circular references
     serialize_rules = ('-comments','-user.activities', '-user.comments')

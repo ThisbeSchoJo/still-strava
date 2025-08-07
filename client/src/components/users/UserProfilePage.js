@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import UserProfile from "./UserProfile";
 import { getApiUrl } from "../../utils/api";
+import { UserContext } from "../../context/UserContext";
 
 function UserProfilePage() {
   const [user, setUser] = useState(null);
@@ -9,6 +10,7 @@ function UserProfilePage() {
   const [error, setError] = useState(null);
   const { id } = useParams(); // This gets the user ID from the URL
   const location = useLocation();
+  const { user: currentUser } = useContext(UserContext);
 
   useEffect(() => {
     // Reset state when ID changes
@@ -16,7 +18,12 @@ function UserProfilePage() {
     setLoading(true);
     setError(null);
 
-    fetch(getApiUrl(`/users/${id}`))
+    // Build URL with current user ID if logged in
+    const url = currentUser
+      ? getApiUrl(`/users/${id}?user_id=${currentUser.id}`)
+      : getApiUrl(`/users/${id}`);
+
+    fetch(url)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
@@ -33,7 +40,7 @@ function UserProfilePage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [id, location.pathname]);
+  }, [id, location.pathname, currentUser?.id]);
 
   if (loading)
     return (
