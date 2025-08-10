@@ -4,28 +4,34 @@ A full-stack social fitness application inspired by Strava, built with React and
 
 ## 🚀 Live Demo
 
-(Coming soon...)
+🎥 **[Watch the Demo Video](https://www.youtube.com/watch?v=iDY6MuXFTGE)**
 
 ## Screenshots
 
 ### Login Page
+
 ![Login Page](images/login-page.png)
 
 ### Home Page
+
 ![Home Page](images/home-page.png)
 
 ### Profile Page
+
 ![Profile Page](images/profile-page.png)
 ![Profile Page](images/profile-page2.png)
 
 ### Activity Creation
+
 ![Activity Form](images/create-new-activity-form.png)
 ![Activity Form](images/create-new-activity2.png)
 
 ### Activity Feed
+
 ![Activity Feed](images/activity-feed.png)
 
 ### Find Friends
+
 ![Friend Search](images/friend-search.png)
 
 ## ✨ Features
