@@ -30,27 +30,23 @@ class User(db.Model, SerializerMixin):
     following = db.relationship(
         'Follow',
         foreign_keys='Follow.follower_id',
-        backref='follower_user',
-        cascade='all, delete-orphan',
-        overlaps="follower_user"
+        back_populates='follower',
+        cascade='all, delete-orphan'
     )
 
     # Users who follow this user
     followers = db.relationship(
         'Follow',
         foreign_keys='Follow.followed_id',
-        backref='followed_user',
-        cascade='all, delete-orphan',
-        overlaps="followed_user"
+        back_populates='followed',
+        cascade='all, delete-orphan'
     )
 
     # Serialization rules to avoid circular references
     serialize_rules = (
         '-activities',
         '-comments',
-        '-password_hash',
-        '-following_assoc',
-        '-followers_assoc'
+        '-password_hash'
     )
 
     # Password methods
@@ -259,8 +255,8 @@ class Follow(db.Model, SerializerMixin):
     followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # Relationships
-    follower = db.relationship('User', foreign_keys=[follower_id], backref='following_assoc', overlaps="following")
-    followed = db.relationship('User', foreign_keys=[followed_id], backref='followers_assoc', overlaps="followers")
+    follower = db.relationship('User', foreign_keys=[follower_id], back_populates='following')
+    followed = db.relationship('User', foreign_keys=[followed_id], back_populates='followers')
 
     __table_args__ = (
         db.UniqueConstraint('follower_id', 'followed_id', name='unique_follow'),
