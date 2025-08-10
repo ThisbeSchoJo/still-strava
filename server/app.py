@@ -419,12 +419,30 @@ api.add_resource(UploadImage, '/upload-image')
 # CRUD for activities
 class AllActivities(Resource):
     def get(self):
-        stmt = select(Activity)
-        result = db.session.execute(stmt)
-        activities = result.scalars().all()
-        
         # Get current user ID from request if available
         current_user_id = request.args.get('user_id', type=int)
+        
+        if current_user_id:
+            # Get the current user and their following relationships
+            current_user = db.session.get(User, current_user_id)
+            if not current_user:
+                return make_response({"error": "User not found"}, 404)
+            
+            # Get IDs of users the current user is following
+            following_ids = [follow.followed_id for follow in current_user.following]
+            
+            # Add current user's own ID to the list
+            following_ids.append(current_user_id)
+            
+            # Filter activities to only include posts from followed users and current user
+            stmt = select(Activity).where(Activity.user_id.in_(following_ids))
+            result = db.session.execute(stmt)
+            activities = result.scalars().all()
+        else:
+            # If no user is logged in, show all activities (or you could return empty)
+            stmt = select(Activity)
+            result = db.session.execute(stmt)
+            activities = result.scalars().all()
         
         response_body = [get_activity_with_likes(activity, current_user_id) for activity in activities]
         
