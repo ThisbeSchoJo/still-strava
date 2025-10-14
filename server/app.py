@@ -739,6 +739,15 @@ def handle_general_error(e):
     return make_response({"error": str(e)}, 500)
 
 if __name__ == '__main__':
+    # Run database migrations on startup
+    with app.app_context():
+        try:
+            from flask_migrate import upgrade
+            upgrade()
+            print("Database migrations completed successfully!")
+        except Exception as e:
+            print(f"Migration error: {e}")
+    
     port = int(os.environ.get('PORT', 5555))
     app.run(host='0.0.0.0', port=port, debug=False)
 
