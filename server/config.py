@@ -54,3 +54,12 @@ CORS(app, supports_credentials=True, origins=allowed_origins)
 # Instantiate JWT Manager
 jwt = JWTManager(app)
 
+# Run database migrations on app startup
+with app.app_context():
+    try:
+        from flask_migrate import upgrade
+        upgrade()
+        print("Database migrations completed successfully!")
+    except Exception as e:
+        print(f"Migration error: {e}")
+
