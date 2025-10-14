@@ -1,0 +1,13 @@
+{
+  "name": "still-strava",
+  "version": "1.0.0",
+  "description": "Still Strava - A social fitness app",
+  "scripts": {
+    "build": "cd client && npm run build",
+    "start": "cd client && npm start",
+    "install": "cd client && npm install"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
