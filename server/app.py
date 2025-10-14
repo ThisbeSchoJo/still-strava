@@ -61,7 +61,7 @@ def get_activity_with_likes(activity, current_user_id=None):
 # Root route - serves as API landing page
 @app.route('/')
 def index():
-    return '<h1>Still Strava</h1>'
+    return '<h1>Still Strava API</h1><p>Backend is running!</p>'
 
 # Serve uploaded files
 @app.route('/uploads/<filename>')
