@@ -20,8 +20,10 @@ import "../../styling/activitycard.css";
  */
 function ActivityEditModal({ isOpen, onClose, activity, onSave }) {
   // Parse existing photos from string to array
-  const existingPhotos = activity.photos ? activity.photos.split("|||").filter(photo => photo.trim()) : [];
-  
+  const existingPhotos = activity.photos
+    ? activity.photos.split("|||").filter((photo) => photo.trim())
+    : [];
+
   const [editedActivity, setEditedActivity] = useState({
     title: activity.title,
     activity_type: activity.activity_type,
@@ -31,7 +33,9 @@ function ActivityEditModal({ isOpen, onClose, activity, onSave }) {
   });
 
   const [photos, setPhotos] = useState(existingPhotos);
-  const [photoValidation, setPhotoValidation] = useState(existingPhotos.map(() => true));
+  const [photoValidation, setPhotoValidation] = useState(
+    existingPhotos.map(() => true)
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 

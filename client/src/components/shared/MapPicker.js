@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import "../../styling/mappicker.css";
 
 /**
@@ -100,7 +100,7 @@ function MapPicker({
    * Called when user clicks anywhere on the map
    * @param {Object} event - Google Maps click event
    */
-  const handleMapClick = (event) => {
+  const handleMapClick = useCallback((event) => {
     // Extract coordinates from click event
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
@@ -110,13 +110,13 @@ function MapPicker({
 
     // Get place name for the coordinates
     handleGeocoding(lat, lng);
-  };
+  }, [createMarker, handleGeocoding]);
 
   /**
    * Gets the user's current location using browser geolocation API
    * Centers the map on user's location and adds a marker
    */
-  const getUserLocation = () => {
+  const getUserLocation = useCallback(() => {
     // Check if geolocation is supported by the browser
     if (!navigator.geolocation) {
       setLocationStatus("Geolocation not supported");
@@ -156,7 +156,7 @@ function MapPicker({
         maximumAge: 60000, // Accept cached location up to 1 minute old
       }
     );
-  };
+  }, [createMarker]);
 
   // ===== MAP INITIALIZATION =====
   /**
