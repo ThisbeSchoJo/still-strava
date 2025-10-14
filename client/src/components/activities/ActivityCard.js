@@ -19,8 +19,8 @@ import { getApiUrl } from "../../utils/api";
  * - setActivities: function to update the activities list
  */
 function ActivityCard({ activity, activities, setActivities }) {
-  // Get current user from context
-  const { user } = useContext(UserContext);
+  // Get current user from context (unused but kept for future use)
+  // const { user } = useContext(UserContext);
 
   // State for managing edit mode
   const [isEditing, setIsEditing] = useState(false);

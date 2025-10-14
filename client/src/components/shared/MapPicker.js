@@ -57,7 +57,7 @@ function MapPicker({
    * @param {Object} position - {lat, lng} coordinates
    * @param {string} title - Tooltip text for the marker
    */
-  const createMarker = (position, title = "Selected Location") => {
+  const createMarker = useCallback((position, title = "Selected Location") => {
     clearMarker(); // Remove any existing marker first
 
     // Create new Google Maps marker
@@ -67,14 +67,14 @@ function MapPicker({
       animation: window.google.maps.Animation.DROP, // Drop animation effect
       title, // Tooltip text
     });
-  };
+  }, []);
 
   /**
    * Converts coordinates to a human-readable place name using Google's Geocoding API
    * @param {number} lat - Latitude coordinate
    * @param {number} lng - Longitude coordinate
    */
-  const handleGeocoding = (lat, lng) => {
+  const handleGeocoding = useCallback((lat, lng) => {
     // Create a new geocoder instance
     const geocoder = new window.google.maps.Geocoder();
 
@@ -93,7 +93,7 @@ function MapPicker({
         onLocationSelect?.({ lat, lng, name: coordName });
       }
     });
-  };
+  }, [onLocationSelect]);
 
   /**
    * Handles map click events
