@@ -22,7 +22,7 @@ function PhotoInput({ url, index, onRemove }) {
       <div className="photo-preview-card">
         <img
           src={url}
-          alt={`Preview of uploaded photo ${index + 1}`}
+          alt={`Uploaded content ${index + 1}`}
           onError={(e) => {
             e.target.style.display = "none";
           }}

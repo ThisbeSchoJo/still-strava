@@ -20,7 +20,7 @@ import { getApiUrl } from "../../utils/api";
  */
 function ActivityCard({ activity, activities, setActivities }) {
   // Get current user from context
-  const { user } = useContext(UserContext);
+  const { user: currentUser } = useContext(UserContext);
 
   // State for managing edit mode
   const [isEditing, setIsEditing] = useState(false);
