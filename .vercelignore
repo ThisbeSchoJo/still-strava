@@ -1,0 +1,6 @@
+server/
+*.py
+Pipfile
+Pipfile.lock
+migrations/
+uploads/
