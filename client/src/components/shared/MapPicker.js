@@ -74,43 +74,49 @@ function MapPicker({
    * @param {number} lat - Latitude coordinate
    * @param {number} lng - Longitude coordinate
    */
-  const handleGeocoding = useCallback((lat, lng) => {
-    // Create a new geocoder instance
-    const geocoder = new window.google.maps.Geocoder();
+  const handleGeocoding = useCallback(
+    (lat, lng) => {
+      // Create a new geocoder instance
+      const geocoder = new window.google.maps.Geocoder();
 
-    // Request reverse geocoding (coordinates to address)
-    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-      if (status === "OK" && results[0]) {
-        // Success: Get the formatted address
-        const placeName = results[0].formatted_address;
-        setLocationStatus(`Location set: ${placeName}`);
-        // Call parent component with location data
-        onLocationSelect?.({ lat, lng, name: placeName });
-      } else {
-        // Failure: Use coordinates as fallback
-        const coordName = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-        setLocationStatus(`Location set: ${coordName}`);
-        onLocationSelect?.({ lat, lng, name: coordName });
-      }
-    });
-  }, [onLocationSelect]);
+      // Request reverse geocoding (coordinates to address)
+      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+        if (status === "OK" && results[0]) {
+          // Success: Get the formatted address
+          const placeName = results[0].formatted_address;
+          setLocationStatus(`Location set: ${placeName}`);
+          // Call parent component with location data
+          onLocationSelect?.({ lat, lng, name: placeName });
+        } else {
+          // Failure: Use coordinates as fallback
+          const coordName = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+          setLocationStatus(`Location set: ${coordName}`);
+          onLocationSelect?.({ lat, lng, name: coordName });
+        }
+      });
+    },
+    [onLocationSelect]
+  );
 
   /**
    * Handles map click events
    * Called when user clicks anywhere on the map
    * @param {Object} event - Google Maps click event
    */
-  const handleMapClick = useCallback((event) => {
-    // Extract coordinates from click event
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
+  const handleMapClick = useCallback(
+    (event) => {
+      // Extract coordinates from click event
+      const lat = event.latLng.lat();
+      const lng = event.latLng.lng();
 
-    // Create marker at clicked location
-    createMarker({ lat, lng });
+      // Create marker at clicked location
+      createMarker({ lat, lng });
 
-    // Get place name for the coordinates
-    handleGeocoding(lat, lng);
-  }, [createMarker, handleGeocoding]);
+      // Get place name for the coordinates
+      handleGeocoding(lat, lng);
+    },
+    [createMarker, handleGeocoding]
+  );
 
   /**
    * Gets the user's current location using browser geolocation API
