@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { getApiUrl } from "../../utils/api";
@@ -27,7 +27,7 @@ function UserSearch() {
   /**
    * Searches for users based on the search term
    */
-  const searchUsers = async (term) => {
+  const searchUsers = useCallback(async (term) => {
     if (!term.trim()) {
       // Show all users when search term is empty
       try {
@@ -93,7 +93,7 @@ function UserSearch() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentUser]);
 
   /**
    * Handles follow/unfollow actions
