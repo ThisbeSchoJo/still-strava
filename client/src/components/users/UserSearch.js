@@ -144,7 +144,7 @@ function UserSearch() {
     }, 300); // Wait 300ms after user stops typing
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm]);
+  }, [searchTerm, searchUsers]);
 
   return (
     <div
@@ -199,7 +199,7 @@ function UserSearch() {
                 <div className="user-info-section">
                   <img
                     src={user.image}
-                    alt={`Profile picture of ${user.username}`}
+                    alt={`${user.username} profile`}
                     className="user-avatar"
                   />
                   <div className="user-info">

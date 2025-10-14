@@ -205,7 +205,7 @@ function MapPicker({
       }
       clearMarker();
     };
-  }, []); // Empty dependency array ensures this only runs once on mount
+  }, [defaultCenter, defaultZoom, getUserLocation, handleMapClick]); // Include all dependencies
 
   // ===== ERROR STATE RENDERING =====
   // Show error message if map initialization failed

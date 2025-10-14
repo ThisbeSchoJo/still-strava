@@ -40,7 +40,7 @@ function UserProfilePage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [id, location.pathname, currentUser?.id]);
+  }, [id, location.pathname, currentUser?.id, currentUser]);
 
   if (loading)
     return (

@@ -251,12 +251,12 @@ function UserProfile({ user: initialUser }) {
       .catch((error) => {
         setFollowLoading(false);
       });
-  }, [currentUser?.id, user?.id]);
+  }, [currentUser?.id, user?.id, currentUser]);
 
   // ===== BADGE CALCULATIONS =====
-  const earnedBadges = useMemo(() => {
-    return getUserBadges(userStats, []).filter((badge) => badge.earned);
-  }, [userStats]);
+  // const earnedBadges = useMemo(() => {
+  //   return getUserBadges(userStats, []).filter((badge) => badge.earned);
+  // }, [userStats]);
 
   return (
     <div className="user-profile">

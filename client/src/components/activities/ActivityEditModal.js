@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { getApiUrl } from "../../utils/api";
 import PhotoUploadSection from "./PhotoUploadSection";
-import ImageProcessor from "./ImageProcessor";
 import "../../styling/activitycard.css";
 
 /**
