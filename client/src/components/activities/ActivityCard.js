@@ -1,7 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../styling/activitycard.css";
-import { UserContext } from "../../context/UserContext";
 import { getActivityIcon } from "../../utils/activityIcons";
 import ActivityEditModal from "./ActivityEditModal";
 import ActivityComments from "./ActivityComments";
