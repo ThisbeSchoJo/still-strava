@@ -1,4 +1,5 @@
 # Standard library imports
+import os
 
 # Remote library imports
 from flask import Flask
@@ -15,10 +16,19 @@ from flask_jwt_extended import JWTManager
 app = Flask(__name__)
 
 # Set ALL config before initializing extensions
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# Use PostgreSQL in production, SQLite in development
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    # Replace postgres:// with postgresql:// for SQLAlchemy compatibility
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'super-secret-key'  # Change this in production!
-app.config["JWT_SECRET_KEY"] = "your-secret-key"  # Strong, random value in production!
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'super-secret-key')
+app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY', "your-secret-key")
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False  # Tokens never expire (for development)
 app.json.compact = False
@@ -35,7 +45,11 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+# Allow both localhost for development and your deployed frontend URL
+allowed_origins = ["http://localhost:3000"]
+if os.environ.get('FRONTEND_URL'):
+    allowed_origins.append(os.environ.get('FRONTEND_URL'))
+CORS(app, supports_credentials=True, origins=allowed_origins)
 
 # Instantiate JWT Manager
 jwt = JWTManager(app)
