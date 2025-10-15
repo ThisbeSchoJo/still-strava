@@ -4,6 +4,8 @@ A full-stack social fitness application inspired by Strava, built with React and
 
 ## 🚀 Live Demo
 
+🌐 **[Try Still Strava Now!](https://web-production-158ec.up.railway.app)** - The app is live and ready to use!
+
 🎥 **[Watch the Demo Video](https://www.youtube.com/watch?v=iDY6MuXFTGE)**
 
 ## Screenshots
@@ -83,13 +85,14 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Flask-CORS** - Cross-origin resource sharing
 - **Flask-JWT-Extended** - JWT authentication
 - **bcrypt** - Password hashing
+- **PostgreSQL** - Production database on Railway
 - **SQLite** - Lightweight database (development)
 - **Werkzeug** - File upload handling
 
 ### Deployment
 
-- **Vercel** - Frontend hosting (eventually)
-- **Railway** - Backend hosting (eventually)
+- **Railway** - Frontend and Backend hosting (LIVE!)
+- **PostgreSQL** - Production database on Railway
 - **GitHub** - Version control
 
 ## 📁 Project Structure
@@ -150,7 +153,28 @@ still-strava/
 └── README.md
 ```
 
-## 🚀 Getting Started
+## 🌐 Live Application
+
+**Still Strava is now LIVE and accessible to everyone!**
+
+- **🌍 Frontend**: [https://web-production-158ec.up.railway.app](https://web-production-158ec.up.railway.app)
+- **🔧 Backend API**: [https://still-strava-production.up.railway.app](https://still-strava-production.up.railway.app)
+- **🗄️ Database**: PostgreSQL hosted on Railway
+- **🗺️ Maps**: Google Maps integration for location features
+
+### What You Can Do Right Now
+
+✅ **Sign up** for a new account  
+✅ **Create activities** with photos and locations  
+✅ **Follow other users** and build your network  
+✅ **Like and comment** on activities  
+✅ **Explore the map** to see where activities happened  
+✅ **Earn badges** for your achievements  
+✅ **Share your peaceful moments** with the community  
+
+---
+
+## 🚀 Local Development Setup
 
 ### Prerequisites
 
@@ -196,6 +220,35 @@ still-strava/
    REACT_APP_API_URL=http://localhost:5555
    REACT_APP_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
    ```
+
+## 🚀 Deployment
+
+Still Strava is deployed on **Railway** with the following setup:
+
+### Backend Deployment
+- **Platform**: Railway
+- **Runtime**: Python 3.11.9
+- **Database**: PostgreSQL (provided by Railway)
+- **WSGI Server**: Gunicorn
+- **URL**: [https://still-strava-production.up.railway.app](https://still-strava-production.up.railway.app)
+
+### Frontend Deployment
+- **Platform**: Railway
+- **Runtime**: Node.js
+- **Static Server**: Serve
+- **URL**: [https://web-production-158ec.up.railway.app](https://web-production-158ec.up.railway.app)
+
+### Environment Variables
+
+**Backend (Railway)**:
+- `DATABASE_URL` - PostgreSQL connection string
+- `SECRET_KEY` - Flask secret key
+- `JWT_SECRET_KEY` - JWT token secret
+- `FRONTEND_URL` - Allowed CORS origin
+
+**Frontend (Railway)**:
+- `REACT_APP_API_URL` - Backend API URL
+- `REACT_APP_GOOGLE_MAPS_API_KEY` - Google Maps API key
 
 ## 📊 Database Schema
 
@@ -390,6 +443,21 @@ Modal components for displaying user followers and following lists with follow/u
 - **Followers/Following Lists**: Modal components for viewing social connections
 - **Enhanced User Profiles**: Better activity statistics and social information
 
+## 🎉 Deployment Success!
+
+**Still Strava is now LIVE and accessible to the world!** 🌍
+
+This full-stack application successfully demonstrates:
+- ✅ **React frontend** with modern hooks and context
+- ✅ **Flask backend** with RESTful API design
+- ✅ **PostgreSQL database** with proper migrations
+- ✅ **JWT authentication** and secure user management
+- ✅ **Google Maps integration** for location features
+- ✅ **Social features** including following, likes, and comments
+- ✅ **File upload** with image compression
+- ✅ **Responsive design** for mobile and desktop
+- ✅ **Production deployment** on Railway
+
 ## 🙏 Acknowledgments
 
 - **Strava** - Inspiration for the social fitness concept
@@ -397,7 +465,10 @@ Modal components for displaying user followers and following lists with follow/u
 - **Flask Team** - Robust Python web framework
 - **Chart.js** - Beautiful charting library
 - **Google Maps** - Location services
+- **Railway** - Excellent deployment platform
 
 ---
 
 **Still Strava** - Connecting people with nature, one peaceful moment at a time. 🌿
+
+**🌐 [Try it now!](https://web-production-158ec.up.railway.app)**
