@@ -10,10 +10,12 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent form reload
     setError(null);
+    setIsLoading(true);
 
     fetch(getApiUrl("/login"), {
       method: "POST",
@@ -33,6 +35,9 @@ function Login() {
       })
       .catch((err) => {
         setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -49,9 +54,29 @@ function Login() {
         aria-label="Login form"
       >
         {error && (
-          <p className="error" role="alert" aria-live="polite">
-            {error}
-          </p>
+          <div className="error" role="alert" aria-live="polite">
+            <p className="error-message">{error}</p>
+            {error.includes("email address") && (
+              <p className="error-hint">
+                💡 Try checking your email address or{" "}
+                <a href="/signup">sign up for a new account</a>
+              </p>
+            )}
+            {error.includes("Incorrect password") && (
+              <p className="error-hint">
+                💡 Double-check your password or{" "}
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("Password reset not yet implemented");
+                  }}
+                >
+                  reset your password
+                </a>
+              </p>
+            )}
+          </div>
         )}
 
         <div className="form-group">
@@ -84,8 +109,9 @@ function Login() {
           type="submit"
           className="login-button"
           aria-describedby="submit-help"
+          disabled={isLoading}
         >
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
         </button>
       </form>
 
