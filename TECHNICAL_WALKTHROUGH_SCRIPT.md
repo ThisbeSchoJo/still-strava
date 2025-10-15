@@ -265,76 +265,7 @@ const [activities, setActivities] = useState([]);
 
 ---
 
-## 🎬 **Demo Flow (5-7 minutes)**
-
-### **1. Landing & Authentication (1 minute)**
-
-- Show login/signup flow
-- Explain JWT token storage and validation
-- Demonstrate user context management
-
-### **2. Activity Creation (2 minutes)**
-
-- Create new activity with photos
-- Show drag & drop photo upload
-- Demonstrate image compression
-- Show location selection with Google Maps
-- Explain form validation and error handling
-
-### **3. Social Features (2 minutes)**
-
-- Show activity feed with filtering
-- Demonstrate like/comment functionality
-- Show real-time updates without page refresh
-- Demonstrate follow/unfollow system
-- Show user search and discovery
-
-### **4. User Profile & Statistics (1-2 minutes)**
-
-- Show user profile with activity history
-- Demonstrate interactive charts and statistics
-- Show badge system and achievements
-- Show followers/following lists
-
-### **5. Technical Deep Dive (1 minute)**
-
-- Open browser dev tools to show API calls
-- Show database relationships in code
-- Demonstrate error handling and loading states
-
----
-
-## 🗣️ **Speaking Points & Transitions**
-
-### **Opening**
-
-"Still Strava is a full-stack social fitness application I built to demonstrate my skills in modern web development. It's inspired by Strava but focuses on mindful outdoor activities rather than competitive fitness."
-
-### **Architecture Transition**
-
-"Let me walk you through the technical architecture. I chose React for the frontend because of its component-based architecture and strong ecosystem, and Flask for the backend because of its simplicity and flexibility for rapid prototyping."
-
-### **Backend Transition**
-
-"The backend is built with Flask and SQLAlchemy, which gives me type-safe database operations and automatic relationship management. I implemented JWT authentication for stateless, scalable user sessions."
-
-### **Frontend Transition**
-
-"On the frontend, I used React 18 with modern hooks and functional components. I chose React Context over Redux for state management because it's simpler for this scale and provides all the functionality I need."
-
-### **Features Transition**
-
-"One of the most interesting technical challenges was implementing real-time updates for likes and comments without requiring page refreshes. I solved this by creating a state management pattern that updates the parent component's state."
-
-### **Closing**
-
-"This project demonstrates my ability to build a complete, production-ready application from scratch. I focused on clean code, proper error handling, and user experience while implementing modern web development best practices."
-
----
-
-## 📝 **Questions to Expect & Answers**
-
-### **"Why did you choose this tech stack?"**
+### **Why I choose this tech stack**
 
 - **React**: Component reusability, strong ecosystem, modern development experience
 - **Flask**: Python's readability, rapid development, excellent ORM with SQLAlchemy
@@ -349,21 +280,16 @@ const [activities, setActivities] = useState([]);
 - **Deployment**: Use containerization (Docker) and cloud platforms
 - **Monitoring**: Add logging and performance monitoring
 
-### **"What was the most challenging part?"**
+### **The most challenging part**
 
 - **Real-time Updates**: Implementing like/comment updates without page refresh
 - **Image Processing**: Client-side compression and upload handling
 - **Database Relationships**: Managing complex many-to-many relationships
 - **State Management**: Coordinating state between multiple components
 
-### **"How do you handle errors and edge cases?"**
+### **"Handling errors and edge cases**
 
 - **Frontend**: Try-catch blocks, loading states, user-friendly error messages
 - **Backend**: Proper HTTP status codes, database rollbacks, input validation
 - **File Uploads**: Type validation, size limits, secure filename handling
 - **Authentication**: Token expiration handling, automatic logout on invalid tokens
-
----
-
-_Remember to be confident, speak clearly, and be prepared to dive deeper into any technical aspect they're interested in. Good luck! 🚀_
-
