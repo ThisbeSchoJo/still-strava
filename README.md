@@ -50,12 +50,14 @@ A full-stack social fitness application inspired by Strava, built with React and
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 18** - Modern React with hooks and functional components
 - **React Router v6** - Client-side routing
 - **Chart.js v4** - Interactive charts and statistics
 - **Google Maps API** - Location services and mapping
 
 ### Backend
+
 - **Flask** - Python web framework
 - **SQLAlchemy** - ORM for database management
 - **PostgreSQL** - Production database on Railway
@@ -63,6 +65,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 - **Flask-CORS** - Cross-origin resource sharing
 
 ### Deployment
+
 - **Railway** - Frontend and Backend hosting (LIVE!)
 - **GitHub** - Version control
 
@@ -80,11 +83,12 @@ A full-stack social fitness application inspired by Strava, built with React and
 ✅ **Follow other users** and build your network  
 ✅ **Like and comment** on activities  
 ✅ **Explore the map** to see where activities happened  
-✅ **Earn badges** for your achievements  
+✅ **Earn badges** for your achievements
 
 ## 🚀 Local Development
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - Python 3.8+
 - pipenv
@@ -92,6 +96,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 ### Setup
 
 1. **Clone and setup backend**:
+
    ```bash
    git clone https://github.com/ThisbeSchoJo/still-strava.git
    cd still-strava/server
@@ -102,6 +107,7 @@ A full-stack social fitness application inspired by Strava, built with React and
    ```
 
 2. **Setup frontend**:
+
    ```bash
    cd ../client
    npm install
@@ -120,6 +126,7 @@ A full-stack social fitness application inspired by Strava, built with React and
 **Still Strava is now LIVE and accessible to the world!** 🌍
 
 This full-stack application successfully demonstrates:
+
 - ✅ **React frontend** with modern hooks and context
 - ✅ **Flask backend** with RESTful API design
 - ✅ **PostgreSQL database** with proper migrations
