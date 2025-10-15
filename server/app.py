@@ -80,8 +80,11 @@ class Login(Resource):
     
         user = User.query.filter_by(email=email).first()
     
-        if not user or not user.authenticate(password):
-            return {'error': 'Invalid email or password'}, 401
+        if not user:
+            return {'error': 'No account found with this email address'}, 401
+        
+        if not user.authenticate(password):
+            return {'error': 'Incorrect password'}, 401
     
         # Generate JWT token
         token = create_access_token(identity=user.id)
