@@ -24,8 +24,11 @@ function Login() {
       },
       body: JSON.stringify({ email, password }),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Invalid email or password");
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.error || "Login failed");
+        }
         return res.json();
       })
       .then((data) => {
