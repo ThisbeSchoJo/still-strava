@@ -1,9 +1,10 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
-from datetime import datetime
+from datetime import datetime, timedelta
 from config import db
 import bcrypt
+import secrets
 
 # Models go here!
 class User(db.Model, SerializerMixin):
@@ -20,6 +21,8 @@ class User(db.Model, SerializerMixin):
     website = db.Column(db.String)
     twitter = db.Column(db.String)
     instagram = db.Column(db.String)
+    reset_token = db.Column(db.String)
+    reset_token_expires = db.Column(db.DateTime)
 
     # Relationships
     activities = db.relationship('Activity', back_populates='user')
@@ -46,7 +49,9 @@ class User(db.Model, SerializerMixin):
     serialize_rules = (
         '-activities',
         '-comments',
-        '-password_hash'
+        '-password_hash',
+        '-reset_token',
+        '-reset_token_expires'
     )
 
     # Password methods
@@ -58,6 +63,28 @@ class User(db.Model, SerializerMixin):
     def authenticate(self, password):
         """Verify the user's password"""
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
+    
+    def generate_reset_token(self):
+        """Generate a secure password reset token"""
+        self.reset_token = secrets.token_urlsafe(32)
+        # Token expires in 1 hour
+        self.reset_token_expires = datetime.utcnow().replace(microsecond=0) + timedelta(hours=1)
+        return self.reset_token
+    
+    def is_reset_token_valid(self, token):
+        """Check if the reset token is valid and not expired"""
+        if not self.reset_token or not self.reset_token_expires:
+            return False
+        if self.reset_token != token:
+            return False
+        if datetime.utcnow() > self.reset_token_expires:
+            return False
+        return True
+    
+    def clear_reset_token(self):
+        """Clear the reset token after successful password reset"""
+        self.reset_token = None
+        self.reset_token_expires = None
 
     # Validation methods
     @validates('username')

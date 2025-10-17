@@ -127,6 +127,67 @@ class Signup(Resource):
 
 api.add_resource(Signup, '/signup')
 
+class RequestPasswordReset(Resource):
+    def post(self):
+        data = request.json
+        email = data.get('email')
+        
+        if not email:
+            return {'error': 'Email is required'}, 400
+        
+        user = User.query.filter_by(email=email).first()
+        
+        if not user:
+            # Don't reveal if email exists or not for security
+            return {'message': 'If an account with that email exists, a password reset link has been sent'}, 200
+        
+        # Generate reset token
+        reset_token = user.generate_reset_token()
+        db.session.commit()
+        
+        # For now, we'll return the token in the response
+        # In production, you'd send this via email
+        reset_link = f"{os.environ.get('FRONTEND_URL', 'http://localhost:3000')}/reset-password?token={reset_token}"
+        
+        return {
+            'message': 'Password reset link sent to your email',
+            'reset_link': reset_link,  # Remove this in production
+            'token': reset_token  # Remove this in production
+        }, 200
+
+api.add_resource(RequestPasswordReset, '/request-password-reset')
+
+class ResetPassword(Resource):
+    def post(self):
+        data = request.json
+        token = data.get('token')
+        new_password = data.get('password')
+        
+        if not token or not new_password:
+            return {'error': 'Token and new password are required'}, 400
+        
+        if len(new_password) < 6:
+            return {'error': 'Password must be at least 6 characters long'}, 400
+        
+        # Find user by reset token
+        user = User.query.filter_by(reset_token=token).first()
+        
+        if not user:
+            return {'error': 'Invalid or expired reset token'}, 400
+        
+        # Check if token is valid and not expired
+        if not user.is_reset_token_valid(token):
+            return {'error': 'Invalid or expired reset token'}, 400
+        
+        # Update password and clear reset token
+        user.set_password(new_password)
+        user.clear_reset_token()
+        db.session.commit()
+        
+        return {'message': 'Password has been reset successfully'}, 200
+
+api.add_resource(ResetPassword, '/reset-password')
+
 class Me(Resource):
     @jwt_required()
     def get(self):

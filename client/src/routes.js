@@ -5,6 +5,8 @@ import ActivityList from "./components/activities/ActivityList";
 import Login from "./components/auth/Login";
 import Logout from "./components/auth/Logout";
 import SignUp from "./components/auth/SignUp";
+import PasswordResetRequest from "./components/auth/PasswordResetRequest";
+import PasswordReset from "./components/auth/PasswordReset";
 import UserProfilePage from "./components/users/UserProfilePage";
 import ActivityForm from "./components/activities/ActivityForm";
 import UserSearch from "./components/users/UserSearch";
@@ -46,6 +48,14 @@ const routes = [
       {
         path: "/signup",
         element: <SignUp />,
+      },
+      {
+        path: "/request-password-reset",
+        element: <PasswordResetRequest />,
+      },
+      {
+        path: "/reset-password",
+        element: <PasswordReset />,
       },
     ],
   },

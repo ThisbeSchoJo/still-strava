@@ -68,15 +68,15 @@ function Login() {
             {error.includes("Incorrect password") && (
               <p className="error-hint">
                 💡 Double-check your password or{" "}
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("Password reset not yet implemented");
+                <button
+                  type="button"
+                  className="reset-password-link"
+                  onClick={() => {
+                    navigate("/request-password-reset");
                   }}
                 >
                   reset your password
-                </a>
+                </button>
               </p>
             )}
           </div>
@@ -119,6 +119,15 @@ function Login() {
       </form>
 
       <div className="login-footer">
+        <p>
+          <button
+            type="button"
+            className="link-button"
+            onClick={() => navigate("/request-password-reset")}
+          >
+            Forgot your password?
+          </button>
+        </p>
         <p>
           Don't have an account? <a href="/signup">Sign up</a>
         </p>
