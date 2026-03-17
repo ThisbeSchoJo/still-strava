@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "./shared/NavBar";
 import "../styling/app.css";
 
+// I anchor the layout here—global header, nav, and router outlet all live inside this shell
 function App() {
   return (
     <>

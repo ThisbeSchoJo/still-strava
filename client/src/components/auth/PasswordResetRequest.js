@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styling/PasswordResetRequest.css";
 
+// I drive the request flow here—collect email, hit the API, and surface dev-friendly reset links
 function PasswordResetRequest() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");

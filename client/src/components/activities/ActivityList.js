@@ -9,6 +9,7 @@ import { getApiUrl } from "../../utils/api";
 
 import ActivityCard from "./ActivityCard";
 
+// I orchestrate the feed here—fetching followed users' sessions and handling empty/loading states
 function ActivityList() {
   // state variables to store our activities data
   const [activities, setActivities] = useState([]);

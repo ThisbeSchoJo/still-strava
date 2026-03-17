@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { getApiUrl } from "../../utils/api";
 
+// I manage sign-in here—persisting JWTs and nudging folks toward reset/signup when needed
 function Login() {
   const { setUser } = useContext(UserContext); // grab setUser from context
   const navigate = useNavigate(); // for redirecting

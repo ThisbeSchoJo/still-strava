@@ -1,4 +1,4 @@
-// API URL configuration
+// I centralize API base config here so toggling between local and prod stays painless
 export const API_BASE_URL =
   process.env.REACT_APP_API_URL || "http://localhost:5555";
 

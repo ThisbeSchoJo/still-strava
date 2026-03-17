@@ -121,6 +121,35 @@ A full-stack social fitness application inspired by Strava, built with React and
    REACT_APP_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
    ```
 
+## 🖼️ Image Optimization & Packing
+
+Still Strava does **server-side image compression** on every upload:
+
+- Uploaded images are saved under `server/uploads/`.
+- After each upload, the backend shrinks the file using `Pillow` via `image_utils.optimize_image_file_in_place(...)`.
+- Images are capped at **1600px** on the longest side and saved with **JPEG quality 85**.
+
+### Batch optimize existing uploads
+
+You can also run a one-off or periodic batch optimization using the CLI in `server/image_utils.py`:
+
+```bash
+cd server
+
+# 1) Optimize everything in uploads/ into a new folder optimized_uploads/
+python image_utils.py uploads optimized_uploads --quality 80 --max-dim 1400
+
+# 2) (Optional) Create a zip archive of the optimized images
+python image_utils.py uploads optimized_uploads --quality 80 --max-dim 1400 \
+  --zip optimized_uploads-archive.zip
+```
+
+- **`uploads/`**: existing raw images (input)
+- **`optimized_uploads/`**: compressed copies preserving folder structure
+- **`optimized_uploads-archive.zip`**: single archive you can download or move to cloud storage
+
+> Note: For regular app usage you don’t need to run this CLI – the `/upload-image` endpoint already optimizes each new upload automatically.
+
 ## 🎉 Deployment Success!
 
 **Still Strava is now LIVE and accessible to the world!** 🌍

@@ -17,6 +17,7 @@ import { getApiUrl } from "../../utils/api";
  * - activities: array of all activities (used for updating the list)
  * - setActivities: function to update the activities list
  */
+// I encapsulate each activity's UI/UX here so likes, comments, and edits all stay in sync
 function ActivityCard({ activity, activities, setActivities }) {
   // Get current user from context (unused but kept for future use)
   // const { user } = useContext(UserContext);

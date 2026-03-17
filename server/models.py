@@ -7,6 +7,7 @@ import bcrypt
 import secrets
 
 # Models go here!
+# I model community members here, bundling social metadata and password helpers the rest of the app depends on
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -119,6 +120,7 @@ class User(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<User {self.username}, Email: {self.email}, Image: {self.image}>'
     
+# I capture each slow-outdoor session here so the feed, profiles, and badges can build on the same source of truth
 class Activity(db.Model, SerializerMixin):
     __tablename__ = 'activities'
 
@@ -203,6 +205,7 @@ class Activity(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Activity {self.title}, Description: {self.description}, Location: {self.location_name}, Datetime: {self.datetime}, Photos: {self.photos}>'
 
+# I store the conversations around each activity here to keep the social loop tight
 class Comment(db.Model, SerializerMixin):
     __tablename__ = 'comments'
 
@@ -241,6 +244,7 @@ class Comment(db.Model, SerializerMixin):
         return f'<Comment {self.content}, Datetime: {self.datetime}, Activity: {self.activity_id}, User: {self.user_id}>'
     
 
+# I log lightweight reactions here so I can surface like counts and avatars without heavy joins
 class Like(db.Model, SerializerMixin):
     __tablename__ = 'likes'
 
@@ -275,6 +279,7 @@ class Like(db.Model, SerializerMixin):
         return f'<Like User: {self.user_id}, Activity: {self.activity_id}, Created: {self.created_at}>'
     
 
+# I track follower/following pairs here to personalize feeds and discovery queries
 class Follow(db.Model, SerializerMixin):
     __tablename__ = 'follows'
     id = db.Column(db.Integer, primary_key=True)

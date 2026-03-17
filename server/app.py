@@ -16,9 +16,10 @@ from werkzeug.utils import secure_filename
 # Local imports
 from config import app, db, api
 from sqlalchemy import select
+from utils.image_utils import optimize_image_file_in_place
 
 
-# Add your model imports
+# Model imports
 from models import User, Activity, Comment, Like, Follow
 
 # Helper function to get activity data with like information
@@ -69,6 +70,7 @@ def uploaded_file(filename):
     return send_from_directory('uploads', filename)
 
 # Login route
+# I let the client exchange email/password for a JWT here so every other request knows who the user is
 class Login(Resource):
     def post(self):
         data = request.json
@@ -95,6 +97,8 @@ class Login(Resource):
         }, 200
 api.add_resource(Login, '/login')
 
+# Signup route
+# I onboard new community members here and immediately log them in so the UX stays smooth
 class Signup(Resource):
     def post(self):
         data = request.json
@@ -127,6 +131,8 @@ class Signup(Resource):
 
 api.add_resource(Signup, '/signup')
 
+
+# Password reset request route
 class RequestPasswordReset(Resource):
     def post(self):
         data = request.json
@@ -157,6 +163,7 @@ class RequestPasswordReset(Resource):
 
 api.add_resource(RequestPasswordReset, '/request-password-reset')
 
+# I finalize the password reset here by validating tokens and rotating credentials server-side
 class ResetPassword(Resource):
     def post(self):
         data = request.json
@@ -188,6 +195,7 @@ class ResetPassword(Resource):
 
 api.add_resource(ResetPassword, '/reset-password')
 
+# Me route - gives the frontend a quick way to hydrate the current session with this lightweight identity endpoint
 class Me(Resource):
     @jwt_required()
     def get(self):
@@ -201,6 +209,7 @@ api.add_resource(Me, '/me')
 
 
 # CRUD for users
+# I expose the public directory here and sprinkle in follow stats so discovery feels social out of the box
 class AllUsers(Resource):
     def get(self):
         stmt = select(User)
@@ -264,6 +273,7 @@ class AllUsers(Resource):
         
 api.add_resource(AllUsers, '/users')
 
+# I power the profile page here, bundling activities plus social context so the client renders everything in one go
 class UserById(Resource):
     def get(self, id):
         user = db.session.get(User, id)
@@ -332,6 +342,7 @@ class UserById(Resource):
 api.add_resource(UserById, '/users/<int:id>')
 
 # CRUD for follows
+# I keep the follow graph tidy here with guardrails that stop self-follows and duplicates
 class FollowUser(Resource):
     # ensure user is authenticated
     @jwt_required()
@@ -361,6 +372,7 @@ class FollowUser(Resource):
 
 api.add_resource(FollowUser, '/users/<int:user_id>/follow')
 
+# I mirror the follow path here so users can curate their feed without stale edges
 class UnfollowUser(Resource):
     # ensure user is authenticated
     @jwt_required()
@@ -395,6 +407,7 @@ class AllFollowing(Resource):
     
 api.add_resource(AllFollowing, '/users/<int:user_id>/following')
 
+# I let people discover new nature buddies here with lightweight search plus follow context
 class UserSearch(Resource):
     def get(self):
         query = request.args.get('q', '').strip()
@@ -441,6 +454,7 @@ class UserSearch(Resource):
 api.add_resource(UserSearch, '/users/search')
 
 # File upload endpoint
+# I handle media uploads here, validating file type and storing locally for now so activity photos feel instant
 class UploadImage(Resource):
     @jwt_required()
     def post(self):
@@ -469,7 +483,15 @@ class UploadImage(Resource):
             
             # Save file
             file.save(file_path)
-            
+
+            # Server-side optimization: shrink image after upload so disk usage
+            # stays lean even if the client sends a large original.
+            try:
+                optimize_image_file_in_place(file_path, quality=85, max_dim=1600)
+            except Exception as e:
+                # Optimization failures should not break the upload flow
+                current_app.logger.error(f"Image optimization failed for {file_path}: {e}")
+
             # Return the URL (in production, this would be a CDN URL)
             image_url = f"/uploads/{unique_filename}"
             
@@ -481,6 +503,7 @@ class UploadImage(Resource):
 api.add_resource(UploadImage, '/upload-image')
 
 # CRUD for activities
+# I build the activity feed here, filtering to followed users when I know who's logged in
 class AllActivities(Resource):
     def get(self):
         # Get current user ID from request if available
@@ -545,6 +568,7 @@ class AllActivities(Resource):
 
 api.add_resource(AllActivities, '/activities')
 
+# I reuse the feed enrichment here so a single activity view stays consistent with the main list
 class ActivityById(Resource):
     def get(self, id):
         activity = db.session.get(Activity, id)
@@ -613,6 +637,7 @@ class ActivityById(Resource):
 api.add_resource(ActivityById, '/activities/<int:id>')
 
 # CRUD for comments
+# I aggregate comments here so each activity card can hydrate its thread on demand
 class AllComments(Resource):
     def get(self):
         activity_id = request.args.get('activity_id', type=int)
@@ -665,6 +690,7 @@ class AllComments(Resource):
 
 api.add_resource(AllComments, '/comments')
 
+# I expose individual comment operations here so users can edit or clean up their own posts
 class CommentById(Resource):
     def get(self, id):
         comment = db.session.get(Comment, id)
@@ -712,6 +738,7 @@ class CommentById(Resource):
 api.add_resource(CommentById, '/comments/<int:id>')
 
 # Like/Unlike functionality
+# I record likes here so the feed reflects social proof instantly
 class LikeActivity(Resource):
     def post(self, activity_id):
         """Like an activity"""
@@ -753,6 +780,7 @@ class LikeActivity(Resource):
             db.session.rollback()
             return make_response({"error": str(e)}, 422)
 
+# I handle unlikes here, keeping counts accurate when someone changes their mind
 class UnlikeActivity(Resource):
     def delete(self, activity_id):
         """Unlike an activity"""

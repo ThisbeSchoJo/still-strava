@@ -1,6 +1,7 @@
 import "../styling/home.css";
 import { Link } from "react-router-dom";
 
+// I use this landing page to articulate the product vision before people log in
 function Home() {
   return (
     <div className="homepage">

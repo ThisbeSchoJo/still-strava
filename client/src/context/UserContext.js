@@ -1,8 +1,10 @@
 import { createContext, useState, useEffect } from "react";
 import { getApiUrl } from "../utils/api";
 
+// I share authenticated user state across the app via this React context
 export const UserContext = createContext();
 
+// I hydrate the current user from localStorage on boot and expose setter so login/logout stay simple
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null); // null means "not logged in"
 
