@@ -6,6 +6,7 @@ nav {
   padding: 1rem 2rem; /* Space inside the nav bar */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   display: flex; /* Use flexbox for layout */
+  flex-wrap: wrap; /* Allow menu to drop below brand + hamburger on small screens */
   justify-content: space-between; /* Space items apart */
   align-items: center; /* Center items vertically */
   position: sticky; /* Stick to top when scrolling */
@@ -46,7 +47,7 @@ nav a:hover {
 nav a.active {
   color: var(--strava-orange); /* Strava orange for active page */
   background-color: transparent; /* No background */
-  font-weight: 700; /* Bolder text for active link */
+  font-weight: 700; /* Bolder text for active page */
 }
 
 /* 
@@ -61,26 +62,39 @@ nav a.active {
   letter-spacing: -0.5px; /* Tighter spacing for brand */
 }
 
-/* 
- * Responsive Design - Mobile Styles
- * These styles apply when the screen width is 768px or less
- */
-@media (max-width: 768px) {
-  nav {
-    padding: 1rem; /* Less padding on mobile */
-    flex-direction: column; /* Stack items vertically */
-    gap: 1rem; /* Space between stacked items */
-  }
+/* Desktop: links in a horizontal row to the right of the brand */
+.nav-menu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
 
-  nav a {
-    width: 100%; /* Full width on mobile */
-    text-align: center; /* Center the text */
-    font-size: var(--font-size-base); /* Larger font for mobile */
-  }
+.hamburger-menu {
+  display: none; /* Shown only on small screens (see media query) */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin: 0;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+}
 
-  .nav-brand {
-    font-size: var(--font-size-lg); /* Smaller brand size on mobile */
-  }
+.hamburger-menu:focus-visible {
+  outline: 2px solid var(--strava-orange);
+  outline-offset: 2px;
+}
+
+.hamburger-line {
+  width: 25px;
+  height: 3px;
+  background-color: var(--strava-gray);
+  margin: 3px 0;
+  transition: 0.3s;
 }
 
 /* touch Target Sizing for Mobile */
@@ -94,22 +108,28 @@ nav a.active {
   }
 }
 
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  padding: 0.5rem;
-}
-
-.hamburger-line {
-  width: 25px;
-  height: 3px;
-  background-color: #333;
-  margin: 3px 0;
-  transition: 0.3s;
-}
-
 @media (max-width: 768px) {
+  nav {
+    padding: 1rem; /* Less padding on mobile */
+  }
+
+  .nav-menu a {
+    width: 100%; /* Full width for items inside the collapsible menu */
+    text-align: center;
+    font-size: var(--font-size-base); /* Larger font for mobile */
+    margin: 0.25rem 0;
+  }
+
+  .nav-brand {
+    font-size: var(--font-size-lg); /* Smaller brand size on mobile */
+    width: auto;
+    margin: 0;
+    text-align: left;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
   .hamburger-menu {
     display: flex;
   }
@@ -117,7 +137,9 @@ nav a.active {
   .nav-menu {
     display: none;
     flex-direction: column;
+    flex-basis: 100%;
     width: 100%;
+    padding-top: 0.5rem;
   }
 
   .nav-menu.active {
