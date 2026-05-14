@@ -92,6 +92,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  min-width: 0; /* lets flex children shrink inside narrow cards */
 }
 
 .user-info-section {
@@ -99,6 +100,7 @@
   align-items: center;
   gap: 1rem;
   flex: 1;
+  min-width: 0;
 }
 
 .user-avatar {
@@ -111,6 +113,7 @@
 
 .user-info {
   flex: 1;
+  min-width: 0; /* allows long usernames to wrap instead of forcing overflow */
 }
 
 .user-username {
@@ -118,6 +121,7 @@
   font-weight: 600;
   color: #333;
   margin: 0 0 0.5rem 0;
+  overflow-wrap: anywhere;
 }
 
 .user-location {
@@ -131,22 +135,23 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  flex-shrink: 0; /* desktop: keep button group from collapsing oddly */
 }
 
 /* View Profile Button */
 .view-profile-button {
-  padding: 0.4rem 0.8rem;
+  padding: 0.35rem 0.65rem;
   border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   background-color: #fff;
   color: #374151;
   white-space: nowrap;
-  width: 100px;
-  min-width: 100px;
+  width: auto;
+  min-width: unset;
 }
 
 .view-profile-button:hover {
@@ -157,16 +162,16 @@
 
 /* Follow Button */
 .follow-button {
-  padding: 0.4rem 0.8rem;
+  padding: 0.35rem 0.65rem;
   border: none;
   border-radius: 6px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  width: 80px;
-  min-width: 80px;
+  width: auto;
+  min-width: unset;
 }
 
 .follow-button.follow {
@@ -192,6 +197,41 @@
   border-color: #ef4444;
 }
 
+/* Shown when not logged in (Follow is only for authenticated users) */
+.follow-login-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  color: #374151;
+  white-space: nowrap;
+  width: auto;
+  min-width: unset;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.follow-login-link:hover {
+  background-color: #f9fafb;
+  border-color: #fc4c02;
+  color: #fc4c02;
+}
+
+.user-search-session-hint {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0 0 1rem 0;
+}
+
 /* No Results */
 .no-results {
   text-align: center;
@@ -202,6 +242,44 @@
 .no-results p {
   font-size: 1.1rem;
   margin: 0;
+}
+
+/* Stack card + full-width action buttons so Follow never clips (phones through small laptops) */
+@media (max-width: 1024px) {
+  .user-card-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .user-info-section {
+    align-items: flex-start;
+  }
+
+  .user-actions-section {
+    flex-shrink: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .view-profile-button,
+  .follow-button {
+    flex: none;
+    width: auto;
+    min-width: unset;
+    max-width: min(100%, 16rem);
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .follow-login-link {
+    width: auto;
+    min-width: unset;
+    max-width: min(100%, 16rem);
+    flex: none;
+    box-sizing: border-box;
+  }
 }
 
 /* Responsive Design */

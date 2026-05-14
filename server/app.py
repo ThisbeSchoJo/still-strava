@@ -7,7 +7,12 @@ import uuid
 
 # Remote library imports
 from flask import request, make_response, current_app, send_from_directory
-from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from flask_jwt_extended import (
+    jwt_required,
+    get_jwt_identity,
+    create_access_token,
+    verify_jwt_in_request,
+)
 from flask_restful import Resource
 from flask_jwt_extended.exceptions import JWTExtendedException
 from werkzeug.utils import secure_filename
@@ -420,15 +425,15 @@ class UserSearch(Resource):
             User.username.ilike(f'%{query}%')
         ).limit(20).all()  # Limit results to 20 users
         
-        # Get current user to check follow status
+        # Get current user to check follow status (must verify JWT before get_jwt_identity)
         current_user_id = None
         if request.headers.get('Authorization'):
             try:
+                verify_jwt_in_request()
                 current_user_id = get_jwt_identity()
-            except:
-                # If JWT is invalid, just continue without user context
+            except Exception:
                 current_user_id = None
-        
+
         results = []
         for user in users:
             user_dict = user.to_dict(only=('id', 'username', 'email', 'image', 'location', 'bio'))
@@ -437,10 +442,11 @@ class UserSearch(Resource):
             user_dict['activities'] = len(user.activities)
             user_dict['followers'] = len(user.followers)
             
-            # Check if current user is following this user
-            if current_user_id and current_user_id != user.id:
+            # Check if current user is following this user (normalize types from JWT)
+            viewer_id = int(current_user_id) if current_user_id is not None else None
+            if viewer_id is not None and viewer_id != user.id:
                 is_following = Follow.query.filter_by(
-                    follower_id=current_user_id,
+                    follower_id=viewer_id,
                     followed_id=user.id
                 ).first() is not None
                 user_dict['isFollowing'] = is_following

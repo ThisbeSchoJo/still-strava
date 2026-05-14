@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext, useCallback, useRef } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { getApiUrl } from "../../utils/api";
 import "../../styling/usersearch.css";
@@ -50,7 +50,9 @@ function UserSearch() {
         const results = await response.json();
         // Filter out the current user from the results
         const filteredResults = currentUser
-          ? results.filter((user) => user.id !== currentUser.id)
+          ? results.filter(
+              (user) => Number(user.id) !== Number(currentUser.id)
+            )
           : results;
         setSearchResults(filteredResults);
       } catch (err) {
@@ -85,7 +87,9 @@ function UserSearch() {
       const results = await response.json();
       // Filter out the current user from the results
       const filteredResults = currentUser
-        ? results.filter((user) => user.id !== currentUser.id)
+        ? results.filter(
+            (user) => Number(user.id) !== Number(currentUser.id)
+          )
         : results;
       setSearchResults(filteredResults);
     } catch (err) {
@@ -146,6 +150,26 @@ function UserSearch() {
     return () => clearTimeout(timeoutId);
   }, [searchTerm, searchUsers]);
 
+  // When /me finishes after load, refetch once so lists and follow state match the session
+  const lastSyncedUserId = useRef(null);
+  useEffect(() => {
+    const uid = currentUser?.id;
+    if (uid == null) {
+      lastSyncedUserId.current = null;
+      return;
+    }
+    if (lastSyncedUserId.current === uid) return;
+    lastSyncedUserId.current = uid;
+    searchUsers(searchTerm);
+  }, [currentUser, searchUsers]); // searchTerm read from latest closure when user id first appears
+
+  const isSelf = (other) =>
+    currentUser != null &&
+    Number(currentUser.id) === Number(other.id);
+
+  const hasSessionToken =
+    typeof window !== "undefined" && !!localStorage.getItem("token");
+
   return (
     <div
       className="user-search-container"
@@ -183,6 +207,12 @@ function UserSearch() {
         <div className="search-error" role="alert" aria-live="polite">
           {error}
         </div>
+      )}
+
+      {hasSessionToken && !currentUser && (
+        <p className="user-search-session-hint" role="status" aria-live="polite">
+          Signing you in… follow actions will appear in a moment.
+        </p>
       )}
 
       {/* Search Results */}
@@ -231,8 +261,8 @@ function UserSearch() {
                     View Profile
                   </button>
 
-                  {/* Follow/Unfollow Button */}
-                  {currentUser && currentUser.id !== user.id && (
+                  {/* Follow only when logged in and not your own row */}
+                  {currentUser && !isSelf(user) && (
                     <button
                       className={`follow-button ${
                         user.isFollowing ? "unfollow" : "follow"
@@ -249,6 +279,16 @@ function UserSearch() {
                     >
                       {user.isFollowing ? "Unfollow" : "Follow"}
                     </button>
+                  )}
+                  {!currentUser && !hasSessionToken && (
+                    <NavLink
+                      to="/login"
+                      className="follow-login-link"
+                      state={{ from: "/find-users" }}
+                      aria-label="Log in to follow users"
+                    >
+                      Log in to follow
+                    </NavLink>
                   )}
                 </div>
               </div>
